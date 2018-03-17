@@ -1,0 +1,532 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="协议">
+      <UniqueIdentifier>{94c0635d-4f9c-41b7-9d96-caaa8834c651}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="协议\protocol_buffer">
+      <UniqueIdentifier>{9ae73df2-0887-45d9-99d6-69c497a9ca5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="本地数据">
+      <UniqueIdentifier>{926d0daf-3896-468e-83af-337f618ebadd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="本地数据\VIP">
+      <UniqueIdentifier>{3157bb68-bd68-47a2-a822-ae7238388bb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="本地数据\宝箱">
+      <UniqueIdentifier>{ac75fe26-85bc-4f23-9392-a4fe663a175e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="本地数据\关卡">
+      <UniqueIdentifier>{244d6afa-8113-4d1d-b55c-9ffc0d1df40f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="本地数据\军队">
+      <UniqueIdentifier>{d46b73be-d7a2-4e34-ad8c-f97f871f14b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="本地数据\内政">
+      <UniqueIdentifier>{9e58e8fc-f2e0-465f-9096-394e61d21fdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="本地数据\祈福">
+      <UniqueIdentifier>{2bfee7a5-c12d-43ba-b05e-e6ef298e1a60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="本地数据\任务">
+      <UniqueIdentifier>{f3ba48bf-1d29-4681-8143-c075c6d5400d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="本地数据\数值">
+      <UniqueIdentifier>{40ba2815-b418-4790-b042-d5567182ca23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="本地数据\物品">
+      <UniqueIdentifier>{03a68bac-f7b9-4f92-98a9-d9421b256064}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="本地数据\屏蔽字">
+      <UniqueIdentifier>{375d0c86-2d2b-4c52-811b-26e1f9fc622a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="本地数据\礼包">
+      <UniqueIdentifier>{5e09993a-d387-4f9c-8d30-ee1482d48647}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="本地数据\公会">
+      <UniqueIdentifier>{16d0981f-c555-4432-bf2a-cf8a5e69c923}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicServer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shared_include.h" />
+    <ClInclude Include="..\..\..\Share\Protocol\Server\Protocol.h">
+      <Filter>协议</Filter>
+    </ClInclude>
+    <ClInclude Include="Message.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shared_header.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="config.h" />
+    <ClInclude Include="common_function.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerList.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="protobuf_include.h">
+      <Filter>协议</Filter>
+    </ClInclude>
+    <ClInclude Include="MySQL.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CriticalSectionZ.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shared_define.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="NameLibrary.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GoldSpend.h">
+      <Filter>本地数据\VIP</Filter>
+    </ClInclude>
+    <ClInclude Include="VIPFun.h">
+      <Filter>本地数据\VIP</Filter>
+    </ClInclude>
+    <ClInclude Include="Lottery.h">
+      <Filter>本地数据\宝箱</Filter>
+    </ClInclude>
+    <ClInclude Include="LotteryChance.h">
+      <Filter>本地数据\宝箱</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenTP.h">
+      <Filter>本地数据\宝箱</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeBox.h">
+      <Filter>本地数据\宝箱</Filter>
+    </ClInclude>
+    <ClInclude Include="TownBox.h">
+      <Filter>本地数据\宝箱</Filter>
+    </ClInclude>
+    <ClInclude Include="TownRankBox.h">
+      <Filter>本地数据\宝箱</Filter>
+    </ClInclude>
+    <ClInclude Include="OfflineRewardStage.h">
+      <Filter>本地数据\关卡</Filter>
+    </ClInclude>
+    <ClInclude Include="SpeedStage.h">
+      <Filter>本地数据\关卡</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage.h">
+      <Filter>本地数据\关卡</Filter>
+    </ClInclude>
+    <ClInclude Include="StageLoot.h">
+      <Filter>本地数据\关卡</Filter>
+    </ClInclude>
+    <ClInclude Include="EliteStage.h">
+      <Filter>本地数据\关卡</Filter>
+    </ClInclude>
+    <ClInclude Include="SoldierTP.h">
+      <Filter>本地数据\军队</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitTP.h">
+      <Filter>本地数据\军队</Filter>
+    </ClInclude>
+    <ClInclude Include="HeroQuality.h">
+      <Filter>本地数据\军队</Filter>
+    </ClInclude>
+    <ClInclude Include="HeroTP.h">
+      <Filter>本地数据\军队</Filter>
+    </ClInclude>
+    <ClInclude Include="InteriorLib.h">
+      <Filter>本地数据\内政</Filter>
+    </ClInclude>
+    <ClInclude Include="InteriorEvent.h">
+      <Filter>本地数据\内政</Filter>
+    </ClInclude>
+    <ClInclude Include="TradeCard.h">
+      <Filter>本地数据\祈福</Filter>
+    </ClInclude>
+    <ClInclude Include="CombinationReward.h">
+      <Filter>本地数据\祈福</Filter>
+    </ClInclude>
+    <ClInclude Include="RewardMission.h">
+      <Filter>本地数据\任务</Filter>
+    </ClInclude>
+    <ClInclude Include="MissionTP.h">
+      <Filter>本地数据\任务</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenGuid.h">
+      <Filter>本地数据\数值</Filter>
+    </ClInclude>
+    <ClInclude Include="RecastLib.h">
+      <Filter>本地数据\数值</Filter>
+    </ClInclude>
+    <ClInclude Include="RecruitLib.h">
+      <Filter>本地数据\数值</Filter>
+    </ClInclude>
+    <ClInclude Include="RootData.h">
+      <Filter>本地数据\数值</Filter>
+    </ClInclude>
+    <ClInclude Include="RuneLibrary.h">
+      <Filter>本地数据\数值</Filter>
+    </ClInclude>
+    <ClInclude Include="AdditionLibrary.h">
+      <Filter>本地数据\数值</Filter>
+    </ClInclude>
+    <ClInclude Include="ExpLibrary.h">
+      <Filter>本地数据\数值</Filter>
+    </ClInclude>
+    <ClInclude Include="FairArenaFirstWin.h">
+      <Filter>本地数据\数值</Filter>
+    </ClInclude>
+    <ClInclude Include="ResolveTP.h">
+      <Filter>本地数据\物品</Filter>
+    </ClInclude>
+    <ClInclude Include="SuitTP.h">
+      <Filter>本地数据\物品</Filter>
+    </ClInclude>
+    <ClInclude Include="Blueprint.h">
+      <Filter>本地数据\物品</Filter>
+    </ClInclude>
+    <ClInclude Include="Enchanting.h">
+      <Filter>本地数据\物品</Filter>
+    </ClInclude>
+    <ClInclude Include="EnchantingCost.h">
+      <Filter>本地数据\物品</Filter>
+    </ClInclude>
+    <ClInclude Include="EquipTP.h">
+      <Filter>本地数据\物品</Filter>
+    </ClInclude>
+    <ClInclude Include="FashionTP.h">
+      <Filter>本地数据\物品</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemTP.h">
+      <Filter>本地数据\物品</Filter>
+    </ClInclude>
+    <ClInclude Include="Mall.h">
+      <Filter>本地数据\物品</Filter>
+    </ClInclude>
+    <ClInclude Include="RecastCost.h">
+      <Filter>本地数据\物品</Filter>
+    </ClInclude>
+    <ClInclude Include="PassSkill.h">
+      <Filter>本地数据\军队</Filter>
+    </ClInclude>
+    <ClInclude Include="Skill.h">
+      <Filter>本地数据\军队</Filter>
+    </ClInclude>
+    <ClInclude Include="IllegalWords.h">
+      <Filter>本地数据\屏蔽字</Filter>
+    </ClInclude>
+    <ClInclude Include="VIPGift.h">
+      <Filter>本地数据\VIP</Filter>
+    </ClInclude>
+    <ClInclude Include="Gift.h">
+      <Filter>本地数据\礼包</Filter>
+    </ClInclude>
+    <ClInclude Include="GuildLibrary.h">
+      <Filter>本地数据\公会</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicServer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Message.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MD5.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerList.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_MissionLibraryForServer.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_ModelLibrary.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_Name.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_NPCLibrary.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_PlayerDataLibrary.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_RewardMissionLibrary.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_RootDataLibrary.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_RuneLibrary.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_ServerConfig.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_SkillLibrary.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_StageMapLibrary.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_StoryLibrary.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_TitleLibrary.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_UnitLibrary.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_VIP.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_BattleMSG.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_ChatMSG.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_GuildMSG.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_ItemMSG.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_LoginMSG.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_MissionMsg.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_OfflineBattle.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_PlayerMSG.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_RoomMSG.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_SharedMSG.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_SocialMSG.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_StageMsg.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_SystemMSG.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_TownMSG.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_BoxLibrary.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_BroadCastLibrary.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_BuffLibrary.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_CardLibrary.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_FairArena.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_LotteryLibrary.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_MakeEquipLibrary.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_Mall.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_Map.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="MySQL.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="NameLibrary.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_ExercisePlatform.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="GoldSpend.cpp">
+      <Filter>本地数据\VIP</Filter>
+    </ClCompile>
+    <ClCompile Include="VIPFun.cpp">
+      <Filter>本地数据\VIP</Filter>
+    </ClCompile>
+    <ClCompile Include="Lottery.cpp">
+      <Filter>本地数据\宝箱</Filter>
+    </ClCompile>
+    <ClCompile Include="LotteryChance.cpp">
+      <Filter>本地数据\宝箱</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenTP.cpp">
+      <Filter>本地数据\宝箱</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeBox.cpp">
+      <Filter>本地数据\宝箱</Filter>
+    </ClCompile>
+    <ClCompile Include="TownBox.cpp">
+      <Filter>本地数据\宝箱</Filter>
+    </ClCompile>
+    <ClCompile Include="TownRankBox.cpp">
+      <Filter>本地数据\宝箱</Filter>
+    </ClCompile>
+    <ClCompile Include="OfflineRewardStage.cpp">
+      <Filter>本地数据\关卡</Filter>
+    </ClCompile>
+    <ClCompile Include="SpeedStage.cpp">
+      <Filter>本地数据\关卡</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage.cpp">
+      <Filter>本地数据\关卡</Filter>
+    </ClCompile>
+    <ClCompile Include="StageLoot.cpp">
+      <Filter>本地数据\关卡</Filter>
+    </ClCompile>
+    <ClCompile Include="EliteStage.cpp">
+      <Filter>本地数据\关卡</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTP.cpp">
+      <Filter>本地数据\军队</Filter>
+    </ClCompile>
+    <ClCompile Include="HeroQuality.cpp">
+      <Filter>本地数据\军队</Filter>
+    </ClCompile>
+    <ClCompile Include="HeroTP.cpp">
+      <Filter>本地数据\军队</Filter>
+    </ClCompile>
+    <ClCompile Include="SoldierTP.cpp">
+      <Filter>本地数据\军队</Filter>
+    </ClCompile>
+    <ClCompile Include="InteriorEvent.cpp">
+      <Filter>本地数据\内政</Filter>
+    </ClCompile>
+    <ClCompile Include="InteriorLib.cpp">
+      <Filter>本地数据\内政</Filter>
+    </ClCompile>
+    <ClCompile Include="TradeCard.cpp">
+      <Filter>本地数据\祈福</Filter>
+    </ClCompile>
+    <ClCompile Include="CombinationReward.cpp">
+      <Filter>本地数据\祈福</Filter>
+    </ClCompile>
+    <ClCompile Include="RewardMission.cpp">
+      <Filter>本地数据\任务</Filter>
+    </ClCompile>
+    <ClCompile Include="MissionTP.cpp">
+      <Filter>本地数据\任务</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenGuid.cpp">
+      <Filter>本地数据\数值</Filter>
+    </ClCompile>
+    <ClCompile Include="RecastLib.cpp">
+      <Filter>本地数据\数值</Filter>
+    </ClCompile>
+    <ClCompile Include="RecruitLib.cpp">
+      <Filter>本地数据\数值</Filter>
+    </ClCompile>
+    <ClCompile Include="RootData.cpp">
+      <Filter>本地数据\数值</Filter>
+    </ClCompile>
+    <ClCompile Include="RuneLibrary.cpp">
+      <Filter>本地数据\数值</Filter>
+    </ClCompile>
+    <ClCompile Include="AdditionLibrary.cpp">
+      <Filter>本地数据\数值</Filter>
+    </ClCompile>
+    <ClCompile Include="ExpLibrary.cpp">
+      <Filter>本地数据\数值</Filter>
+    </ClCompile>
+    <ClCompile Include="FairArenaFirstWin.cpp">
+      <Filter>本地数据\数值</Filter>
+    </ClCompile>
+    <ClCompile Include="ResolveTP.cpp">
+      <Filter>本地数据\物品</Filter>
+    </ClCompile>
+    <ClCompile Include="SuitTP.cpp">
+      <Filter>本地数据\物品</Filter>
+    </ClCompile>
+    <ClCompile Include="Blueprint.cpp">
+      <Filter>本地数据\物品</Filter>
+    </ClCompile>
+    <ClCompile Include="Enchanting.cpp">
+      <Filter>本地数据\物品</Filter>
+    </ClCompile>
+    <ClCompile Include="EnchantingCost.cpp">
+      <Filter>本地数据\物品</Filter>
+    </ClCompile>
+    <ClCompile Include="EquipTP.cpp">
+      <Filter>本地数据\物品</Filter>
+    </ClCompile>
+    <ClCompile Include="FashionTP.cpp">
+      <Filter>本地数据\物品</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemTP.cpp">
+      <Filter>本地数据\物品</Filter>
+    </ClCompile>
+    <ClCompile Include="Mall.cpp">
+      <Filter>本地数据\物品</Filter>
+    </ClCompile>
+    <ClCompile Include="RecastCost.cpp">
+      <Filter>本地数据\物品</Filter>
+    </ClCompile>
+    <ClCompile Include="PassSkill.cpp">
+      <Filter>本地数据\军队</Filter>
+    </ClCompile>
+    <ClCompile Include="Skill.cpp">
+      <Filter>本地数据\军队</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_BlockWordLibrary.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="IllegalWords.cpp">
+      <Filter>本地数据\屏蔽字</Filter>
+    </ClCompile>
+    <ClCompile Include="VIPGift.cpp">
+      <Filter>本地数据\VIP</Filter>
+    </ClCompile>
+    <ClCompile Include="Gift.cpp">
+      <Filter>本地数据\礼包</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_Gift.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="GuildLibrary.cpp">
+      <Filter>本地数据\公会</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_GuildLibrary.pb.cc">
+      <Filter>协议\protocol_buffer</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

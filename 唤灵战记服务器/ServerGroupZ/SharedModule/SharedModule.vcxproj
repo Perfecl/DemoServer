@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{5B234651-15D5-41BC-AAD8-6A9048564DD6}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>SharedModule</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)mysql\include;$(VSInstallDir)\boost;</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PreBuildEvent>
+      <Command>copy $(ProjectDir)NetworkZ\NetworkZ.dll $(OutDir)
+copy $(ProjectDir)LoggerZ\LoggerZ.dll $(OutDir)
+copy $(ProjectDir)mysql\lib\mysqlcppconn.dll $(OutDir)</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)mysql\include;$(VSInstallDir)\boost;</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <PreBuildEvent>
+      <Command>copy $(ProjectDir)NetworkZ\NetworkZ.dll $(OutDir)
+copy $(ProjectDir)LoggerZ\LoggerZ.dll $(OutDir)
+copy $(ProjectDir)mysql\lib\mysqlcppconn.dll $(OutDir)</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Share\Protocol\Server\Protocol.h" />
+    <ClInclude Include="AdditionLibrary.h" />
+    <ClInclude Include="BasicServer.h" />
+    <ClInclude Include="Blueprint.h" />
+    <ClInclude Include="CombinationReward.h" />
+    <ClInclude Include="common_function.h" />
+    <ClInclude Include="config.h" />
+    <ClInclude Include="CriticalSectionZ.hpp" />
+    <ClInclude Include="EliteStage.h" />
+    <ClInclude Include="Enchanting.h" />
+    <ClInclude Include="EnchantingCost.h" />
+    <ClInclude Include="EquipTP.h" />
+    <ClInclude Include="ExpLibrary.h" />
+    <ClInclude Include="FairArenaFirstWin.h" />
+    <ClInclude Include="FashionTP.h" />
+    <ClInclude Include="Gift.h" />
+    <ClInclude Include="GoldSpend.h" />
+    <ClInclude Include="GuildLibrary.h" />
+    <ClInclude Include="HeroQuality.h" />
+    <ClInclude Include="HeroTP.h" />
+    <ClInclude Include="IllegalWords.h" />
+    <ClInclude Include="InteriorEvent.h" />
+    <ClInclude Include="InteriorLib.h" />
+    <ClInclude Include="ItemTP.h" />
+    <ClInclude Include="Lottery.h" />
+    <ClInclude Include="LotteryChance.h" />
+    <ClInclude Include="Mall.h" />
+    <ClInclude Include="Message.h" />
+    <ClInclude Include="MissionTP.h" />
+    <ClInclude Include="MySQL.h" />
+    <ClInclude Include="NameLibrary.h" />
+    <ClInclude Include="OfflineRewardStage.h" />
+    <ClInclude Include="OpenGuid.h" />
+    <ClInclude Include="OpenTP.h" />
+    <ClInclude Include="PassSkill.h" />
+    <ClInclude Include="protobuf_include.h" />
+    <ClInclude Include="RecastCost.h" />
+    <ClInclude Include="RecastLib.h" />
+    <ClInclude Include="RecruitLib.h" />
+    <ClInclude Include="ResolveTP.h" />
+    <ClInclude Include="RewardMission.h" />
+    <ClInclude Include="RootData.h" />
+    <ClInclude Include="RuneLibrary.h" />
+    <ClInclude Include="ServerList.h" />
+    <ClInclude Include="shared_define.h" />
+    <ClInclude Include="shared_header.h" />
+    <ClInclude Include="shared_include.h" />
+    <ClInclude Include="Skill.h" />
+    <ClInclude Include="SoldierTP.h" />
+    <ClInclude Include="SpeedStage.h" />
+    <ClInclude Include="Stage.h" />
+    <ClInclude Include="StageLoot.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="SuitTP.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="TimeBox.h" />
+    <ClInclude Include="TownBox.h" />
+    <ClInclude Include="TownRankBox.h" />
+    <ClInclude Include="TradeCard.h" />
+    <ClInclude Include="UnitTP.h" />
+    <ClInclude Include="VIPFun.h" />
+    <ClInclude Include="VIPGift.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_BlockWordLibrary.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_BoxLibrary.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_BroadCastLibrary.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_BuffLibrary.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_CardLibrary.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_ExercisePlatform.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_FairArena.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_Gift.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_GuildLibrary.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_LotteryLibrary.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_MakeEquipLibrary.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_Mall.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_Map.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_MissionLibraryForServer.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_ModelLibrary.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_Name.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_NPCLibrary.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_PlayerDataLibrary.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_RewardMissionLibrary.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_RootDataLibrary.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_RuneLibrary.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_ServerConfig.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_SkillLibrary.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_StageMapLibrary.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_StoryLibrary.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_TitleLibrary.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_UnitLibrary.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\DAT_VIP.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_BattleMSG.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_ChatMSG.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_GuildMSG.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_ItemMSG.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_LoginMSG.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_MissionMsg.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_OfflineBattle.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_PlayerMSG.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_RoomMSG.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_SharedMSG.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_SocialMSG.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_StageMsg.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_SystemMSG.pb.cc" />
+    <ClCompile Include="..\..\..\Share\Protocol\Server\PTO_TownMSG.pb.cc" />
+    <ClCompile Include="AdditionLibrary.cpp" />
+    <ClCompile Include="BasicServer.cpp" />
+    <ClCompile Include="Blueprint.cpp" />
+    <ClCompile Include="CombinationReward.cpp" />
+    <ClCompile Include="EliteStage.cpp" />
+    <ClCompile Include="Enchanting.cpp" />
+    <ClCompile Include="EnchantingCost.cpp" />
+    <ClCompile Include="EquipTP.cpp" />
+    <ClCompile Include="ExpLibrary.cpp" />
+    <ClCompile Include="FairArenaFirstWin.cpp" />
+    <ClCompile Include="FashionTP.cpp" />
+    <ClCompile Include="Gift.cpp" />
+    <ClCompile Include="GoldSpend.cpp" />
+    <ClCompile Include="GuildLibrary.cpp" />
+    <ClCompile Include="HeroQuality.cpp" />
+    <ClCompile Include="HeroTP.cpp" />
+    <ClCompile Include="IllegalWords.cpp" />
+    <ClCompile Include="InteriorEvent.cpp" />
+    <ClCompile Include="InteriorLib.cpp" />
+    <ClCompile Include="ItemTP.cpp" />
+    <ClCompile Include="Lottery.cpp" />
+    <ClCompile Include="LotteryChance.cpp" />
+    <ClCompile Include="Mall.cpp" />
+    <ClCompile Include="MD5.cpp" />
+    <ClCompile Include="Message.cpp" />
+    <ClCompile Include="MissionTP.cpp" />
+    <ClCompile Include="MySQL.cpp" />
+    <ClCompile Include="NameLibrary.cpp" />
+    <ClCompile Include="OfflineRewardStage.cpp" />
+    <ClCompile Include="OpenGuid.cpp" />
+    <ClCompile Include="OpenTP.cpp" />
+    <ClCompile Include="PassSkill.cpp" />
+    <ClCompile Include="RecastCost.cpp" />
+    <ClCompile Include="RecastLib.cpp" />
+    <ClCompile Include="RecruitLib.cpp" />
+    <ClCompile Include="ResolveTP.cpp" />
+    <ClCompile Include="RewardMission.cpp" />
+    <ClCompile Include="RootData.cpp" />
+    <ClCompile Include="RuneLibrary.cpp" />
+    <ClCompile Include="ServerList.cpp" />
+    <ClCompile Include="Skill.cpp" />
+    <ClCompile Include="SoldierTP.cpp" />
+    <ClCompile Include="SpeedStage.cpp" />
+    <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="StageLoot.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="SuitTP.cpp" />
+    <ClCompile Include="TimeBox.cpp" />
+    <ClCompile Include="TownBox.cpp" />
+    <ClCompile Include="TownRankBox.cpp" />
+    <ClCompile Include="TradeCard.cpp" />
+    <ClCompile Include="UnitTP.cpp" />
+    <ClCompile Include="VIPFun.cpp" />
+    <ClCompile Include="VIPGift.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

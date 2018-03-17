@@ -1,0 +1,1553 @@
+syntax="proto2";
+package intranet;
+option optimize_for = SPEED;
+
+import "message.proto";
+
+enum MSG_SS {
+  //玩家登录服务器消息
+  MSG_SS_REQUEST_GET_UID            = 0x7000; //通过玩家OpenID获取相应的UID
+  MSG_SS_RESPONSE_GET_UID           = 0x7001; //服务器返回玩家的UID
+  MSG_SS_REQUEST_REGISTE_ACCOUNT    = 0x7002; //注册账号
+  MSG_SS_RESPONSE_REGISTE_ACCOUNT   = 0x7003; //注册账号返回
+  MSG_SS_REQUEST_ACCOUNT_LOGIN      = 0x7004; //账号登陆
+  MSG_SS_RESPONSE_ACCOUNT_LOGIN     = 0x7005; //账号登陆返回
+
+  //服务器登录服务器
+  MSG_SS_SERVER_LOGIN               = 0x7010; //服务器登录服务器
+  MSG_SS_SERVER_HEART_BEAT          = 0x7011; //服务器心跳
+
+  //拉取玩家信息
+  MSG_SS_REQUEST_GET_PLAYER_INFO    = 0x8000; //拉取玩家信息
+  MSG_SS_RESPONSE_PLAYER_NOT_EXIST  = 0x8001; //玩家不存在,需要创建
+  MSG_SS_GET_PLAYER_INFO_BEGIN      = 0x8002; //拉取玩家信息开始
+  MSG_SS_GET_ITEM_INFO              = 0x8003; //拉取玩家道具信息
+  MSG_SS_GET_HERO_INFO              = 0x8004; //拉取舰船信息
+  MSG_SS_GET_CARRIER_INFO           = 0x8005; //拉取航母信息
+  MSG_SS_GET_TACTIC_INFO            = 0x8006; //拉取阵型信息
+  MSG_SS_GET_COPY_INFO              = 0x8007; //拉取副本信息
+  MSG_SS_GET_MAIL_INFO              = 0x8008; //拉取邮件信息
+  MSG_SS_GET_SHOP_INFO              = 0x8009; //拉取商店信息
+  MSG_SS_GET_REWARD_INFO            = 0x800A; //拉取奖励信息
+  MSG_SS_GET_FRIEND_INFO            = 0x800B; //拉取好友信息
+  MSG_SS_GET_PATROL_INFO            = 0x800C; //拉取巡逻信息
+  MSG_SS_GET_REPORT_ABSTRACT        = 0x800D; //拉取战报简要信息
+  MSG_SS_REQUEST_GET_MAIL           = 0x800E; //请求拉取邮件
+
+  MSG_SS_GET_PLAYER_INFO_END        = 0x80FF; //拉取玩家信息结束
+
+  //创建角色
+  MSG_SS_REQUEST_CREATE_PLAYER      = 0x8110; //创建角色
+  MSG_SS_RESPONSE_CREATE_PLAYER     = 0x8111; //创建角色返回
+  MSG_SS_REQUEST_CHANGE_NAME        = 0x8112; //改名
+  MSG_SS_RESPONSE_CHANGE_NAME       = 0x8113; //改名返回
+
+  //存档消息开始
+  MSG_SS_UPDATE_ITEM_INFO           = 0x8150; //保存道具
+  MSG_SS_UPDATE_TACTIC_INFO         = 0x8151; //更新阵型信息
+  MSG_SS_UPDATE_OIL_INFO            = 0x8152; //更新石油(体力)信息
+  MSG_SS_UPDATE_MONEY_INFO          = 0x8153; //更新货币信息
+  MSG_SS_UPDATE_HERO_INFO           = 0x8154; //更新舰船信息
+  MSG_SS_UPDATE_EQUIP_INFO          = 0x8155; //更新装备信息
+  MSG_SS_UPDATE_MAIL_ID             = 0x8156; //更新已读邮件ID
+  MSG_SS_UPDATE_CARRIER_INFO        = 0x8157; //更新航母信息(增加)
+  MSG_SS_UPDATE_CURRENT_CARRIER_INFO= 0x8158; //更新当前装备的航母信息
+  MSG_SS_UPDATE_COPY_INFO           = 0x8159; //更新副本信息
+  MSG_SS_UPDATE_RESEARCH_HERO_INFO  = 0x815A; //更新研发船只信息
+  MSG_SS_UPDATE_FRESH_TIME          = 0x815D; //更新刷新时间
+  MSG_SS_UPDATE_SHOP_INFO           = 0x815E; //更新商店信息
+  MSG_SS_UPDATE_PK_RANK_INFO        = 0x815F; //更新竞技场信息
+  MSG_SS_UPDATE_PK_RANK_REWARD      = 0x8160; //更新竞技场奖励信息
+  MSG_SS_UPDATE_FRIEND_INFO         = 0x8161; //更新好友信息
+  MSG_SS_UPDATE_BUY_COUNT           = 0x8162; //更新购买次数
+  MSG_SS_UPDATE_PATROL_INFO         = 0x8163; //更新巡逻信息
+  MSG_SS_UPDATE_REPORT_ABSTRACT     = 0x8164; //更新战报摘要信息
+  MSG_SS_UPDATE_TOWER_INFO          = 0x8165; //更新爬塔信息
+  MSG_SS_UPDATE_TRUCE_TIME          = 0x8166; //更新免战时间
+  MSG_SS_UPDATE_FRIEND_ENERGY       = 0x8167; //更新好友赠送精力(赠送别人精力)
+  MSG_SS_UPDATE_SIGN_IN             = 0x8168; //更新签到信息
+  MSG_SS_UPDATE_ACHIEVEMENT         = 0x8169; //更新成就信息
+  MSG_SS_UPDATE_RANK_ID             = 0x816A; //更新军衔ID
+  MSG_SS_ADD_SERVER_MAIL            = 0x816B; //增加全服邮件
+  MSG_SS_UPDATE_LOGIN_TIME          = 0x816C; //更新登录时间
+  MSG_SS_UPDATE_DIALOG              = 0x816D; //更新新手引导
+  MSG_SS_UPDATE_LOGIN_INFO          = 0x816E; //更新登录/登出信息
+  MSG_SS_UPDATE_CREATE_PLAYER_INFO  = 0x816F; //更新创建玩家信息
+  MSG_SS_UPDATE_OTHER_DSTRIKE_BOSS  = 0x8170; //更新其他人的boss等级
+  MSG_SS_UPDATE_CLIENT_FLAG         = 0x8171; //更新客户端标识
+  MSG_SS_UPDATE_COPY_STATUS         = 0x8172; //更新副本统计信息
+  MSG_SS_PLAYER_HEART_BEAT          = 0x8173; //玩家心跳
+  MSG_SS_UPDATE_CHANGE_AVATAR       = 0x8174; //更新玩家头像
+  MSG_SS_UPDATE_LEGUAGE_INFO        = 0x8175; //更新玩家军团信息
+  MSG_SS_UPDATE_ARMY_MEMBER         = 0x8176; //更新军团成员信息
+  MSG_SS_ON_JOIN_ARMY               = 0x8177; //正确处理玩家加入军团(不管玩家在不在线)
+  MSG_SS_UPDATE_ARMY_APPLY          = 0x8178; //更新军团申请
+  MSG_SS_UPDATE_ARMY_EXP_INFO       = 0x8179; //更新军团信息（简单）
+  MSG_SS_UPDATE_ARMY_LOG            = 0x817A; //更新军团Log信息
+  MSG_SS_UPDATE_ARMY_NOTICE         = 0x817B; //更新军团公告信息
+  MSG_SS_UPDATE_DAILY_SIGN          = 0x817C; //更新日常标记
+  MSG_SS_UPDATE_MONTH_CARD          = 0x817D; //更新月卡信息
+  MSG_SS_UPDATE_FIRST_RECHAGE_INFO  = 0x817E; //更新首次充值信息
+  MSG_SS_UPDATE_VIP_WEEKLY          = 0x817F; //更新vip每周购买记录
+  MSG_SS_UPDATE_RECHARGE_DETAILS    = 0x8180; //充值详情
+  MSG_SS_ADD_BUY_ITEM_LOG           = 0x8181; //添加商品购买日志
+  MSG_SS_UPDATE_ARMY_INFO           = 0x8182; //更新军团信息
+  MSG_SS_UPDATE_TOTAL_RECHARGE      = 0x8183; //更新总共充值金额
+  MSG_SS_UPDATE_CREATE_TIME         = 0x8185; //更新创建时间
+  MSG_SS_UPDATE_LOGIN_DAYS          = 0x8186; //更新登录天数
+  MSG_SS_UPDATE_ACTIVITY_RECORD_NEW = 0x8187; //更新活动记录新
+  MSG_SS_UPDATE_DEVICE_ID           = 0x8188; //更新设备ID
+
+
+  MSG_SS_MESSAGE_ERROR              = 0x8300; //处理玩家消息出错
+
+  MSG_SS_SEND_MAIL                  = 0x8306; //发送邮件(会返回给逻辑服务器)
+  MSG_SS_REQUEST_LOAD_MULTI_PLAYER  = 0x8307; //拉取多个玩家信息
+  MSG_SS_RESPONSE_LOAD_MULTI_PLAYER = 0x8308; //拉取多个玩家信息返回
+  MSG_SS_UPDATE_DAILY_PK_RANK_INFO  = 0x8309; //更新多个玩家的每日竞技场信息
+  MSG_SS_UPDATE_DSTRIKE_INFO        = 0x830A; //更新围剿BOSS信息
+  MSG_SS_REQUEST_GET_MAIL_REWARD    = 0x830B; //获取邮件奖励
+  MSG_SS_RESPONSE_GET_MAIL_REWARD   = 0x830C; //获取邮件奖励返回
+  MSG_SS_NOTIFY_GET_MAIL_REWARD     = 0x830D; //获取邮件奖励通知
+  MSG_SS_UPDATE_DSTRIKE_BOSS_INFO   = 0x830F; //更新被围剿的BOSS信息
+  MSG_SS_UPDATE_SERVER_SHOP         = 0x8310; //更新服务器商店信息
+  MSG_SS_SEND_MAIL_TO_MULTI         = 0x8311; //发送邮件给多人
+  MSG_SS_UPDATE_RANK_LIST_DETAILS   = 0x8312; //更新排行榜信息
+  MSG_SS_UPDATE_RANK_LIST_PLAYER    = 0x8313; //更新排行榜玩家信息
+  MSG_SS_UPDATE_CARRIER_COPY_INFO   = 0x8314; //更新航母副本信息
+  MSG_SS_UPDATE_OBTAINED_CARRIERS   = 0x8315; //更新已有航母
+  MSG_SS_UPDATE_RECHARGE            = 0x8316; //充值信息
+  MSG_SS_UPDATE_MAX_FIGHT_ATTR      = 0x8317; //历史最高战斗力
+  MSG_SS_UPDATE_ASTROLOGY_AWARD     = 0x8318; //更新占星奖池
+  MSG_SS_UPDATE_SERVER_COPY_INFO    = 0x8319; //更新服务器内副本统计信息
+  MSG_SS_UPDATE_SERVER_IP_LIST      = 0x831A; //设置服务器的IP列表
+  MSG_SS_UPDATE_MEDAL_COPY_ID       = 0x831B; //设置勋章副本ID
+
+  //NameThread的消息不能由Player来执行逻辑
+  //必须得用普通函数执行逻辑
+  MSG_SS_NAME_THREAD_BEGIN          = 0x84FF; //名字线程消息开始
+  MSG_SS_REQUEST_GET_PK_RANK_LIST   = 0x8500; //拉取竞技场列表
+  MSG_SS_RESPONSE_GET_PK_RANK_LIST  = 0x8501; //拉取竞技场列表返回
+  MSG_SS_REQUEST_GET_UID_BY_NAME    = 0x8502; //通过名字查询玩家UID
+  MSG_SS_RESPONSE_GET_UID_BY_NAME   = 0x8503; //通过名字查询玩家UID返回
+  MSG_SS_REQUEST_LOAD_RANK_LIST     = 0x850A; //拉取排行榜
+  MSG_SS_RESPONSE_LOAD_RANK_LIST    = 0x850B; //拉取排行榜返回
+  MSG_SS_REQUEST_LOAD_BOSS_LIST     = 0x850C; //拉取被围剿的boss列表
+  MSG_SS_RESPONSE_LOAD_BOSS_LIST    = 0x850D; //拉取被围剿的boss列表返回
+  MSG_SS_REQUEST_LOAD_SERVER_SHOP   = 0x850E; //拉取服务器商店信息
+  MSG_SS_RESPONSE_LOAD_SERVER_SHOP  = 0x850F; //拉取服务器商店返回
+  MSG_SS_REQUEST_LOAD_SERVER_MAIL   = 0x8510; //拉取服务器邮件
+  MSG_SS_RESPONSE_LOAD_SERVER_MAIL  = 0x8511; //拉取服务器邮件返回
+  MSG_SS_REQUEST_LOAD_IP_LIST       = 0x8512; //拉取ip列表
+  MSG_SS_RESPONSE_LOAD_IP_LIST      = 0x8513; //拉取ip列表返回
+  MSG_SS_REQUEST_LOAD_NOTICE        = 0x8514; //拉取公告
+  MSG_SS_RESPONSE_LOAD_NOTICE       = 0x8515; //拉取公告返回
+  MSG_SS_REQUEST_LOAD_ARMY          = 0x8516; //拉取军团信息
+  MSG_SS_RESPONSE_LOAD_ARMY         = 0x8517; //拉取军团信息返回
+  MSG_SS_RESPONSE_LOAD_ARMY_MEMBER  = 0x8518; //拉取军团成员信息返回
+  MSG_SS_REQUEST_CREATE_ARMY        = 0x8519; //创建军团
+  MSG_SS_RESPONSE_CREATE_ARMY       = 0x851A; //创建军团返回
+  MSG_SS_REQUEST_DESTORY_ARMY       = 0x851B; //解散军团
+  MSG_SS_REUQEST_GET_SERVER_START   = 0x851D; //获取开服时间
+  MSG_SS_RESPONSE_GET_SERVER_START  = 0x851E; //获取开服时间返回
+  MSG_SS_REQUEST_LOAD_TIME_ACTIVITY = 0x851F; //获取限时活动
+  MSG_SS_RESPONSE_LOAD_TIME_ACTIVITY= 0x8520; //获取限时活动返回
+  MSG_SS_REQUEST_QUERY_LIVELY_ACCOUNT    = 0x8521; //查询活跃账号(测试用)
+  MSG_SS_RESPONSE_QUERY_LIVELY_ACCOUNT   = 0x8522; //查询活跃账号返回
+  MSG_SS_REQUEST_LOAD_TIME_ACTIVITY_NEW  = 0x8523; //获取限时活动
+  MSG_SS_RESPONSE_LOAD_TIME_ACTIVITY_NEW = 0x8524; //获取限时活动返回
+  MSG_SS_REQUEST_LOAD_ALL_NAME           = 0x8525; //获取本服务器内所有的名字
+  MSG_SS_RESPONSE_LOAD_ALL_NAME          = 0x8526; //获取本服务器内所有的名字返回
+
+  MSG_SS_NAME_THREAD_END            = 0x86FF; //名字线程消息结束
+
+  //CenterServer消息
+  MSG_SS_CENTER_BEGIN               = 0x8FFF;
+  MSG_SS_NOTIFY_PLAYER_NUM          = 0x9000; //发送在线玩家人数
+  MSG_SS_REQUEST_KICK_USER          = 0x9001; //踢人下线
+  MSG_SS_SET_ACCOUNT_STATUS         = 0x9002; //设置账号状态(封号/禁言, 设置GM等)
+  MSG_SS_SET_IP_LIST                = 0x9003; //设置黑白名单
+  MSG_SS_REQUEST_ADD_GOODS          = 0x9004; //添加删除物品
+  MSG_SS_RESPONSE_ADD_GOODS         = 0x9005; //添加删除物品返回
+  MSG_SS_SERVER_NOTICE              = 0x9006; //服务器公告
+  MSG_SS_SERVER_SET_DIALOG          = 0x9007; //设置引导ID
+  MSG_SS_SERVER_CLEAR_DATA          = 0x9008; //服务器清档
+  MSG_SS_SREVER_TIME_ACTIVITY       = 0x9009; //更新限时活动
+  MSG_SS_UPDATE_OTHER_PLAYER_INFO   = 0x900A; //更新OtherPlayerInfo
+  MSG_SS_REQUEST_QUERY_OTHER_PLAYER = 0x900B; //查询OtherPlayerInfo
+  MSG_SS_RESPONSE_QUERY_OTHER_PLAYER= 0x900C; //查询OtherPlayerInfo返回
+  MSG_SS_REQUEST_LEGION_WAR_NEW_PLAYER= 0x900D; //全球制霸新玩家
+  MSG_SS_RESPONSE_LEGION_WAR_NEW_PLAYER=0x900E; //全球制霸新玩家返回
+  MSG_SS_UPDATE_CROSS_SERVER_RANK_LIST= 0x900F; //更新跨服排行榜(大区的形式)
+  MSG_SS_UPDATE_LEGION_WAR_POS      = 0x9011; //更新全球制霸位置
+  MSG_SS_UPDATE_LEGION_WAR_PLAYER   = 0x9012; //更新制霸全球玩家信息
+  MSG_SS_REQUEST_PLAYER_LOGIN       = 0x9013; //玩家登录
+  MSG_SS_NOTIFY_GLOBAL_CONFIG       = 0x9014; //通知全局配置
+  MSG_SS_NOTIFY_CORAL_SEA_TEAM      = 0x9015; //通知血战珊瑚海队伍情况
+  MSG_SS_REQUEST_CREATE_CORAL_SEA_TEAM = 0x9016;  //创建血战珊瑚海队伍
+  MSG_SS_REQUEST_SEARCH_CORAL_SEA_TEAM = 0x9017;  //搜索血战珊瑚海队伍
+  MSG_SS_REQUEST_JOIN_CORAL_SEA_TEAM   = 0x9018;  //请求加入血战珊瑚海队伍
+  MSG_SS_REQUEST_LEAVE_CORAL_SEA_TEAM  = 0x9019;  //离开血战珊瑚岛队伍
+  MSG_SS_REQUEST_CORAL_SEA_DEBUG       = 0x901A;  //调试
+
+  MSG_SS_CENTER_END                 = 0x9FFF;
+};
+
+enum SystemID {
+  SYSTEM_ID_BASE                    = 1;    //基础系统（玩家升级）
+  SYSTEM_ID_GM                      = 2;    //GM命令
+  SYSTEM_ID_MAIL                    = 3;    //邮件
+  SYSTEM_ID_TIME                    = 4;    //时间恢复
+  SYSTEM_ID_RECHARGE                = 5;    //充值
+
+  SYSTEM_ID_COPY                    = 20;   //副本类
+  SYSTEM_ID_TACTIC                  = 30;   //阵容(换船)
+  SYSTEM_ID_BAG                     = 40;   //仓库
+  SYSTEM_ID_LEAGUE                  = 50;   //联盟
+  SYSTEM_ID_BUILD_SHIPS             = 60;   //造船
+  SYSTEM_ID_SHOP_LIST               = 120;  //商店整合
+  SYSTEM_ID_DAILY_TASK              = 140;  //日常任务
+  SYSTEM_ID_ACHIEVEMENT             = 150;  //成就
+  SYSTEM_ID_CARRIER_BUILD           = 170;  //航母(研究航母, 装备飞机)
+  SYSTEM_ID_PLANE_SYNTHESIS         = 190;  //飞机研发
+  SYSTEM_ID_WAR_SHIP_UPGRADE        = 220;  //战舰升级
+  SYSTEM_ID_WAR_SHIP_FIRM           = 230;  //战舰加固
+  SYSTEM_ID_WAR_SHIP_REFORM         = 240;  //战舰突破
+  SYSTEM_ID_WAR_SHIP_RESEARCH       = 250;  //战舰研发
+  SYSTEM_ID_EQUIP_LEVEL_UP          = 260;  //装备强化
+  SYSTEM_ID_EQUIP_REFORM            = 270;  //装备改造
+  SYSTEM_ID_ARMY_UP                 = 280;  //海军升级
+  SYSTEM_ID_ARMY_REFORM             = 290;  //海军改造
+  SYSTEM_ID_PKMAIN                  = 330;  //竞技场
+  SYSTEM_ID_ROB                     = 340;  //夺宝
+  SYSTEM_ID_CHALLENGE               = 350;  //突袭油田
+  SYSTEM_ID_HOOK                    = 360;  //领地攻讨
+  SYSTEM_ID_DSTRIKE_MAIN            = 370;  //围剿叛军
+  SYSTEM_ID_MILITARY_RANK           = 390;  //军衔
+  SYSTEM_ID_COMPOUND                = 400;  //装备合成
+  SYSTEM_ID_RECOVER                 = 410;  //回收
+  SYSTEM_ID_RANK                    = 440;  //排行榜
+  SYSTEM_ID_ACTIVITY                = 450;  //签到
+  SYSTEM_ID_SEVEN_ACTIVITY          = 460;  //7日活动
+  SYSTEM_ID_EXPLOIT_SHOP            = 480;  //功勋商店
+  SYSTEM_ID_VIP                     = 490;  //VIP
+  SYSTEM_ID_CARRIER_COPY            = 810;  //航母副本
+  SYSTEM_ID_CARRIER_LEVEL_UP        = 830;  //航母升级
+  SYSTEM_ID_CARRIER_REFORM          = 840;  //航母改造
+  SYSTEM_ID_WORLD_BOSS              = 970;  //世界boss
+  SYSTEM_ID_DAILY_ACTIVITY          = 1000; //活动页签
+  SYSTEM_ID_ARMY_WAR                = 1300; //军团战役
+  SYSTEM_ID_WAKE                    = 1400; //觉醒
+  SYSTEM_ID_ASTROLOGY               = 1500; //占星
+  SYSTEM_ID_CROSS_SERVER_POINT      = 1600; //跨服积分战
+  SYSTEM_ID_RESEARCH_ITEM           = 1800; //限时采购
+  SYSTEM_ID_LEGION_WAR              = 1810; //制霸全球
+  SYSTEM_ID_LOGIN_AWARD             = 1830; //双卡登录奖励
+  SYSTEM_ID_WEEKLY_CARD             = 1840; //周基金/大小月基金
+  SYSTEM_ID_LEGION_FOREPLAY         = 1850; //制霸全球前传
+  SYSTEM_ID_SWEEP_STAKE             = 1900; //转盘活动
+  SYSTEM_ID_FESTIVAL_ACTIVITY       = 1940; //节日活动
+  SYSTEM_ID_MEDAL                   = 1970; //勋章
+  SYSTEM_ID_RED_EQUIP_STAR          = 2000; //红装升星
+  SYSTEM_ID_HERO_COME_BACK          = 2010; //英雄归来
+  SYSTEM_ID_PEARL_HARBOR            = 2020; //捍卫珍珠港
+};
+
+//MSG_SS_REQUEST_GET_UID
+message MessageSSRequestGetUID
+{
+required string openid     = 1;
+required uint32 server     = 4;
+required int64  session_id = 5;
+optional string channel    = 6;
+optional string device_id  = 7;
+optional string idfa       = 8;
+}
+
+//MSG_SS_RESPONSE_GET_UID
+message MessageSSResponseGetUID
+{
+required string openid     = 1;
+required uint32 server     = 4;
+required int64  session_id = 5;
+required int64  uid        = 6;
+required string token      = 7;
+required int64 expiry_time = 8;
+optional int32 create      = 9;
+optional string channel    = 10;
+optional string device_id  = 11;
+optional int32 error_code  = 12;
+optional string idfa       = 13;
+}
+
+//MSG_SS_REQUEST_REGISTE_ACCOUNT
+message MessageSSRequestRegisteAccount
+{
+required string account   = 1;
+required string password  = 2;
+required int64 session_id = 3;
+}
+
+//MSG_SS_RESPONSE_REGISTE_ACCOUNT
+message MessageSSResponseRegisteAccount
+{
+required string account   = 1;
+required string password  = 2;
+required int64 session_id = 3;
+required bool success     = 4;
+}
+
+//MSG_SS_REQUEST_ACCOUNT_LOGIN
+message MessageSSRequestAccountLogin
+{
+required string account   = 1;
+required string password  = 2;
+required int64 session_id = 3;
+}
+
+//MSG_SS_RESPONSE_ACCOUNT_LOGIN
+message MessageSSResponseAccountLogin
+{
+required string account   = 1;
+required int64 session_id = 3;
+required bool success     = 4;
+}
+
+//MSG_SS_RESPONSE_QUERY_LIVELY_ACCOUNT
+message MessageSSResponseQueryLivelyAccount
+{
+repeated int64 players      = 1;
+}
+
+//MSG_SS_SERVER_LOGIN
+message MessageSSServerLogin
+{
+optional string server_name = 1;  //服务器名称
+repeated uint32 server_ids = 2;    //服务器ID(有可能是一个个集合)
+optional string platform = 3;     //平台ID
+}
+
+//MSG_SS_RESPONSE_PLAYER_NOT_EXIST
+message MessageSSResponsePlayerNotExist
+{
+required int32 msgid      = 1;
+}
+
+//MSG_SS_REQUEST_GET_PLAYER_INFO
+message MessageSSRequestGetPlayerInfo
+{
+required int32 msgid       = 1;
+required int64 uid         = 2;
+}
+
+//MSG_SS_GET_PLAYER_INFO_BEGIN
+message MessageSSResponsePlayerInfo
+{
+required sy.PlayerInfo player = 1;
+optional int32 fresh_time     = 2;
+repeated sy.KVPair2 buy_count = 3;
+required sy.DstrikeInfo dstrike = 4;
+repeated sy.KVPair2 achievements = 5;
+repeated sy.RechargeInfo recharge = 6;
+optional int32 last_login_time = 7;
+repeated sy.ActivityRecord records_new = 9;
+}
+
+//MSG_SS_GET_ITEM_INFO
+message MessageSSResponseGetItemInfo
+{
+repeated sy.Item items        = 1;
+optional sy.EquipsInfo equips = 2;
+}
+
+//MSG_SS_GET_HERO_INFO
+message MessageSSResponseGetHeroInfo
+{
+repeated sy.HeroInfo ships    = 1;
+optional sy.HeroResearchInfo research = 2;
+}
+
+//MSG_SS_GET_CARRIER_INFO
+message MessageSSResponseGetCarrierInfo
+{
+repeated sy.CarrierInfo carrier             = 1;
+optional sy.CurrentCarrierInfo current_carrier = 4;
+}
+
+//MSG_SS_GET_PLAYER_INFO_END
+message MessageSSResponseGetPlayerInfoEnd
+{
+required int32 msgid      = 2;
+}
+
+//MSG_SS_MESSAGE_ERROR
+message MessageSSServerMessageError
+{
+required sy.ResultID error_code = 1;
+required int32 msg_id           = 2;
+}
+
+//MSG_SS_REQUEST_CREATE_PLAYER
+message MessageSSRequestCreatePlayer
+{
+required sy.PlayerInfo info = 2;
+repeated sy.HeroInfo ships  = 3;
+optional sy.CarrierInfo carrier = 4;
+required sy.TacticInfo tactic   = 5;
+
+repeated sy.Item items      = 10;
+optional int64 last_server_mail_id = 11;
+
+optional int64 tid          = 20;
+optional int32 system       = 21;
+optional int32 msgid        = 22;
+}
+
+//MSG_SS_RESPONSE_CREATE_PLAYER
+message MessageSSResponseCreatePlayer
+{
+optional string name      = 2;
+}
+
+//MSG_SS_REQUEST_CHANGE_NAME
+message MessageSSRequestChangeName
+{
+required string name      = 1;
+}
+
+//MSG_SS_RESPONSE_CHANGE_NAME
+message MessageSSResponseChangeName
+{
+required string name      = 2;
+}
+
+//MSG_SS_UPDATE_ITEM_INFO
+message MessageSSUpdateItemInfo
+{
+repeated sy.Item update_items = 1;
+repeated int64 delete_items = 3;
+optional int32 system       = 4;
+optional int32 msgid        = 5;
+optional int64 tid          = 6;
+}
+
+//MSG_SS_GET_MAIL_INFO
+message MessageSSResponseGetMailInfo
+{
+repeated sy.MailInfo mails = 1;
+required int64 last_mail_id = 2;
+required int64 last_server_mail_id = 3;
+}
+
+//MSG_SS_GET_SHOP_INFO
+message MessageSSResponseGetShopInfo
+{
+repeated sy.ShopCommodityInfo feats_commodity = 1;   //兑换商品信息
+required int64 last_time = 2;                        //免费抽取起始时间
+required int32 used_count = 3;                       //已经刷新次数
+repeated sy.ShopCommodityInfo normal_commodity = 4;  //道具商品更新信息
+repeated sy.ShopCommodityInfo life_commodity = 5;    //终生道具更新信息
+repeated sy.RefreshShopInfo   refresh_commodity = 6; //刷新商店信息
+}
+
+//MSG_SS_SEND_MAIL
+message MessageSSSendMail
+{
+required int64 player_id   = 1;
+required sy.MailInfo mail  = 2;
+optional int64 tid = 3;
+optional uint32 server_id = 4;
+}
+
+//MSG_SS_SEND_MAIL_TO_MULTI
+message MessageSSSendMailToMulti
+{
+repeated int64 player_ids   = 1;
+required sy.MailInfo mail   = 2;
+}
+
+//MSG_SS_GET_TACTIC_INFO
+message MessageSSResponseGetTacticInfo
+{
+required sy.TacticInfo info  = 1;
+repeated int32 obtained_carriers = 2;
+optional int64 max_fight_attr = 3;
+optional int64 army_id = 4;
+repeated int32 army_skill = 5;
+optional int64 leave_time = 6;
+}
+
+//MSG_SS_GET_COPY_INFO
+message MessageSSResponseGetCopyInfo
+{
+repeated sy.CopyStarInfo copy_star          = 3;
+repeated sy.CopyProgress progress           = 4;
+repeated sy.CopyCount   copy_count          = 5;                  //副本通关次数
+repeated int32          passed_copy         = 6 [packed = true];  //一次性通关副本
+repeated sy.ChapterAwardInfo chapter_award  = 7;                  //章节奖励
+repeated int32          gate_award          = 8 [packed = true];  //关卡奖励
+required sy.TowerState  tower_stat          = 9;                  //爬塔的状态
+repeated sy.KVPair2     tower_buff          = 10;                 //爬塔Buff
+
+repeated sy.CarrierCopy carrier_copy         = 11;                 //航母副本
+optional sy.CarrierCopyInfo carrier_copy_info= 12;                 //航母副本通关情况
+optional int32          medal_copy_id        = 13;                 //勋章副本ID
+optional int32          medal_star           = 14;                 //勋章集册进度
+optional string         medal_state          = 15;                 //勋章集册状态
+optional int32          medal_achi           = 16;                 //勋章成就
+}
+
+//MSG_SS_UPDATE_TACTIC_INFO
+message MessageSSRequestUpdateTacticInfo
+{
+repeated sy.PositionInfo infos       = 2; //上阵的位置信息
+repeated sy.PositionInfo battle_pos  = 3; //战斗时的位置信息
+repeated sy.PositionInfo support_pos  = 4; //战斗时的位置信息
+}
+
+//MSG_SS_UPDATE_OIL_INFO
+message MessageSSUpdateOilInfo
+{
+required int32 oil          = 1;
+required int32 last_oil_time= 2;
+required int32 energy         = 3;
+required int32 last_energy_time = 4;
+
+optional int64 tid          = 10; //事务ID
+optional int32 system       = 11;
+optional int32 msgid        = 12;
+}
+
+//MSG_SS_UPDATE_LOGIN_INFO
+message MessageSSUpdateLoginInfo
+{
+optional int64 tid            = 1;  //事务ID
+
+required int32 login          = 2;  //登录/登出
+required int32 online_time    = 3;  //在线时长
+optional string ipaddr        = 4;  //IP地址
+}
+
+//MSG_SS_UPDATE_MONEY_INFO
+message MessageSSUpdateMoneyInfo
+{
+optional int64 tid            = 1;  //事务ID
+optional int32 system         = 2;
+optional int32 msgid          = 3;
+
+required int32 vip_level      = 5;  //VIP等级
+required int32 level          = 6;  //玩家等级
+required int32 vip_exp        = 7;  //VIP经验
+required int64 exp            = 8;  //经验
+required int64 coin           = 9;  //金币数量
+required int64 money          = 10; //元宝数量
+required int32 prestige       = 15; //声望
+required int32 plane          = 16; //神魂(飞机碎片)
+required int32 hero           = 17; //将魂(英雄碎片)
+required int32 muscle         = 18; //威名
+required int32 exploit        = 19; //功勋
+required int32 union          = 20; //公会贡献
+
+repeated int64 delta          = 30 [packed = true]; //货币变化的delta值
+optional int32 delta_level    = 31; //等级变化值
+optional int32 delta_vip_level= 32; //VIP等级变化值
+}
+
+//MSG_SS_UPDATE_HERO_INFO
+message MessageSSUpdateHeroInfo
+{
+repeated sy.HeroInfo info   = 1;  //舰船
+repeated int64 delete_items = 2;
+optional int32 system       = 4;
+optional int32 msgid        = 5;
+optional int64 tid          = 6;
+}
+
+//MSG_SS_UPDATE_CARRIER_INFO
+message MessageSSUpdateCarrierInfo
+{
+optional sy.CarrierInfo info = 1;
+optional int64 tid           = 6;
+optional int32 delete_id     = 7;
+}
+
+//MSG_SS_UPDATE_CURRENT_CARRIER_INFO
+message MessageSSUpdateCurrentCarrierInfo
+{
+required sy.CurrentCarrierInfo info = 1;
+}
+
+//MSG_SS_UPDATE_COPY_INFO
+message MessageSSUpdateCopyInfo
+{
+repeated sy.CopyStarInfo copy_star    = 3;
+optional sy.CopyProgress copy         = 4;
+repeated sy.CopyCount   copy_count    = 5;  //副本通关次数
+repeated int32          passed_copy   = 6;  //一次性通关副本
+optional sy.ChapterAwardInfo chapter_award  = 7; //章节奖励
+optional int32          gate_award          = 8; //关卡奖励
+}
+
+//MSG_SS_UPDATE_RESEARCH_HERO_INFO
+message MessageSSUpdateResearchHeroInfo
+{
+optional sy.HeroResearchInfo info = 1;
+}
+
+//MSG_SS_UPDATE_FRESH_TIME
+message MessageSSUpdateFreshTime
+{
+required int32 fresh_time     = 1;
+}
+
+//MSG_SS_UPDATE_EQUIP_INFO
+message MessageSSUpdateEquipInfo
+{
+required int32 position   = 1;
+repeated int64 equips     = 2;
+}
+
+//MSG_SS_UPDATE_SHOP_INFO
+message MessageSSUpdateShopInfo
+{
+repeated sy.ShopCommodityInfo feats_commodity = 1;   //兑换商品信息
+optional int64 last_time = 2;                        //免费抽取起始时间
+optional int32 used_count = 3;                       //已经刷新次数
+repeated sy.ShopCommodityInfo normal_commodity = 4;  //道具商品更新信息
+repeated sy.ShopCommodityInfo life_commodity = 5;    //终生道具更新信息
+repeated sy.RefreshShopInfo   refresh_commodity = 6; //刷新商店信息
+}
+
+//MSG_SS_REQUEST_LOAD_MULTI_PLAYER
+message MessageSSRequestLoadMultiPlayer
+{
+repeated int64 player_ids     = 1;    //(真正)需要被拉取的玩家
+optional int64 forward_player = 2;    //消息返回给哪个玩家
+optional int32 msg_id         = 3;    //请求的消息ID
+repeated int64 forward_ids    = 4;    //需要被处理的玩家
+
+optional sy.GMContent forward_gm  = 10; //GM加东西
+optional int64 conn_id            = 11; //HTTP的conn id
+optional int64 session_id         = 12;
+
+optional int64 pk_player                      = 13; //切磋
+optional sy.MessageRequestTestPkTarget arena  = 14; //竞技场
+}
+
+//MSG_SS_RESPONSE_LOAD_MULTI_PLAYER
+message MessageSSResponseLoadMultiPlayer
+{
+optional MessageSSRequestLoadMultiPlayer request = 13;
+}
+
+//MSG_SS_REQUEST_GET_PK_RANK_LIST
+message MessageSSRequestGetPKRankList
+{
+repeated uint32 server_ids     = 1;
+}
+
+//MSG_SS_RESPONSE_GET_PK_RANK_LIST
+message MessageSSResponseGetPKRankList
+{
+repeated sy.PKRankInfo  ranks = 1;
+}
+
+//MSG_SS_REQUEST_GET_UID_BY_NAME
+message MessageSSRequestGetUIDByName
+{
+required string name        = 1;
+}
+
+//MSG_SS_RESPONSE_GET_UID_BY_NAME
+message MessageSSResponseGetUIDByName
+{
+required string name        = 1;
+optional int64  player_id   = 2;
+}
+
+//MSG_SS_UPDATE_PK_RANK_INFO
+message MessageSSUpdatePKRankInfo
+{
+required int64 player_id    = 1;
+required uint32 server       = 2;
+required int32 rank         = 3;
+repeated sy.PKRankInfo rank_info = 4;
+optional int32 rank_times   = 5;
+optional int32 max_rank     = 6;
+optional int32 last_pk_time = 7;
+}
+
+//MSG_SS_UPDATE_PK_RANK_REWARD
+message MessageSSUpdatePKRankReward
+{
+required int32 pk_rank_reward_rank  = 1;
+required int32 pk_rank_reward_time  = 2;
+}
+
+//MSG_SS_GET_REWARD_INFO
+message MessageSSGetRewardInfo
+{
+required int32 pk_rank_reward_rank  = 1;
+required int32 pk_rank_reward_time  = 2;
+required int32 rank_times           = 3;
+repeated sy.PKRankInfo rank_info    = 4;
+required int32 pk_rank_max          = 5;
+required int32 last_pk_time         = 6;
+repeated int32 daily_sign           = 7;
+optional int64 month_card           = 8;
+optional int64 big_month_card       = 9;
+optional int64 life_card            = 10;
+repeated sy.KVPair2 vip_weekly      = 11;
+
+optional int32 month_card_1        = 26; //小月基金购买时间
+optional int32 month_card_1_login  = 27; //小月基金登录天数
+optional int32 month_card_1_status = 28; //小月基金领奖状态
+optional int32 month_card_2        = 29; //大月基金购买时间
+optional int32 month_card_2_login  = 30; //大月基金登录天数
+optional int32 month_card_2_status = 31; //大月基金领奖状态
+optional int32 weekly_card         = 32; //周卡购买时间
+optional int32 weekly_card_login   = 33; //周卡登录天数
+optional int32 weekly_card_status  = 34; //周卡领取状态
+}
+
+//MSG_SS_GET_FRIEND_INFO
+message MessageSSGetFriendInfo
+{
+repeated sy.FriendInfo infos    = 1;
+}
+
+//MSG_SS_UPDATE_FRIEND_INFO
+message MessageSSUpdateFriendInfo
+{
+repeated sy.FriendInfo friends= 1;  //好友信息变动
+optional int64 delete_friend  = 2;  //要被删除的好友
+required int64 player_id      = 3;  //this uid
+}
+
+//MSG_SS_UPDATE_DAILY_PK_RANK_INFO
+message MessageSSUpdateDailyPkRankInfo
+{
+repeated int64 player_ids = 1;
+repeated int32 rank       = 2;
+repeated int32 time       = 3;
+}
+
+//MSG_SS_UPDATE_BUY_COUNT
+message MessageSSUpdateBuyCount
+{
+repeated sy.KVPair2 infos   = 1;
+optional bool is_clear      = 2;
+}
+
+
+//MSG_SS_GET_PATROL_INFO
+message MessageSSGetPatrolInfo
+{
+required int32 total_time  = 1;
+repeated sy.PatrolInfo infos = 2;
+}
+
+
+//MSG_SS_UPDATE_PATROL_INFO
+message MessageSSUpdatePatrolInfo
+{
+required int32 total_time  = 1;
+repeated sy.PatrolInfo infos = 2;
+}
+
+//MSG_SS_GET_REPORT_ABSTRACT
+message MessageSSGetReportAbstract
+{
+repeated string report_abstract = 1;
+}
+
+//MSG_SS_UPDATE_REPORT_ABSTRACT
+message MessageSSUpdateReportAbstract
+{
+required int64 player_1         = 1;
+required int64 player_2         = 2;
+required int32 report_type      = 3;
+required string report_content  = 4;
+required int64 report_uid       = 5;
+}
+
+//MSG_SS_UPDATE_TOWER_INFO
+message MessageSSUpdateTowerInfo
+{
+required sy.TowerState state    = 1;
+repeated sy.KVPair2    buff     = 2; //全部的buff
+}
+
+//MSG_SS_UPDATE_TRUCE_TIME
+message MessageSSUpdateTruceTime
+{
+required int64 truce_time = 1;
+}
+
+//MSG_SS_REQUEST_LOAD_RANK_LIST
+message MessageSSRequestLoadRankList
+{
+required uint32 server_id = 1;
+repeated int32 type       = 2;
+}
+
+//MSG_SS_RESPONSE_LOAD_RANK_LIST
+message MessageSSResponseLoadRankList
+{
+required uint32 server_id = 1;
+required int32 type       = 2;
+required sy.RankList list = 3;
+}
+
+//MSG_SS_UPDATE_FRIEND_ENERGY
+message MessageSSUpdateFriendEnergy
+{
+required int64 friend_id    = 1;
+required int32 enery        = 2;
+}
+
+//MSG_SS_UPDATE_DSTRIKE_INFO
+message MessageSSUpdateDstrikeInfo
+{
+required sy.DstrikeInfo info = 1;
+}
+
+//MSG_SS_UPDATE_SIGN_IN
+message MessageSSUpdateSignIn
+{
+required int32 sign_id      = 1;
+required int64 sign_time    = 2;
+}
+
+//MSG_SS_UPDATE_ACHIEVEMENT
+message MessageSSUpdateAchievement
+{
+repeated sy.KVPair2 infos   = 1;
+}
+
+//MSG_SS_REQUEST_GET_MAIL_REWARD
+message MessageSSRequestGetMailReward
+{
+required fixed64 mail_id = 1;
+}
+
+//MSG_SS_RESPONSE_GET_MAIL_REWARD
+message MessageSSResponseGetMailReward
+{
+required fixed64 mail_id = 1;
+optional int32 result_id = 2;
+repeated sy.KVPair2 rewards = 3;
+}
+
+//MSG_SS_NOTIFY_GET_MAIL_REWARD
+message MessageSSNotifyGetMailReward
+{
+required fixed64 mail_id = 1;
+}
+
+//MSG_SS_UPDATE_RANK_ID
+message MessageSSUpdateRankID
+{
+required int32 rank_id = 1;
+}
+
+//MSG_SS_NOTIFY_PLAYER_NUM
+message MessageSSNotifyPlayerNum
+{
+required int32 player_num   = 1;
+optional uint32 server_id   = 3;
+optional string version     = 4;
+optional int64 update_time  = 5;
+optional int32 open_days    = 6;  //开服天数
+repeated uint32 servers     = 8;
+}
+
+//MSG_SS_REQUEST_KICK_USER
+message MessageSSRequestKickUser
+{
+repeated int64 player_id    = 1;  //T掉多个人
+optional int32 all          = 2;  //T所有人下线
+}
+
+//MSG_SS_UPDATE_RANK_LIST_DETAILS
+message MessageSSUpdateRankListDetails
+{
+required uint32 server_id   = 1;
+required int32 type         = 2;
+repeated int64 players      = 3;
+}
+
+//MSG_SS_UPDATE_RANK_LIST_PLAYER
+message MessageSSUpdateRankListPlayer
+{
+required int32 type           = 1;
+required sy.RankItemInfo info = 2;
+}
+
+//MSG_SS_UPDATE_DSTRIKE_BOSS_INFO
+message MessageSSUpdateDstrikeBossInfo
+{
+required uint32 server_id     = 1;
+optional sy.DstrikeBoss boss  = 2;
+optional int64 player_id      = 3;  //删除boss
+}
+
+//MSG_SS_REQUEST_LOAD_BOSS_LIST
+message MessageSSRequestLoadBossList
+{
+required uint32 server_id = 1;
+}
+
+//MSG_SS_RESPONSE_LOAD_BOSS_LIST
+message MessageSSResponseLoadBossList
+{
+required uint32 server_id     = 1;
+repeated sy.DstrikeBoss boss  = 2;
+}
+
+//MSG_SS_UPDATE_SERVER_SHOP
+message MessageSSUpdateServerShop
+{
+required uint32 server_id     = 1;
+repeated sy.KVPair2   items   = 2;
+}
+
+//MSG_SS_REQUEST_LOAD_SERVER_SHOP
+message MessageSSRequestLoadServerShop
+{
+required uint32 server_id     = 1;
+}
+
+//MSG_SS_RESPONSE_LOAD_SERVER_SHOP
+message MessageSSResponseLoadServerShop
+{
+required uint32 server_id     = 1;
+repeated sy.KVPair2  items    = 2;
+optional int32 astrology_country_id = 3;
+optional int64 astrology_refresh_time = 4;
+}
+
+//MSG_SS_SET_ACCOUNT_STATUS
+message MessageSSSetAccountStatus
+{
+required int64 player_id      = 1;
+optional int32 status         = 2;
+optional int32 status_time    = 3;
+optional int32 flag           = 4;
+}
+
+//MSG_SS_UPDATE_MAIL_ID
+message MessageSSUpdateMailID
+{
+optional int64 server_mail_id = 2;
+}
+
+//MSG_SS_REQUEST_LOAD_SERVER_MAIL
+message MessageSSRequestLoadServerMail
+{
+required uint32 server_id     = 1;
+}
+
+//MSG_SS_RESPONSE_LOAD_SERVER_MAIL
+message MessageSSResponseLoadServerMail
+{
+required uint32 server_id     = 1;
+repeated sy.MailInfo mails    = 2;
+}
+
+//MSG_SS_UPDATE_LOGIN_TIME
+message MessageSSUpdateLoginTime
+{
+optional string channel     = 1;
+optional string device_id   = 2;
+}
+
+//MSG_SS_ADD_SERVER_MAIL
+message MessageSSAddServerMail
+{
+required uint32 server_id     = 1;
+required sy.MailInfo mail     = 2;
+}
+
+//MSG_SS_UPDATE_SERVER_IP_LIST
+message MessageSSSetServerIpList
+{
+required uint32 server_id     = 1;
+optional string black_list    = 2;
+optional string white_list    = 3;
+}
+
+//MSG_SS_SET_IP_LIST
+message MessageSSSetIpList
+{
+required uint32 server_id     = 1;
+repeated string list          = 2;
+required int32 type           = 3;  //1是黑名单, 2是白名单
+required int32 append         = 4;  //1是替换, 2是追加
+}
+
+//MSG_SS_UPDATE_DIALOG
+message MessageSSUpdateDialog
+{
+optional string dialog_id = 1;
+optional string story_id = 2;
+}
+
+//MSG_SS_UPDATE_CLIENT_FLAG
+message MessageSSUpdateClientFlag
+{
+required string client_flag = 1;
+}
+
+//MSG_SS_REQUEST_ADD_GOODS
+message MessageSSRequestAddGood
+{
+required sy.GMContent content = 1;
+repeated int64 player_uid     = 2;
+optional int64 conn_id        = 3;
+}
+
+//MSG_SS_RESPONSE_ADD_GOODS
+message MessageSSResponseAddGood
+{
+required int32 result  = 1;
+repeated int64 player_uid = 2;
+required int64 conn_id = 3;
+}
+
+//MSG_SS_REQUEST_LOAD_IP_LIST
+message MessageSSRequestLoadIPList
+{
+required uint32 server_id = 1;
+}
+
+//MSG_SS_RESPONSE_LOAD_IP_LIST
+message MessageSSResponseLoadIPList
+{
+repeated string white_list = 1;
+repeated string black_list = 2;
+}
+
+//MSG_SS_SERVER_NOTICE
+message MessageSSServerNotice
+{
+optional sy.NoticeInfo notice = 2;
+optional int64 delete_id      = 3;
+optional uint32 server_id     = 4;
+}
+
+//MSG_SS_REQUEST_LOAD_NOTICE
+message MessageSSRequestLoadNotice
+{
+required uint32 server_id = 1;
+}
+
+//MSG_SS_RESPONSE_LOAD_NOTICE
+message MessageSSResponseLoadNotice
+{
+repeated sy.NoticeInfo notices = 1;
+}
+
+//MSG_SS_UPDATE_CREATE_PLAYER_INFO
+message MessageSSUpdateCreatePlayerInfo
+{
+required uint32 server      = 1;
+required string openid      = 2;
+required int64 player_id    = 3;
+required int32 time         = 4;
+optional string channel     = 5;
+}
+
+//MSG_SS_UPDATE_OTHER_DSTRIKE_BOSS
+message MessageSSUpdateOtherDstrikeBoss
+{
+required int64 player_id    = 1;
+}
+
+//MSG_SS_UPDATE_COPY_STATUS
+message MessageSSUpdateCopyStatus
+{
+required int64 tid        = 1;
+required int64 player_id  = 3;
+required int32 copy_type  = 4;
+required int32 copy_id    = 5;
+required int32 copy_order = 6;
+required int32 copy_star  = 7;
+}
+
+//MSG_SS_UPDATE_CARRIER_COPY_INFO
+message MessageSSUpdateCarrierCopyInfo
+{
+repeated sy.CarrierCopy carrier_copy = 1;
+optional sy.CarrierCopyInfo carrier_copy_info = 2;
+}
+
+//MSG_SS_UPDATE_OBTAINED_CARRIERS
+message MessageSSUpdateObtainedCarriers
+{
+repeated int32 carrier_id = 1;
+}
+
+//MSG_SS_UPDATE_RECHARGE
+message MessageSSUpdateRecharge
+{
+required fixed32 recharge_time  = 1;
+required int32 money            = 2;
+optional int64 tid              = 3;
+optional int32 goodid           = 4;
+}
+
+//MSG_SS_UPDATE_CHANGE_AVATAR
+message MessageSSChangeAvatar
+{
+required int32 avatar     = 1;
+}
+
+//MSG_SS_UPDATE_MAX_FIGHT_ATTR
+message MessageSSUpdateMaxFightAttr
+{
+required int64 attr       = 1;
+}
+
+//MSG_SS_REQUEST_LOAD_ARMY
+message MessageSSLoadArmy
+{
+repeated uint32 server_id   = 1;
+}
+
+//MSG_SS_RESPONSE_LOAD_ARMY
+message MessageSSResponseLoadArmy
+{
+repeated sy.ArmyInfo info     = 2;
+}
+
+//MSG_SS_RESPONSE_LOAD_ARMY_MEMBER
+message MessageSSReponseLoadArmyMember
+{
+repeated sy.ArmyMemberInfo member = 1;
+repeated sy.ArmyApplyInfo apply   = 2;
+}
+
+//MSG_SS_UPDATE_LEGUAGE_INFO
+message MessageSSUpdateLeguageInfo
+{
+optional int64 army_id = 1;
+repeated int32 army_skill = 2;
+optional int64 leave_time = 3;
+optional int64 player_id  = 4;  //被动加入或者T出
+}
+
+//MSG_SS_REQUEST_CREATE_ARMY
+message MessageSSRequestCreateArmy
+{
+required sy.ArmyInfo info         = 1;
+required sy.ArmyMemberInfo master = 2;
+optional uint32 server            = 3;
+}
+
+//MSG_SS_RESPONSE_CREATE_ARMY
+message MessageSSResponseCreateArmy
+{
+optional sy.ArmyInfo info         = 1;  //如果成功的话,会带上军团信息
+optional int64 master_id          = 2;  //创建军团的人
+optional bool is_fail             = 3;  //是否创建成功
+optional sy.ArmyMemberInfo master = 4;
+}
+
+//MSG_SS_REQUEST_DESTORY_ARMY
+message MessageSSRequestDestoryArmy
+{
+optional int64 army_id          = 1;  //要被解散的军团ID
+repeated int64 player_ids       = 2;  //成员(包含的成员)
+}
+
+//MSG_SS_UPDATE_ARMY_MEMBER
+message MessageSSUpdateArmyMember
+{
+//更新军团成员信息
+optional sy.ArmyMemberInfo member = 1;
+optional uint32 server            = 2;
+
+//T玩家出军团
+optional int64 army_id            = 3;
+optional int64 member_id          = 4;
+}
+
+//MSG_SS_ON_JOIN_ARMY
+message MessageSSOnJoinArmy
+{
+optional int64 player_id        = 1;
+optional int64 army_id          = 2;
+}
+
+//MSG_SS_UPDATE_ARMY_APPLY
+message MessageSSUpdateArmyApply
+{
+//增加申请
+optional sy.ArmyApplyInfo info    = 1;
+//删除军团申请
+optional int64 player_id          = 2;
+optional int64 army_id            = 3;
+optional uint32 server            = 4;
+}
+
+//MSG_SS_UPDATE_ARMY_EXP_INFO
+message MessageSSUpdateArmyExpInfo
+{
+required int64 army_id           = 1;
+optional int32 army_exp          = 2;
+optional int32 army_level        = 3;
+optional int32 donate_count      = 4;
+optional int32 donate_value      = 5;
+optional int32 donate_time       = 6;
+repeated int32 army_skill        = 7;
+optional int64 tid               = 8;
+optional int32 msgid             = 9;
+optional int32 exp_delta         = 10;
+optional int64 player_id         = 11;
+optional uint32 server_id        = 12;
+}
+
+//MSG_SS_UPDATE_ARMY_LOG
+message MessageSSUpdateArmyLog
+{
+optional int64 army_id          = 1;
+repeated string logs            = 2;
+}
+
+//MSG_SS_UPDATE_ARMY_NOTICE
+message MessageSSUpdateArmyNotice
+{
+optional string notice1         = 1;
+optional string notice2         = 2;
+optional int32 avatar           = 3;
+optional int64 army_id          = 4;
+}
+
+//MSG_SS_UPDATE_DAILY_SIGN
+message MessageSSUpdateDailySign
+{
+repeated int32 daily_sign = 1;
+}
+
+//MSG_SS_UPDATE_RECHARGE_DETAILS
+message MessageSSUpdateRechargeDetails
+{
+optional string order_id      = 1;
+optional int32  device_type   = 2;
+optional string user_id       = 3;
+optional int32 pay_amount     = 4;
+optional string currency_code = 5;
+optional string channel_id    = 6;
+optional uint32 server_id     = 7;
+optional int64 role_id        = 8;
+optional int32 goods_type     = 9;
+optional int32 game_coin      = 10;
+optional string timestamp     = 12;
+optional string goods_id      = 11;
+
+optional int32 result         = 15; //错误码
+optional int32 session_id     = 16; //HTTP请求的session
+optional int32 request_time   = 17; //请求的时间戳
+optional int32 stage          = 18; //请求的步骤
+optional int64 tid            = 19; //tid
+}
+
+//MSG_SS_UPDATE_MONTH_CARD
+message MessageSSUpdateMonthCard
+{
+required int32 month_card = 1;
+required int32 big_month_card = 2;
+required int32 life_card = 3;
+
+optional int32 month_card_1        = 26; //小月基金购买时间
+optional int32 month_card_1_login  = 27; //小月基金登录天数
+optional int32 month_card_1_status = 28; //小月基金领奖状态
+optional int32 month_card_2        = 29; //大月基金购买时间
+optional int32 month_card_2_login  = 30; //大月基金登录天数
+optional int32 month_card_2_status = 31; //大月基金领奖状态
+optional int32 weekly_card         = 32; //周卡购买时间
+optional int32 weekly_card_login   = 33; //周卡登录天数
+optional int32 weekly_card_status  = 34; //周卡领取状态
+}
+
+//MSG_SS_UPDATE_VIP_WEEKLY
+message MessageSSUpdateVIPWeekly
+{
+repeated sy.KVPair2 vip_weekly = 1;
+}
+
+//MSG_SS_UPDATE_FIRST_RECHAGE_INFO
+message MessageSSUpdateFirstRechargeInfo
+{
+optional string openid        = 1;
+optional int64 player_id      = 2;
+optional int32 recharge_time  = 3;
+optional int32 money          = 4;
+optional uint32 server_id     = 5;
+}
+
+//MSG_SS_SERVER_SET_DIALOG
+message MessageSSServerSetDialog
+{
+required int64 player_id = 1;
+required string guide = 2;
+}
+
+//MSG_SS_SERVER_CLEAR_DATA
+message MessageSSServerClearData
+{
+required uint32 server_id = 1;
+}
+
+//MSG_SS_REUQEST_GET_SERVER_START
+message MessageSSRequestGetServerStart
+{
+required uint32 server_id = 1;
+}
+
+//MSG_SS_RESPONSE_GET_SERVER_START
+message MessageSSResponseGetServerStart
+{
+required int64 start_time = 1;
+}
+
+//MSG_SS_ADD_BUY_ITEM_LOG
+message MessageSSAddBuyItemLog
+{
+required int64 tid = 1;
+required int32 commodity_id = 2;
+required int32 shop_type = 3;
+required int32 item_id = 4;
+required int32 buy_count = 5;
+}
+
+//MSG_SS_UPDATE_ARMY_INFO
+message MessageSSUpdateArmyInfo
+{
+required int64 army_id = 1;
+optional int64 master_id = 2;
+optional string master_name = 3;
+repeated sy.ShopCommodityInfo army_shop = 4;
+optional sy.ArmyShopRecord buy_record = 5;
+optional int64 shop_refresh_time = 6;
+}
+
+//MSG_SS_UPDATE_TOTAL_RECHARGE
+message MessageSSUpdateTotalRecharge
+{
+required int32 total_recharge = 1;
+}
+
+//MSG_SS_UPDATE_ACTIVITY_RECORD_NEW
+message MessageSSUpdateActivityRecordNew
+{
+optional sy.ActivityRecord records = 1;
+}
+
+
+//MSG_SS_REQUEST_LOAD_TIME_ACTIVITY
+message MessageRequestLoadTimeActivity
+{
+required uint32 server_id = 1; 
+}
+
+//MSG_SS_RESPONSE_LOAD_TIME_ACTIVITY
+message MessageResponseLoadTimeActivity
+{
+repeated sy.TimeActivityInfo activitis = 1;
+}
+
+//MSG_SS_REQUEST_LOAD_TIME_ACTIVITY_NEW
+message MessageRequestLoadTimeActivityNew
+{
+optional uint32 server_id = 1;
+}
+
+//MSG_SS_RESPONSE_LOAD_TIME_ACTIVITY_NEW
+message MessageResponseLoadTimeActivityNew
+{
+repeated sy.TimeActivityInfo activitis = 1;
+}
+
+//MSG_SS_UPDATE_ASTROLOGY_AWARD
+message MessageSSUpdateAstrologyAward
+{
+required uint32 server_id = 1;
+required int32 astrology_country_id = 2;
+required int64 astrology_refresh_time = 3;
+}
+
+message CopyStatInfo
+{
+optional int32 copy_type    = 1;
+optional int32 player_count = 2;
+optional int32 count        = 3;
+optional int32 max_copy_id  = 4;
+}
+
+//MSG_SS_UPDATE_SERVER_COPY_INFO
+message MessageSSUpdateServerCopyInfo
+{
+optional uint32 server_id       = 1;
+optional int32 update_time      = 4;
+repeated CopyStatInfo info      = 5;
+}
+
+//MSG_SS_UPDATE_OTHER_PLAYER_INFO
+message MessageSSUpdateOtherPlayerInfo
+{
+optional sy.OtherPlayerInfo info  = 1;
+}
+
+message QueryOtherPlayer
+{
+optional int32 level      = 10; //优先按照等级查找
+optional int64 fight      = 11; //没有等级按照战斗力查找
+}
+
+//MSG_SS_REQUEST_QUERY_OTHER_PLAYER
+message MessageSSRequestQueryOtherPlayer
+{
+repeated QueryOtherPlayer query   = 1;
+optional int64 request_player_id  = 2;
+optional int32 msg_id = 3;
+}
+
+
+//MSG_SS_RESPONSE_QUERY_OTHER_PLAYER
+message MessageSSResponseQueryOtherPlayer
+{
+repeated sy.OtherPlayerInfo player  = 1;
+optional int64 request_player_id    = 2;
+optional int32 msg_id = 3;
+}
+
+//MSG_SS_UPDATE_CREATE_TIME
+message MessageSSUpdateCreateTime
+{
+required int64 create_time = 1;
+}
+
+//MSG_SS_UPDATE_CROSS_SERVER_RANK_LIST
+message MessageSSUpdateCrossServerRankList
+{
+optional uint32 server_id     = 1;
+repeated sy.RankItemInfo info = 2;
+optional int32 rank_type      = 3;
+}
+
+//MSG_SS_REQUEST_LEGION_WAR_NEW_PLAYER
+message MessageSSRequestLegionWarNewPlayer
+{
+optional sy.OtherPlayerInfo player  = 1;
+optional uint32 server_id           = 2;  //参加比赛的服务器
+}
+
+//MSG_SS_RESPONSE_LEGION_WAR_NEW_PLAYER
+message MessageSSResponseLegionNewPlayer
+{
+optional sy.OtherPlayerInfo player  = 1;
+optional int32 city_id              = 2;  //如果没有city_id表示没有空位了
+optional int32 position             = 3;
+}
+
+//MSG_SS_UPDATE_LEGION_WAR_POS
+message MessageSSUpdateLegionWarPos
+{
+optional int32 city_1               = 1;  //第一个人
+optional int32 position_1           = 2;
+optional int32 city_2               = 3;  //第二个人
+optional int32 position_2           = 4;
+optional uint32 server_id           = 5;
+}
+
+//MSG_SS_UPDATE_LEGION_WAR_PLAYER
+message MessageSSUpdateLegionWarPlayer
+{
+optional uint32 server_id         = 1;
+optional int64 player_id          = 3;
+optional int64 army_id            = 4;  //如果有表示加入军团; 否则是退出
+optional int32 army_avatar        = 5;
+optional string army_name         = 6;
+}
+
+//MSG_SS_UPDATE_LOGIN_DAYS
+message MessageSSUpdateLoginDays
+{
+optional int32 login_days = 1;
+}
+
+//MSG_SS_REQUEST_PLAYER_LOGIN
+message MessageSSRequestPlayerLogin
+{
+optional int64 player_id      = 1;
+optional uint32 server_id     = 2;
+}
+
+//MSG_SS_REQUEST_LOAD_ALL_NAME
+message MessageSSRequestLoadAllName
+{
+repeated uint32 server_id     = 1;
+}
+
+//MSG_SS_RESPONSE_LOAD_ALL_NAME
+message MessageSSResponseLoadAllName
+{
+repeated string name          = 2;
+}
+
+//MSG_SS_UPDATE_DEVICE_ID
+message MessageSSUpdateDeviceID
+{
+optional string device_id     = 1;
+optional string idfa          = 2;
+}
+
+//MSG_SS_UPDATE_MEDAL_COPY_ID
+message MessageUpdateMedalCopyID
+{
+optional int32 medal_copy_id = 1;
+optional int32 medal_star = 2;
+optional string medal_state = 3;
+optional int32 medal_achi = 4;
+}
+
+//MSG_SS_NOTIFY_GLOBAL_CONFIG
+message MessageSSNotifyGlobalConfig
+{
+optional string global_str    = 1;
+}
+
+//MSG_SS_NOTIFY_CORAL_SEA_TEAM
+message MessageSSNotifyCoralSeaTeam
+{
+optional sy.CoralSeaTeam team   = 1;
+optional int64 player_leave     = 2;
+}
+
+//MSG_SS_REQUEST_CREATE_CORAL_SEA_TEAM
+message MessageSSRequestCreateCoralSeaTeam
+{
+optional sy.OtherPlayerInfo player  = 1;
+}
+
+//MSG_SS_REQUEST_SEARCH_CORAL_SEA_TEAM
+message MessageSSRequestSearchCoralSeaTeam
+{
+optional sy.OtherPlayerInfo player  = 1;
+optional int64 abort_search         = 2;
+}
+
+//MSG_SS_REQUEST_JOIN_CORAL_SEA_TEAM
+message MessageSSRequestJoinCoralSeaTeam
+{
+optional sy.OtherPlayerInfo player  = 1;
+optional int64 team_id              = 2;
+}
+
+//MSG_SS_REQUEST_LEAVE_CORAL_SEA_TEAM
+message MessageSSRequestLeaveCoralSeaTeam
+{
+optional int64 player_id            = 1;
+}

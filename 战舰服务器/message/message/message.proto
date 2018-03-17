@@ -1,0 +1,4473 @@
+syntax="proto2";
+package sy;
+option optimize_for = SPEED;
+
+enum MSG_CS {
+  MSG_CS_MSG_ID_BEGIN                       = 0x1FFF;  //CS消息的起始边界(不包含)
+  MSG_CS_ERROR_CODE                         = 0x2000;  //发送给客户端错误码
+  MSG_CS_CLOSE_CONNECTION                   = 0x2001;  //客户端关闭连接
+  MSG_CS_REQUEST_HEART_BEAT                 = 0x2002;  //心跳
+  MSG_CS_RESPONSE_HEART_BEAT                = 0x2003;  //心跳返回
+  MSG_CS_NOTIFY_NEW_CLIENT                  = 0x2004;  //新版本客户端
+  MSG_CS_REQUEST_GM_COMMAND                 = 0x2006;  //GM请求
+  MSG_CS_RESPONSE_GM_COMMAND                = 0x2007;  //GM请求返回
+
+  //登录相关
+  MSG_CS_REQUEST_LOGIN_C                    = 0x2010;  //客户端请求登录
+  MSG_CS_RESPONSE_LOGIN_S                   = 0x2011;  //服务器登录返回
+  MSG_CS_REPORT_TOKEN_C                     = 0x2012;  //客户端上报口令
+  MSG_CS_NOTIFY_RELOGIN                     = 0x2013;  //客户端重复登陆
+  MSG_CS_REQUEST_LOGOUT                     = 0x2014;  //客户端网络连接断开
+  MSG_CS_REPORT_TOKEN_S                     = 0x2015;  //使用口令登录成功
+  MSG_CS_REQUEST_REGISTE_ACCOUNT            = 0x2016;  //注册账号
+  MSG_CS_RESPONSE_REGISTE_ACCOUNT           = 0x2017;  //注册账号返回
+  MSG_CS_REQUEST_ACCOUNT_LOGIN              = 0x2018;  //账号登陆
+  MSG_CS_RESPONSE_ACCOUNT_LOGIN             = 0x2019;  //账号登陆返回
+
+  //角色相关
+  MSG_CS_REQUEST_CREATE_PLAYER              = 0x2020;  //创建角色
+  MSG_CS_RESPONSE_CREATE_PLAYER             = 0x2021;  //创建角色返回
+  //拉取玩家信息
+  MSG_CS_REQUEST_LOAD_PLAYER                = 0x2030;  //拉取玩家信息
+  MSG_CS_RESPONSE_LOAD_PLAYER               = 0x2031;  //拉取玩家信息
+  MSG_CS_RESPONSE_LOAD_FRIEND               = 0x2032;  //拉取好友信息
+  MSG_CS_RESPONSE_GET_MAIL                  = 0x2033;  //获取邮件返回
+  MSG_CS_RESPONSE_LOAD_PLAYER_END           = 0x2034;  //拉取玩家信息成功
+  MSG_CS_RESPONSE_LOAD_ITEM                 = 0x2035;  //拉取道具返回
+  MSG_CS_RESPONSE_ACTIVITY_SWEEP_STAKE      = 0x2036;  //拉去转盘活动返回
+  MSG_CS_RESPONSE_LOAD_SHIP                 = 0x2037;  //拉取船只信息返回
+
+  MSG_CS_RESPONSE_LOAD_TACTIC               = 0x2039;  //拉取阵型信息返回
+
+  MSG_CS_RESPONSE_LOAD_COPY                 = 0x203B;  //拉取副本信息返回
+  MSG_CS_RESPONSE_TIME_ACTIVITY             = 0x203C;  //跟时间有关的活动
+
+  MSG_CS_RESPONSE_LOAD_SHOP                 = 0x203D;  //拉取商店信息返回
+
+  MSG_CS_LOGIC_BEGIN                        = 0x204F;  //逻辑请求开始
+  MSG_CS_REQUEST_SET_TACTIC                 = 0x2050;  //设置阵型信息
+
+  MSG_CS_REQUEST_ACTIVE_CARRIER             = 0x2053;  //研发新航母
+  MSG_CS_RESPONSE_ACTIVE_CARRIER            = 0x2054;  //研发新航母返回
+  MSG_CS_REQUEST_RESEARCH_HERO              = 0x2055;  //研发船只
+  MSG_CS_REQUEST_GET_RESEARCH_HERO          = 0x2056;  //获取研发的船只
+  MSG_CS_RESPONSE_GET_RESEARCH_HERO         = 0x2057;  //获取研发的船只返回
+
+  MSG_CS_RESPONSE_SET_TACTIC                = 0x205A;  //设置阵型信息返回
+  MSG_CS_REQUEST_EQUIP_REFINE               = 0x205E;  //装备精炼
+  MSG_CS_RESPONSE_EQUIP_REFINE              = 0x205F;  //装备精炼返回
+  MSG_CS_REQUEST_EQUIP_LEVEL_UP             = 0x2060;  //装备升级
+  MSG_CS_RESPONSE_EQUIP_LEVEL_UP            = 0x2061;  //装备升级返回
+  MSG_CS_REQUEST_HERO_LEVEL_UP              = 0x2062;  //船舰升级
+  MSG_CS_RESPONSE_HERO_LEVEL_UP             = 0x2063;  //船舰升级返回
+  MSG_CS_REQUEST_CLEAR_CD                   = 0x2064;  //清除CD
+  MSG_CS_RESPONSE_CLEAR_CD                  = 0x2065;  //清除CD返回
+  MSG_CS_REQUEST_HERO_GRADE_LEVEL_UP        = 0x2066;  //船舰突破
+  MSG_CS_RESPONSE_HERO_GRADE_LEVEL_UP       = 0x2067;  //船舰突破返回
+  MSG_CS_REQUEST_FLOP                       = 0x2068;  //翻牌请求
+  MSG_CS_RESPONSE_FLOP                      = 0x2069;  //翻牌请求返回
+  MSG_CS_REQUEST_EQUIP_ITEM                 = 0x206A;  //船穿/卸装备
+  MSG_CS_RESPONSE_EQUIP_ITEM                = 0x206B;  //穿卸装备返回
+  MSG_CS_REQUEST_COMPOSE_EQUIP              = 0x206C;  //装备船只合成
+  MSG_CS_RESPONSE_COMPOSE_EQUIP             = 0x206D;  //装备船只合成返回
+  MSG_CS_REQUEST_NAVY_REFINE                = 0x206E;  //宝物突破
+  MSG_CS_RESPONSE_NAVY_REFINE               = 0x206F;  //宝物突破返回
+  //战斗奖励
+  MSG_CS_NOTIFY_FIGTH_RESULT                = 0x2070;  //通知战斗结果(服务器发)
+  //战斗
+  MSG_CS_REQUEST_FIGHT_REPORT               = 0x2074;  //获取战报
+  MSG_CS_RESPONSE_FIGHT_REPORT              = 0x2075;  //获取战报返回
+  MSG_CS_REQUEST_FIGHT                      = 0x2076;  //战斗请求(副本和夺宝, 返回MSG_CS_RESPONSE_FIGHT_REPORT和MSG_CS_NOTIFY_FIGTH_RESULT)
+
+  MSG_CS_REQUEST_HERO_RANDOM_ATTR           = 0x2080;  //船洗随机属性
+  MSG_CS_RESPONSE_HERO_RANDOM_ATTR          = 0x2081;  //船洗随机属性返回
+  MSG_CS_REQUEST_PLANE_LEVEL_UP             = 0x2082;  //飞机升级
+  MSG_CS_RESPONSE_PLANE_LEVEL_UP            = 0x2083;  //飞机升级返回
+  MSG_CS_REQUEST_CARRIER_OPEN_SLOT          = 0x2084;  //航母开启槽位
+  MSG_CS_RESPONSE_CARRIER_OPEN_SLOT         = 0x2085;  //航母开启槽位返回
+  MSG_CS_REQUEST_GET_COPY_AWARD             = 0x2086;  //获取星级宝箱和章节奖励
+  MSG_CS_RESPONSE_GET_COPY_AWARD            = 0x2087;  //获取星级宝箱和章节奖励返回
+  MSG_CS_REQUEST_SAVE_RANDOM_ATTR           = 0x2088;  //保存随机属性
+  MSG_CS_RESPONSE_SAVE_RANDOM_ATTR          = 0x2089;  //保存随机属性返回
+  MSG_CS_REQUEST_COMPOSE_NAVY               = 0x208A;  //宝物合成
+  MSG_CS_RESPONSE_COMPOSE_NAVY              = 0x208B;  //宝物合成返回
+  MSG_CS_REQUEST_NAVY_LEVEL_UP              = 0x208C;  //宝物升级
+  MSG_CS_RESPONSE_NAVY_LEVEL_UP             = 0x208D;  //宝物升级返回
+  MSG_CS_REQUEST_CHANGE_NAME                = 0x208E;  //改名
+  MSG_CS_RESPONSE_CHANGE_NAME               = 0x208F;  //改名返回
+  MSG_CS_REQUEST_SELL_ITEM                  = 0x2090;  //出售装备
+  MSG_CS_RESPONSE_SELL_ITEM                 = 0x2091;  //出售装备返回
+  MSG_CS_REQUEST_SELL_SHIP                  = 0x2092;  //出售船只
+  MSG_CS_RESPONSE_SELL_SHIP                 = 0x2093;  //出售船只返回
+  MSG_CS_REQUEST_BUY_ITEM                   = 0x2094;  //购买物品
+  MSG_CS_RESPONSE_BUY_ITEM                  = 0x2095;  //购买物品返回
+  MSG_CS_REQUEST_REFRESH_FEATS              = 0x2096;  //刷新兑换商店
+  MSG_CS_RESPONSE_REFRESH_FEATS             = 0x2097;  //刷新兑换商店返回
+  MSG_CS_REQUEST_SET_MAIL_ID                = 0x2098;  //设置最后读取邮件的ID
+  MSG_CS_REQUEST_SEND_MAIL                  = 0x2099;  //发送邮件
+  MSG_CS_RESPONSE_SEND_MAIL                 = 0x209A;  //发送邮件返回
+  MSG_CS_REQUEST_FATE_LEVEL_UP              = 0x209B;  //天命升级
+  MSG_CS_RESPONSE_FATE_LEVEL_UP             = 0x209C;  //天命升级返回
+  MSG_CS_REQUEST_GET_OTHER_PLAYER           = 0x209D;  //获取他人信息
+  MSG_CS_RESPONSE_GET_OTHER_PLAYER          = 0x209E;  //获取他人信息返回
+  MSG_CS_REQUEST_GET_PK_RANK_LIST           = 0x209F;  //获取竞技场排行榜前几名
+  MSG_CS_RESPONSE_GET_PK_RANK_LIST          = 0x20A0;  //获取竞技场排行榜前几名返回
+  MSG_CS_REQUEST_GET_MY_PK_RANK_INFO        = 0x20A1;  //获取自己的竞技场信息
+  MSG_CS_RESPONSE_GET_MY_PK_RANK_INFO       = 0x20A2;  //获取自己的竞技场信息返回
+  MSG_CS_REQUEST_ADD_FRIEND                 = 0x20A3;  //添加好友
+  MSG_CS_RESPONSE_ADD_FRIEND                = 0x20A4;  //添加好友返回
+  MSG_CS_REQUEST_AGREE_ADD_FRIEND           = 0x20A5;  //同意添加好友
+  MSG_CS_RESPONSE_AGREE_ADD_FRIEND          = 0x20A6;  //同意添加好友返回
+  MSG_CS_REQUEST_START_PATROL               = 0x20A7;  //开始巡逻
+  MSG_CS_RESPONSE_START_PATROL              = 0x20A8;  //开始巡逻返回
+  MSG_CS_REQUEST_GET_PATROL_AWARDS          = 0x20A9;  //领取巡逻奖励
+  MSG_CS_RESPONSE_GET_PATROL_AWARDS         = 0x20AA;  //领取巡逻奖励返回
+  MSG_CS_REQUEST_PATROL_LEVEL_UP            = 0x20AB;  //领地升级
+  MSG_CS_RESPONSE_PATROL_LEVEL_UP           = 0x20AC;  //领地升级返回
+  MSG_CS_REQUEST_REFRESH_PK_TARGETS         = 0x20AD;  //刷新竞技场对手(返回MSG_CS_RESPONSE_GET_MY_PK_RANK_INFO)
+  MSG_CS_REQUEST_TEST_PK_TARGET             = 0x20AE;  //竞技场挑战(检测对手是否发生变动,否则就战斗,是否需要刷新)
+  MSG_CS_RESPONSE_TEST_PK_TARGET            = 0x20AF;  //竞技场挑战对象发生变动
+  MSG_CS_REQUEST_BUY_COUNT                  = 0x20B0;  //购买次数
+  MSG_CS_RESPONSE_BUY_COUNT                 = 0x20B1;  //购买次数返回
+  MSG_CS_REQUEST_TALK                       = 0x20B2;  //聊天
+  MSG_CS_RESPONSE_TALK                      = 0x20B3;  //聊天返回
+  MSG_CS_REQUEST_RECOVER                    = 0x20B4;  //回收
+  MSG_CS_RESPONSE_RECOVER                   = 0x20B5;  //回收返回
+  MSG_CS_REQUEST_TOWER_BUY_BUFF             = 0x20B6;  //爬塔购买buff
+  MSG_CS_RESPONSE_TOWER_BUY_BUFF            = 0x20B7;  //爬塔购买buff返回
+  MSG_CS_REQUEST_TOWER_AWARD                = 0x20B8;  //获取爬塔奖励
+  MSG_CS_RESPONSE_TOWER_AWARD               = 0x20B9;  //获取爬塔奖励返回
+  MSG_CS_REQUEST_TOWER_BUY_BOX              = 0x20BA;  //爬塔抽宝箱
+  MSG_CS_RESPONSE_TOWER_BUY_BOX             = 0x20BB;  //爬塔抽宝箱返回
+  MSG_CS_REQUEST_GET_UID_BY_NAME            = 0x20BC;  //通过名字查找玩家ID
+  MSG_CS_RESPONSE_GET_UID_BY_NAME           = 0x20BD;  //通过名字查找玩家ID返回
+  MSG_CS_REQUEST_COPY_SWEEP                 = 0x20BE;  //副本扫荡
+  MSG_CS_RESPONSE_COPY_SWEEP                = 0x20BF;  //副本扫荡返回
+  MSG_CS_REQUEST_DSTRIKE_LIST               = 0x20C0;  //围剿BOSS列表
+  MSG_CS_RESPONSE_DSTRIKE_LIST              = 0x20C1;  //围剿BOSS列表返回
+  MSG_CS_REQUEST_DSTRIKE_FIGHT              = 0x20C2;  //发起围剿BOSS请求(会返回MSG_CS_RESPONSE_FIGHT_REPORT,MSG_CS_NOTIFY_FIGTH_RESULT和MSG_CS_RESPONSE_DSTRIKE_FIGHT)
+  MSG_CS_RESPONSE_DSTRIKE_FIGHT             = 0x20C3;  //BOSS挑战请求返回
+  MSG_CS_REQUEST_DSTRIKE_SHARE              = 0x20C4;  //发起BOSS分享
+  MSG_CS_REQUEST_USE_ITEM                   = 0x20C5;  //使用道具
+  MSG_CS_RESPONSE_USE_ITEM                  = 0x20C6;  //使用道具返回
+  MSG_CS_REQUEST_GET_RANK_AWARD             = 0x20C7;  //获取排行榜奖励
+  MSG_CS_RESPONSE_GET_RANK_AWARD            = 0x20C8;  //获取排行榜奖励返回
+  MSG_CS_REQUEST_SIGN_IN                    = 0x20C9;  //签到
+  MSG_CS_RESPONSE_SIGN_IN                   = 0x20CA;  //签到返回
+  MSG_CS_REQUEST_GET_ROB_OPPONENT           = 0x20CB;  //获取夺宝对手
+  MSG_CS_RESPONSE_GET_ROB_OPPONENT          = 0x20CC;  //获取夺宝对手返回
+  MSG_CS_REQUEST_USE_TRUCE                  = 0x20CF;  //使用免战
+  MSG_CS_RESPONSE_USE_TRUCE                 = 0x20D0;  //使用免战返回
+  MSG_CS_REQUEST_GET_FRIEND_INFO            = 0x20D1;  //获取好友信息
+  MSG_CS_REQUEST_FRIEND_ENERGY              = 0x20D2;  //送好友精力
+  MSG_CS_RESPONSE_FRIEND_ENERGY             = 0x20D3;  //送好友精力返回
+  MSG_CS_REQUEST_GET_FRIEND_ENERGY          = 0x20D4;  //获取好友送的精力
+  MSG_CS_RESPONSE_GET_FRIEND_ENERGY         = 0x20D5;  //获取好友送的精力返回
+  MSG_CS_REQUEST_GET_RANK_LIST              = 0x20D6;  //拉取排行榜
+  MSG_CS_RESPONSE_GET_RANK_LIST             = 0x20D7;  //拉取排行榜返回
+  MSG_CS_REQUEST_GET_DAILY_AWARD            = 0x20D8;  //获取日常奖励
+  MSG_CS_RESPONSE_GET_DAILY_AWARD           = 0x20D9;  //获取日常奖励返回
+  MSG_CS_REQUEST_GET_ACHIEVEMENT            = 0x20DA;  //获取成就奖励
+  MSG_CS_RESPONSE_GET_ACHIEVEMENT           = 0x20DB;  //获取成就奖励返回
+  MSG_CS_REQUEST_GET_MAIL_REWARD            = 0x20DC;  //获取邮件奖励
+  MSG_CS_RESPONSE_GET_MAIL_REWARD           = 0x20DD;  //获取邮件奖励返回
+  MSG_CS_REQUEST_RANK_INFO                  = 0x20DE;  //获取军衔信息
+  MSG_CS_RESPONSE_RANK_INFO                 = 0x20DF;  //获取军衔信息返回
+  MSG_CS_REQUEST_PATROL_HELP                = 0x20E0;  //领地攻讨灭火
+  MSG_CS_RESPONSE_PATROL_HELP               = 0x20E1;  //领地攻讨灭火返回
+  MSG_CS_REQUEST_GET_SEVEN_DAYS             = 0x20E2;  //请求七天奖励
+  MSG_CS_RESPONSE_GET_SEVEN_DAYS            = 0x20E3;  //请求七天奖励返回
+  MSG_CS_REQUEST_GET_SERVER_SHOP_INFO       = 0x20E4;  //拉取全服商店信息
+  MSG_CS_RESPONSE_GET_SERVER_SHOP_INFO      = 0x20E5;  //拉取全服商店信息返回
+  MSG_CS_REQUEST_ACTIVE_RELATION            = 0x20E6;  //激活缘分
+  MSG_CS_RESPONSE_ACTIVE_RELATION           = 0x20E7;  //激活缘分返回
+  MSG_CS_REQUEST_EQUIP_PLANE_NEW            = 0x20E8;  //装备飞机
+  MSG_CS_RESPONSE_EQUIP_PLANE_NEW           = 0x20E9;  //装备飞机返回
+  MSG_CS_REQUEST_PLANE_LEVEL_UP_NEW         = 0x20F0;  //飞机升级
+  MSG_CS_RESPONSE_PLANE_LEVEL_UP_NEW        = 0x20F1;  //飞机升级返回
+  MSG_CS_REQUEST_CHANGE_CARRIER             = 0x20F2;  //切换航母
+  MSG_CS_RESPONSE_CHANGE_CARRIER            = 0x20F3;  //切换航母返回
+  MSG_CS_REQUEST_DIALOG                     = 0x20F4;  //新手引导
+  MSG_CS_RESPONSE_DIALOG                    = 0x20F5;  //新手引导返回
+  MSG_CS_REQUEST_DSTRIKE_DAILY_AWARD        = 0x20F6;  //领取围剿BOSS每日功勋奖励
+  MSG_CS_RESPONSE_DSTRIKE_DAILY_AWARD       = 0x20F7;  //领取围剿BOSS每日功勋奖励返回
+  MSG_CS_REQUEST_TEST_PK                    = 0x20F8;  //切磋
+  MSG_CS_REQUEST_GET_RANDOM_FRIEND          = 0x20F9;  //获取随机推荐的好友
+  MSG_CS_RESPONSE_GET_RANDOM_FRIEND         = 0x20FA;  //获取随机推荐好友返回
+  MSG_CS_REQUEST_CLIENT_FLAG                = 0x20FB;  //设置客户端标识
+  MSG_CS_RESPONSE_CLIENT_FLAG               = 0x20FC;  //返回设置客户端标识
+  MSG_CS_REQUEST_EQUIP_CARRIER              = 0x20FD;  //装备航母
+  MSG_CS_RESPONSE_EQUIP_CARRIER             = 0x20FE;  //装备航母返回
+  MSG_CS_REQUEST_CARRIER_LEVEL_UP           = 0x20FF;  //航母升级
+  MSG_CS_RESPONSE_CARRIER_LEVEL_UP          = 0x2100;  //航母升级返回
+  MSG_CS_REQUEST_CARRIER_REFORM_UP          = 0x2101;  //航母突破升级
+  MSG_CS_RESPONSE_CARRIER_REFORM_UP         = 0x2102;  //航母突破升级返回
+  MSG_CS_REQUEST_CARRIER_COPY_NEXT_LEVEL    = 0x2103;  //获取航母副本下一层
+  MSG_CS_RESPONSE_CARRIER_COPY_NEXT_LEVEL   = 0x2104;  //获取航母副本下一层返回
+  MSG_CS_REQUEST_GET_CARRIER_COPY_AWARD     = 0x2105;  //航母副本开箱子(获取航母副本奖励)
+  MSG_CS_RESPONSE_GET_CARRIER_COPY_AWARD    = 0x2106;  //获取航母副本奖励返回
+  MSG_CS_REQUEST_FIGHT_CARRIER_COPY         = 0x2107;  //进入航母副本战斗
+  MSG_CS_REQUEST_GET_OPEN_FUND              = 0x2108;  //领取开服基金
+  MSG_CS_RESPONSE_GET_OPEN_FUND             = 0x2109;  //领取开服基金返回
+  MSG_CS_REQUEST_GET_OPEN_WELFARE           = 0x210A;  //领取开服基金福利
+  MSG_CS_RESPONSE_GET_OPEN_WELFARE          = 0x210B;  //领取开服基金福利返回
+  MSG_CS_REQUEST_CREATE_ARMY                = 0x210C;  //创建军团
+  MSG_CS_RESPONSE_CREATE_ARMY               = 0x210D;  //创建军团返回
+  MSG_CS_REQUEST_ARMY_SKILL_UP              = 0x210E;  //升级公会技能
+  MSG_CS_RESPONSE_ARMY_SKILL_UP             = 0x210F;  //升级公会技能返回
+  MSG_CS_REQUEST_ARMY_SIGN                  = 0x2110;  //军团签到
+  MSG_CS_RESPONSE_ARMY_SIGN                 = 0x2111;  //军团签到返回
+  MSG_CS_REQUEST_GET_ARMY_INFO              = 0x2112;  //获取自己的军团信息
+  MSG_CS_RESPONSE_GET_ARMY_INFO             = 0x2113;  //获取自己军团信息返回
+  MSG_CS_REQUEST_ARMY_APPLY                 = 0x2114;  //申请加入军团
+  MSG_CS_RESPONSE_ARMY_APPLY                = 0x2115;  //申请加入军团返回
+  MSG_CS_REQUEST_AGREE_ARMY_APPLY           = 0x2116;  //同意他人加入军团
+  MSG_CS_RESPONSE_AGREE_ARMY_APPLY          = 0x2117;  //同意他人加入军团返回
+  MSG_CS_REQUEST_ARMY_LEVEL_UP              = 0x2118;  //军团升级
+  MSG_CS_RESPONSE_ARMY_LEVEL_UP             = 0x2119;  //军团升级返回
+  MSG_CS_REQUEST_KICK_ARMY_MEMBER           = 0x211A;  //T玩家出军团
+  MSG_CS_RESPONSE_KICK_ARMY_MEMBER          = 0x211B;  //T玩家出军团返回
+  MSG_CS_REQUEST_LEAVE_ARMY                 = 0x211C;  //自己离开军团
+  MSG_CS_RESPONSE_LEAVE_ARMY                = 0x211D;  //自己离开军团返回
+  MSG_CS_REQUEST_CHANGE_ARMY_ANNOUNCEMENT   = 0x211E;  //更改军团公告(也可以更改头像)
+  MSG_CS_RESPONSE_CHANGE_ARMY_ANNOUNCEMENT  = 0x211F;  //更改军团公告返回
+  MSG_CS_REQUEST_DISMISS_ARMY               = 0x2120;  //解散军团
+  MSG_CS_RESPONSE_DISMISS_ARMY              = 0x2121;  //解散军团返回
+  MSG_CS_REQUEST_GET_ARMY_SIGN_AWARD        = 0x2122;  //获取军团签到奖励
+  MSG_CS_RESPONSE_GET_ARMY_SIGN_AWARD       = 0x2123;  //获取军团签到奖励返回
+  MSG_CS_REQUEST_ARMY_MAX_LEVEL_UP          = 0x2124;  //提升军团技能最高等级
+  MSG_CS_RESPONSE_ARMY_MAX_LEVEL_UP         = 0x2125;  //提升军团技能最高等级返回
+  MSG_CS_REQUEST_GET_DAILY_ACTIVITY         = 0x2126;  //获取活动奖励[月卡/燃油补给/每日单笔充值/每日累计充值]
+  MSG_CS_RESPONSE_GET_DAILY_ACTIVITY        = 0x2127;  //获取日常活动奖励返回
+  MSG_CS_REQUEST_GET_VIP_DAILY_AWARD        = 0x2128;  //获取VIP礼包-》每日福利
+  MSG_CS_RESPONSE_GET_VIP_DAILY_AWARD       = 0x2129;  //获取vip日常活动返回
+  MSG_CS_REQUEST_RAISE_FUNDING              = 0x212A;  //募集军资
+  MSG_CS_RESPONSE_RAISE_FUNDING             = 0x212B;  //募集军资返回
+  MSG_CS_REQUEST_FIRST_RECHARGE             = 0x212C;  //首冲奖励
+  MSG_CS_RESPONSE_FIRST_RECHARGE            = 0x212D;  //首冲奖励返回
+  MSG_CS_REQUEST_GET_VIP_WEEKLY             = 0x212E;  //获取vip每周礼包
+  MSG_CS_RESPONSE_GET_VIP_WEEKLY            = 0x212F;  //获取vip每周礼包
+  MSG_CS_REQUEST_ARMY_LIST                  = 0x2130;  //获取军团列表
+  MSG_CS_RESPONSE_ARMY_LIST                 = 0x2131;  //返回军团列表
+  MSG_CS_REQUEST_GET_ARMY_WAR_INFO          = 0x2132;  //获取军团战役信息
+  MSG_CS_RESPONSE_GET_ARMY_WAR_INFO         = 0x2133;  //获取军团战役信息返回
+  MSG_CS_REQUEST_ARMY_WAR_FIGHT             = 0x2134;  //军团战役请求(返回MSG_CS_RESPONSE_FIGHT_REPORT,MSG_CS_NOTIFY_FIGTH_RESULT和MSG_CS_RESPONSE_GET_ARMY_WAR_INFO)
+  MSG_CS_REQUEST_SEARCH_ARMY                = 0x2135;  //搜索军团
+  MSG_CS_RESPONSE_SEARCH_ARMY               = 0x2136;  //搜索军团返回
+  MSG_CS_REQUEST_CHANGE_ARMY_POS            = 0x2137;  //改变军团职位
+  MSG_CS_RESPONSE_CHANGE_ARMY_POS           = 0x2138;  //返回改变军团职位
+  MSG_CS_REQUEST_GET_FOURTEEN_DAYS          = 0x2139;  //请求十四天奖励
+  MSG_CS_RESPONSE_GET_FOURTEEN_DAYS         = 0x213A;  //请求十四天奖励返回
+  MSG_CS_REQUEST_GET_ARMY_WAR_CHAPTER_AWARD = 0x213B;  //获取军团战役章节奖励
+  MSG_CS_RESPONSE_GET_ARMY_WAR_CHAPTER_AWARD= 0x213C;  //获取军团战役章节奖励返回
+  MSG_CS_REQUEST_GET_ARMY_WAR_BOSS_AWARD    = 0x213E;  //获取军团战役个人奖励
+  MSG_CS_RESPONSE_GET_ARMY_WAR_BOSS_AWARD   = 0x213F;  //获取军团战役个人奖励返回
+  MSG_CS_REQUEST_SET_ARMY_WAR_CHAPTER       = 0x2140;  //军团长设置下一个章节
+  MSG_CS_RESPONSE_SET_ARMY_WAR_CHAPTER      = 0x2141;  //军团设置下一个章节返回
+  MSG_CS_REQUEST_GET_ARMY_SHOP_INFO         = 0x2142;  //获取军团商店信息
+  MSG_CS_RESPONSE_GET_ARMY_SHOP_INFO        = 0x2143;  //返回获取军团商店信息
+  MSG_CS_REQUEST_GET_WORLD_BOSS             = 0x2144;  //获取世界boss信息
+  MSG_CS_RESPONSE_GET_WORLD_BOSS            = 0x2145;  //返回获取世界boss信息
+  MSG_CS_REQUEST_REFRESH_DIAMOND_SHOP       = 0x2146;  //刷新钻石商店
+  MSG_CS_RESPONSE_REFRESH_DIAMOND_SHOP      = 0x2147;  //刷新钻石商店返回
+  MSG_CS_REQUEST_FIGHT_WORLD_BOSS           = 0x2148;  //挑战世界boss
+  MSG_CS_RESPONSE_FIGHT_WORLD_BOSS          = 0x2149;  //返回挑战世界boss
+  MSG_CS_RESPONSE_ARMY_LIST_RANK            = 0x214A;  //返回公会排行
+  MSG_CS_REQUEST_WORLD_BOSS_COUNTRY         = 0x214B;  //选择世界boss国家
+  MSG_CS_RESPONSE_WORLD_BOSS_COUNTRY        = 0x214C;  //选择世界boss国家返回
+  MSG_CS_REQUEST_GET_WORLD_BOSS_MERIT_AWARD = 0x214D;  //获取世界boss荣誉奖励
+  MSG_CS_RESPONSE_GET_WORLD_BOSS_MERIT_AWARD= 0x214E;  //返回选择世界boss荣誉奖励
+  MSG_CS_REQUEST_GET_WORLD_BOSS_KILL_AWARD  = 0x214F;  //获取世界boss击杀奖励
+  MSG_CS_RESPONSE_GET_WORLD_BOSS_KILL_AWARD = 0x2150;  //返回选择世界boss击杀奖励
+  MSG_CS_REQUEST_GET_WORLD_BOSS_MERIT_RANK  = 0x2151;  //获取世界boss荣耀排行
+  MSG_CS_RESPONSE_GET_WORLD_BOSS_MERIT_RANK = 0x2152;  //返回获取世界boss荣耀排行
+  MSG_CS_REQUEST_GET_WORLD_BOSS_DAMAGE_RANK = 0x2153;  //获取世界boss伤害排行
+  MSG_CS_RESPONSE_GET_WORLD_BOSS_DAMAGE_RANK= 0x2154;  //返回获取世界boss伤害排行
+  MSG_CS_REQUEST_MAKE_WAKE_ITEM             = 0x2155;  //合成觉醒道具
+  MSG_CS_RESPONSE_MAKE_WAKE_ITEM            = 0x2156;  //合成觉醒道具返回
+  MSG_CS_REQUEST_RECOVER_WAKE_ITEM          = 0x2157;  //分解觉醒道具
+  MSG_CS_RESPONSE_RECOVER_WAKE_ITEM         = 0x2158;  //分解觉醒道具返回
+  MSG_CS_REQUEST_EQUIP_WAKE_ITEM            = 0x2159;  //装备觉醒道具
+  MSG_CS_RESPONSE_EQUIP_WAKE_ITEM           = 0x215A;  //装备觉醒道具返回
+  MSG_CS_REQUEST_SHIP_WAKE                  = 0x215B;  //战舰觉醒
+  MSG_CS_RESPONSE_SHIP_WAKE                 = 0x215C;  //战舰觉醒返回
+  MSG_CS_REQUEST_ELITE_RANDOM_COPY_FIGHT    = 0x215D;  //精英副本随机副本战斗开始(返回MSG_CS_RESPONSE_FIGHT_REPORT,MSG_CS_NOTIFY_FIGTH_RESULT和MSG_CS_NOTIFY_ELITE_RANDOM_COPY)
+  MSG_CS_REQUEST_GET_TIME_ACTIVITY_AWARD    = 0x215E;  //获取限时活动奖励
+  MSG_CS_RESPONSE_GET_TIME_ACTIVITY_AWARD   = 0x215F;  //获取限时活动奖励返回
+  MSG_CS_REQUEST_SET_USER_DEFINED           = 0x2160;  //设置用户自定义
+  MSG_CS_RESPONSE_SET_USER_DEFINED          = 0x2161;  //设置用户自定义返回
+  MSG_CS_REQUEST_ASTROLOGY                  = 0x2162;  //占星
+  MSG_CS_RESPONSE_ASTROLOGY                 = 0x2163;  //占星返回
+  MSG_CS_REQUEST_ASTROLOGY_CHANGE           = 0x2164;  //占星换将
+  MSG_CS_RESPONSE_ASTROLOGY_CHANGE          = 0x2165;  //占星换将返回
+  MSG_CS_REQUEST_BUY_OPEN_FUND              = 0x2166;  //购买开服基金(不真使用)
+  MSG_CS_REQUEST_GET_LEGION_WAR_INFO        = 0x2167;  //获取全球争霸信息
+  MSG_CS_RESPONSE_GET_LEGION_WAR_INFO       = 0x2168;  //获取全球争霸信息返回
+  MSG_CS_REQUEST_LEGION_WAR_FIGHT           = 0x2169;  //全球争霸战斗(返回MSG_CS_RESPONSE_FIGHT_REPORT,MSG_CS_NOTIFY_FIGTH_RESULT和MSG_CS_RESPONSE_LEGION_WAR_FIGHT)
+  MSG_CS_RESPONSE_LEGION_WAR_FIGHT          = 0x216A;  //全球争霸战斗返回
+  MSG_CS_REQUEST_GET_LEGION_WAR_PLAYER      = 0x216B;  //获取全球争霸玩家信息
+  MSG_CS_RESPONSE_GET_LEGION_WAR_PLAYER     = 0x216C;  //获取全球争霸玩家信息返回
+  MSG_CS_REQUEST_RESEARCH_ITEM              = 0x216D;  //限时采购
+  MSG_CS_RESPONSE_RESEARCH_ITEM             = 0x217E;  //限时采购返回
+  MSG_CS_REQUEST_GET_RESEARCH_ITEM_AWARD    = 0x216F;  //获取限时采购奖励
+  MSG_CS_RESPONSE_GET_RESEARCH_ITEM_AWARD   = 0x2170;  //获取限时采购奖励返回
+  MSG_CS_REQUEST_CROSS_SERVER_COUNTRY       = 0x2171;  //选择跨服积分战国家
+  MSG_CS_RESPONSE_CROSS_SERVER_COUNTRY      = 0x2172; //选择跨服积分战国家返回
+  MSG_CS_REQUEST_CROSS_SERVER_RANDOM_PLAYER = 0x2173; //随机跨服积分战玩家
+  MSG_CS_RESPONSE_CROSS_SERVER_RANDOM_PLAYER= 0x2174; //随机跨服积分战玩家返回
+  MSG_CS_REQUEST_CROSS_SERVER_FIGHT         = 0x2175; //跨服积分战战斗
+  MSG_CS_RESPONSE_CROSS_SERVER_FIGHT        = 0x2176; //跨服积分战战斗返回
+  MSG_CS_REQUEST_LEGION_WAR_REGISTER        = 0x2177; //制霸全球注册
+  MSG_CS_RESPONSE_LEGION_WAR_REGISTER       = 0x2178; //制霸全球注册返回
+  MSG_CS_REQUEST_CROSS_SERVER_GET_AWARD     = 0x217B; //获取跨服积分战胜场奖励
+  MSG_CS_RESPONSE_CROSS_SERVER_GET_AWARD    = 0x217C; //获取跨服积分战胜场奖励返回
+  MSG_CS_REQUEST_GET_LEGION_WAR_REWARD      = 0x217D; //领取制霸全球攻打次数每日奖励
+  //SKIP_217E                               = 0x217E; //跳过217E消息ID(不要用这个消息ID)
+  MSG_CS_RESPONSE_GET_LEGION_WAR_REWARD     = 0x217F; //领取制霸全球攻打次数每日奖励返回
+  MSG_CS_REQUEST_GET_LEGION_WAR_TARGET      = 0x2180; //获取制霸全球悬赏目标
+  MSG_CS_RESPONSE_GET_LEGION_WAR_TARGET     = 0x2181; //获取制霸全球悬赏目标返回
+  MSG_CS_REQUEST_GET_LEGION_WAR_TARGET_AWARD= 0x2182; //领取制霸全球悬赏奖励
+  MSG_CS_RESPONSE_GET_LEGION_WAR_TARGET_AWARD=0x2183; //领取制霸全球悬赏奖励返回
+  MSG_CS_REQUEST_GET_ASTROLOGY_INFO         = 0x2184; //获取占星信息
+  MSG_CS_RESPONSE_GET_ASTROLOGY_INFO        = 0x2185; //获取占星信息返回
+  MSG_CS_REQUEST_GET_LOGIN_AWARD            = 0x2186; //获取累计登录奖励
+  MSG_CS_RESPONSE_GET_LOGIN_AWARD           = 0x2187; //获取累计登录奖励返回
+  MSG_CS_REQUEST_GET_WEEKLY_CARD_AWARD      = 0x2188; //获取周基金/小月基金/大月基金奖励
+  MSG_CS_RESPONSE_GET_WEEKLY_CARD_AWARD     = 0x2189; //获取周基金/小月基金/大月基金奖励返回
+  MSG_CS_REQUEST_LEGION_FOREPLAY_FIGHT      = 0x2190;     //制霸全球前戏战斗
+  MSG_CS_RESPONSE_LEGION_FOREPLAY_FIGHT     = 0x2191;     //制霸全球前戏战斗
+  MSG_CS_REQUEST_LEGION_FOREPLAY_GET_SERVER_AWARD = 0x2192; //制霸全球获取全服奖励
+  MSG_CS_RESPONSE_LEGION_FOREPLAY_GET_SERVER_AWARD= 0x2193; //制霸全球获取全服奖励返回
+  MSG_CS_REQUEST_LEGION_FOREPLAY_GET_DAMAGE_AWARD = 0x2194; //制霸全球获取伤害奖励
+  MSG_CS_RESPONSE_LEGION_FOREPLAY_GET_DAMAGE_AWARD= 0x2195; //制霸全球获取伤害奖励返回
+  MSG_CS_REQUEST_LEGION_FOREPLAY_GET_INFO   = 0x2196; //获取制霸全球前戏信息
+  MSG_CS_RESPONSE_LEGION_FOREPLAY_GET_INFO  = 0x2197; //获取制霸全球前戏信息返回
+  MSG_CS_REQUEST_WEEKL_CARD_SIGN            = 0x2198; //周基金/大小月基金补签
+  MSG_CS_RESPONSE_WEEKL_CARD_SIGN           = 0x2199; //周基金/大小月基金补签返回
+  MSG_CS_REQUEST_ENTER_STAGE                = 0x219A; //进入界面
+  MSG_CS_REQUEST_LEAVE_STAGE                = 0x219B; //离开界面
+  MSG_CS_REQUEST_SET_FOCUS_CITY             = 0x219C; //设置集火城市
+  MSG_CS_REQUEST_GET_LEGION_WAR_LOG         = 0x219D; //获取制霸全球攻防日志
+  MSG_CS_RESPONSE_GET_LEGION_WAR_LOG        = 0x219E; //获取制霸全球攻防日志返回
+  MSG_CS_REQUEST_SWEEP_STAKE_EQUIP          = 0x219F; //深海探秘
+  MSG_CS_REQUEST_SWEEP_STAKE_CARRIER        = 0x21A0; //航母活动
+  MSG_CS_RESPONSE_SWEEP_STAKE               = 0x21A1; //转盘活动返回
+  MSG_CS_REQUEST_GET_SWEEP_STAKE_EQUIP_AWARD= 0x21A2; //深海探秘领取积分奖励
+  MSG_CS_RESPONSE_GET_SWEEP_STAKE_EQUIP_AWARD=0x21A3; //深海探秘领取积分奖励返回
+  MSG_CS_REQUEST_GET_SWEEP_STAKE_COUNT_AWARD= 0x21A4; //获取转盘活动N次奖励
+  MSG_CS_RESPONSE_GET_SWEEP_STAKE_COUNT_AWARD=0x21A5; //获取转盘活动N次奖励返回
+  MSG_CS_REQUEST_ACTIVE_RELATION_ALL        = 0x21A6; //一键激活缘分
+  MSG_CS_RESPONSE_ACTIVE_RELATION_ALL       = 0x21A7; //一键激活缘分返回
+  MSG_CS_REQUEST_FESTIVAL_REPLENISHSIGN     = 0x21A8; //节日补签
+  MSG_CS_RESPONSE_FESTIVAL_REPLENISHSIGN    = 0x21A9; //节日补签返回
+  MSG_CS_REQUEST_PLANE_CHANGE               = 0x21AA; //飞机转换
+  MSG_CS_RESPONSE_PLANE_CHANGE              = 0x21AB; //飞机转换返回
+  MSG_CS_REQUEST_GET_VERSION_AWARD          = 0x21AC; //获取版本奖
+  MSG_CS_RESPONSE_GET_VERSION_AWARD         = 0x21AD; //获取版本奖励返回
+  MSG_CS_REQUEST_MEDAL_RESEARCH             = 0x21AE; //抽取勋章
+  MSG_CS_RESPONSE_MEDAL_RESEARCH            = 0X21AF; //抽取勋章返回
+  MSG_CS_REQUEST_MEDAL_FIGHT                = 0x21B0; //勋章战斗
+  MSG_CS_RESPONSE_MEDAL_FIGHT               = 0x21B1; //勋章战斗返回
+  MSG_CS_REQUEST_MEDAL_FIGHT_REFRESH        = 0x21B2; //勋章战斗刷新
+  MSG_CS_RESPONSE_MEDAL_FIGHT_REFRESH       = 0x21B3; //勋章战斗刷新返回
+  MSG_CS_REQUEST_MEDAL_ACTIVE               = 0x21B6; //勋章集册激活
+  MSG_CS_RESPONSE_MEDAL_ACTIVE              = 0x21B7; //勋章集册激活返回
+  MSG_CS_REQUEST_RED_EQUIP_STAR_LEVEL_UP    = 0x21B8; //红装升星
+  MSG_CS_RESPONSE_RED_EQUIP_STAR_LEVEL_UP   = 0x21B9; //红装升星返回
+  MSG_CS_REQUEST_GET_COME_BACK_LOGIN_AWARD  = 0x21BA; //领取回归登录奖励
+  MSG_CS_RESPONSE_GET_COME_BACK_LOGIN_AWARD = 0x21BB; //领取回归登录奖励返回
+  MSG_CS_REQUEST_GET_COME_BACK_RECHARGE_AWARD = 0x21BC; //领取回归充值奖励
+  MSG_CS_RESPONSE_GET_COME_BACK_RECHARGE_AWARD= 0x21BD; //领取回归充值奖励返回
+  MSG_CS_REQUEST_SELL_ITEM_EX               = 0x21BE; //出售物品ex
+  MSG_CS_RESPONSE_SELL_ITEM_EX              = 0x21BF; //出售物品ex返回
+  MSG_CS_REQUEST_MEDAL_ACTIVE_ACHI          = 0x21C0; //勋章成就激活
+  MSG_CS_RESPONSE_MEDAL_ACTIVE_ACHI         = 0x21C1; //勋章成就激活返回
+  MSG_CS_REQUEST_PEARL_HARBOR_FIGHT         = 0x21C2; //捍卫珍珠港战斗
+  MSG_CS_RESPONSE_PEARL_HARBOR_FIGHT        = 0x21C3; //捍卫珍珠港战斗返回
+  MSG_CS_REQUEST_PEARL_HARBOR_GET_INFO      = 0x21C4; //获取捍卫珍珠港信息
+  MSG_CS_RESPONSE_PEARL_HARBOR_GET_INFO     = 0x21C5; //获取捍卫珍珠港信息返回
+  MSG_CS_REQUEST_PEARL_HARBOR_WAR_ZONE      = 0x21C6; //捍卫珍珠港选择战区
+  MSG_CS_RESPONSE_PEARL_HARBOR_WAR_ZONE     = 0x21C7; //捍卫珍珠港选择战区返回
+  MSG_CS_REQUEST_PEARL_HARBOR_START_BUFF    = 0x21C8; //捍卫珍珠港开启buff
+  MSG_CS_RESPONSE_PEARL_HARBOR_START_BUFF   = 0x21C9; //捍卫珍珠港开启buff返回
+  MSG_CS_REQUEST_CORAL_SEA_FIGHT            = 0x21CA; //血战珊瑚岛战斗开始
+  MSG_CS_RESPONSE_CORAL_SEA_FIGHT           = 0x21CB; //血战珊瑚岛战斗返回
+  MSG_CS_REQUEST_CORAL_SEA_FIGHT_LOG        = 0x21CC; //获取血战珊瑚岛战斗记录
+  MSG_CS_RESPONSE_CORAL_SEA_FIGHT_LOG       = 0x21CD; //获取血战珊瑚岛战斗记录返回
+  MSG_CS_REQUEST_CREATE_CORAL_SEA_TEAM      = 0x21CE; //创建血战珊瑚岛队伍
+  MSG_CS_RESPONSE_CREATE_CORAL_SEA_TEAM     = 0x21CF; //创建血战珊瑚岛队伍返回
+  MSG_CS_REQUEST_SEARCH_CORAL_SEA_TEAM      = 0x21D0; //寻找一个血战珊瑚岛队伍
+  MSG_CS_RESPONSE_SEARCH_CORAL_SEA_TEAM     = 0x21D1; //寻找一个血战珊瑚岛队伍返回
+  MSG_CS_REQUEST_KICK_CORAL_SEA_TEAM_MEMBER = 0x21D2; //T掉血战珊瑚岛队伍成员
+  MSG_CS_RESPONSE_KICK_CORAL_SEA_TEAM_MEMBER= 0x21D3; //T掉血战珊瑚岛队伍成员返回
+  MSG_CS_REQUEST_LEAVE_CORAL_SEA_TEAM       = 0x21D4; //离开血战珊瑚岛队伍
+  MSG_CS_RESPONSE_LEAVE_CORAL_SEA_TEAM      = 0x21D5; //离开血战珊瑚岛队伍返回
+  MSG_CS_REQUEST_CORAL_SEA_READY            = 0x21D6; //血战珊瑚岛准备
+  MSG_CS_RESPONSE_CORAL_SEA_READY           = 0x21D7; //血战珊瑚岛准备返回
+  MSG_CS_REQUEST_INVITE_DEAD_MAN            = 0x21D8; //血战珊瑚岛邀请死人
+  MSG_CS_RESPONSE_INVITE_DEAD_MAN           = 0x21D9; //血战珊瑚岛邀请死人返回
+  MSG_CS_REQUEST_PEARL_HARBOR_ARMY_SCORE    = 0x21DA; //捍卫珍珠军团战绩
+  MSG_CS_RESPONSE_PEARL_HARBOR_ARMY_SCORE   = 0x21DB; //捍卫珍珠军团战绩返回
+
+
+  //通知
+  MSG_CS_NOTIFY_OIL_INFO                    = 0x4000;  //通知汽油(体力,精力)
+  MSG_CS_NOTIFY_HERO_INFO                   = 0x4001;  //通知舰船信息
+  MSG_CS_NOTIFY_ITEM_INFO                   = 0x4002;  //通知物品信息
+  MSG_CS_NOTIFY_CARRIER_INFO                = 0x4004;  //通知新航母
+  MSG_CS_NOTIFY_CURRENT_CARRIER_INFO        = 0x4005;  //通知当前装备的航母信息
+  MSG_CS_NOTIFY_MONEY_INFO                  = 0x4006;  //更新货币信息
+  MSG_CS_NOTIFY_COPY_INFO                   = 0x4007;  //通知副本信息
+  MSG_CS_NOTIFY_HERO_RESEARCH_INFO          = 0x4008;  //通知船只研发信息
+  MSG_CS_NOTIFY_EQUIP_INFO                  = 0x4009;  //通知装备信息
+  MSG_CS_NOTIFY_SHOP_INFO                   = 0x400A;  //通知功勋商店更新
+  MSG_CS_NOTIFY_MAIL_INFO                   = 0x400B;  //通知邮件信
+  MSG_CS_NOTIFY_FRIEND_INFO                 = 0x400C;  //通知好友信息
+  MSG_CS_NOTIFY_DAILY_RANK_INFO             = 0x400D;  //通知每日竞技场排名情况
+  MSG_CS_NOTIFY_BUY_COUNT                   = 0x400E;  //通知购买次数
+  MSG_CS_NOTIFY_TALK                        = 0x400F;  //通知聊天
+  MSG_CS_NOTIFY_PK_PERFORMANCE              = 0x4010;  //竞技场最高战绩发生变化
+  MSG_CS_NOTIFY_NEW_REPORT                  = 0x4011;  //通知新的战报
+  MSG_CS_NOTIFY_TOWER_STATE                 = 0x4012;  //通知爬塔状态
+  MSG_CS_NOTIFY_DSTRIKE_SHARE               = 0x4013;  //围剿BOSS分享通知
+  MSG_CS_NOTIFY_DSTRIKE_INFO                = 0x4014;  //通知围剿BOSS信息
+  MSG_CS_NOTIFY_DSTRIKE_FIGHT_RESULT        = 0x4015;  //通知围剿BOSS战斗结果
+  MSG_CS_NOTIFY_ACHIEVEMENT_COUNT           = 0x4016;  //通知成就数量
+  MSG_CS_NOTIFY_BAN_TO_LOGIN                = 0x4017;  //封号状态
+  MSG_CS_NOTIFY_ARENA_RANK_CHANGED          = 0x4018;  //竞技场排名发生变化
+  MSG_CS_NOTIFY_NOTICE                      = 0x4019;  //通知玩家有新公告
+  MSG_CS_NOTIFY_NOTICE_PRIZE                = 0x401A;  //通知玩家有中奖通知
+  MSG_CS_NOTIFY_CARRIER_COPY                = 0x401B;  //通知航母副本状况
+  MSG_CS_NOTIFY_RECHARGE                    = 0x401C;  //通知充值信息
+  MSG_CS_NOTIFY_OBTAINED_CARRIERS           = 0x401D;  //通知已获得航母
+  MSG_CS_NOTIFY_ARMY_STATUS                 = 0x401E;  //通知自己军团状况
+  MSG_CS_NOTIFY_DAILY_SIGN                  = 0x401F;  //通知玩家日常标记
+  MSG_CS_NOTIFY_MONTH_CARD                  = 0x4020;  //通知玩家月卡信息
+  MSG_CS_NOTIFY_VIP_WEEKLY                  = 0x4021;  //通知玩家vip每周购买
+  MSG_CS_NOTIFY_ARMY_MEMBER_POS             = 0x4022;  //通知玩家军团成员更新
+  MSG_CS_NOTIFY_WORLD_BOSS_FIGHT_RESULT     = 0x4023;  //通知世界boss战斗结果
+  MSG_CS_NOTIFY_ACTIVITY_RECORD             = 0x4024;  //通知活动记录
+  MSG_CS_NOTIFY_ELITE_RANDOM_COPY           = 0x4025;  //通知精英随机副本
+  MSG_CS_NOTIFY_LEGION_WAR_PLAYER           = 0x4026;  //通知制霸全球新玩家
+  MSG_CS_NOTIFY_RECHARGE_DETAILS            = 0x4027;  //订单详情
+  MSG_CS_NOTIFY_LEGION_WAR_POS              = 0x4028;  //通知制霸全球玩家位置变化
+  MSG_CS_NOTIFY_CROSS_SERVER                = 0x4029;  //更新跨服积分战
+  MSG_CS_NOTIFY_LOGIN_DAYS                  = 0x402A;  //更新登录天数
+  MSG_CS_NOTIFY_WORLD_BOSS_STATUS           = 0x402B;  //世界boss信息更新
+  MSG_CS_NOTIFY_FOREPLAY_STATUS             = 0x402C;  //制霸前戏信息更新
+  MSG_CS_NOTIFY_MAX_FIGHT_ATTR              = 0x402D;  //通知最高战斗力
+  MSG_CS_NOTIFY_LEGION_WAR_ARMY_INFO        = 0x402E;  //通知制霸全球军团信息(集火目标,军团积分)
+  MSG_CS_NOTIFY_ACTIVITY_SWEEP_STAKE        = 0x402F;  //通知转盘活动
+  MSG_CS_NOTIFY_SERVER_NOTICE               = 0x4030;  //通知所有
+  MSG_CS_NOTIFY_GLOBAL_CONFIG               = 0x4031;  //通知全局配置
+  MSG_CS_NOYIFY_COME_BACK_INFO              = 0x4032;  //通知玩家回归信息
+
+  //测试命令
+  MSG_CS_REQUEST_TEST                       = 0x5000;  //测试加东西的指令
+  MSG_CS_RESPONSE_TEST                      = 0x5001;  //加东西返回
+
+  //在上面添加新的消息ID
+  MSG_CS_MSG_ID_END                         = 0x7000;  // CS消息的结束边界(不包含)
+};
+
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+enum ResultID
+{
+  ERR_OK = 0;            //操作正常, 没有错误
+
+  ERR_INTERNAL          = 10000;  //内部错误
+
+  //登录相关的
+  ERR_TOKEN_INVALID     = 10001;  //不存在的口令
+  ERR_TOKEN_TIMEOUT     = 10002;  //口令超时
+  ERR_TEST_ACCOUNT      = 10003;  //账号已存在
+  ERR_TEST_PASSWORD     = 10004;  //错误的用户名密码
+  ERR_SERVER_MAINTAIN   = 10006;  //服务器维护中
+  ERR_NOT_IN_WHITE_LIST = 10007;  //不在白名单中,拒绝链接
+  ERR_IN_BLACK_LIST     = 10008;  //在黑名单中,拒绝链接
+  ERR_SERVER_INIT       = 10009;  //服务器初始化中
+  ERR_SIGN              = 10010;  //错误的签名
+  ERR_NOT_PROCESS       = 10011;  //消息未处理(未知的消息)
+  ERR_BAN_LOGIN         = 10012;  //封号中
+  ERR_BAN_TALK          = 10013;  //禁言中
+
+  //玩家相关
+  ERR_PLAYER_NOT_EXIST  = 10100;  //玩家不存在
+  ERR_PLAYER_NAME_EXIST = 10101;  //名字重复
+  ERR_PLAYER_EXIST      = 10102;  //已经有角色了
+  ERR_PLAYER_NEED_CREATE= 10103;  //需要创建角色
+  ERR_PLAYER_NAME_LEN_MIN=10104;  //角色名字长度过小
+  ERR_PLAYER_NAME_LEN_MAX=10105;  //角色名字长度过长
+  ERR_PLAYER_DATA_NOT_LOADED=10106; //玩家数据未加载
+  ERR_PLAYER_NEED_STAR    = 10107; //副本星数不足
+  ERR_PLAYER_FRIEND_MAX_1 = 10108; //我的好友已经达到上限
+  ERR_PLAYER_FRIEND_MAX_2 = 10109; //对方好友已到上限
+  ERR_PLAYER_FRIEND_MAX_3 = 10110; //黑名单已达上限
+  ERR_PLAYER_ILLEGAL_CHARACTER = 10112; //包含非法字符
+  ERR_PLAYER_FRIEND_EXISTS= 10113;  //已经在好友列表
+  ERR_PLAYER_FRIEND_ENERGY  = 10114;  //领取好友精力次数达到上限
+  ERR_PLAYER_NON_SELF       = 10115;  //不能添加自己为好友
+  ERR_PLAYER_OFFLINE    = 10116;    //玩家离线
+  ERR_PLAYER_LEVEL      = 10117;  //玩家等级太低
+
+  //物品相关
+  ERR_ITEM_INVALID_PARAM= 10200;  //错误的物品参数
+  ERR_ITEM_CREATE_FAIL  = 10201;  //创建物品失败
+  ERR_ITEM_NEED_MORE    = 10202;  //物品数不足
+  ERR_ITEM_NOT_FOUND    = 10203;  //没有找到该物品
+  ERR_ITEM_REFINE_NOT_FOUND = 10204;  //没有找到改造材料
+  ERR_ITEM_LEVEL_MAX    = 10205;  //已经达到顶级
+
+  //船相关
+  ERR_HERO_NOT_FOUND    = 10300;  //不存在该舰船
+  ERR_POS_OUT_OF_BOUND  = 10301;  //布阵位置越界
+  ERR_HERO_COUNT_OF     = 10302;  //上阵船只个数太多
+  ERR_HERO_SAME         = 10303;  //不能上阵相同的船只
+  ERR_HERO_NEED_LEVEL_UP= 10304;  //需要更高的等级
+  ERR_HERO_NEED_MORE    = 10305;  //需要更多的船
+  ERR_HERO_LEVEL_MAX    = 10306;  //船等级已达上限
+  ERR_HERO_ON_BATTLE    = 10307;  //船正在出战
+  ERR_HERO_ON_PATROL    = 10308;  //船正在巡逻
+
+
+  //航母
+  ERR_CARRIER_NOT_FOUND = 10400;  //航母没找到
+  ERR_PLANE_NOT_FOUND   = 10401;  //没找到该飞机
+  ERR_CARRIER_EXISTED   = 10402;  //航母已经存在
+  ERR_PLANES_TOO_MANY   = 10403;  //飞机总数超过上限
+  ERR_PLANE_TOO_MANY    = 10404;  //单一飞机超过上限
+  ERR_CARRIER_SLOT_FULL = 10405;  //已经开满格子了
+
+  //围剿BOSS相关
+  ERR_DSTRIKE_NOT_EXISTS= 10500;  //BOSS不在了
+  ERR_DSTRIKE_ESCAPE    = 10501;  //BOSS逃跑了
+
+  //货币相关
+  ERR_CURRENCY_MONEY    = 11500;  //元宝不足
+  ERR_CURRENCY_COIN     = 11501;  //金币不足
+  ERR_CURRENCY_OIL      = 11502;  //汽油不足
+  ERR_CURRENCY_VIP_EXP  = 11503;  //VIP经验不足
+  ERR_CURRENCY_EXP      = 11504;  //经验不足
+  ERR_CURRENCY_ENERGY   = 11505;  //精力不足
+  ERR_CURRENCY_UNKNOW   = 11506;  //未知的货币类型
+  ERR_CURRENCY_PLANE    = 11507;  //神魂不足
+  ERR_CURRENCY_HERO     = 11508;  //将魂不足
+  ERR_CURRENCY_PRESTIGE = 11509;  //声望不足
+  ERR_CURRENCY_MUSCLE   = 11510;  //威名不足
+  ERR_CURRENCY_EXPLOIT  = 11511;  //功勋不足
+  ERR_CURRENCY_UNION    = 11512;  //公会贡献不足
+  ERR_CURRENCY_STAR     = 11513;  //星数不足
+  ERR_CURRENCY_OIL_OF   = 11514;  //汽油超过上限
+  ERR_CURRENCY_ENERGY_OF= 11515;  //精力超过上限
+
+  //参数错误
+  ERR_PARAM_ARRAY_BOUND = 11600;  //数组过大
+  ERR_PARAM_OVERFLOW    = 11601;  //参数溢出
+  ERR_PARAM_INVALID     = 11602;  //参数错误
+  ERR_COPY_COUNT        = 11603;  //副本次数不足
+  ERR_COPY_INVALID      = 11604;  //副本还未开启
+  ERR_COPY_AWARDED      = 11605;  //已经领取过奖励
+  ERR_PROTO_OLD         = 11606;  //协议已过期
+  ERR_COPY_NOT_OPEN_DAY = 11607;  //副本本日没开放
+  ERR_COPY_PASSED       = 11608;  //副本已通关
+  ERR_ARENA_CD          = 11609;  //竞技场CD中
+  ERR_ARENA_TIMES       = 11610;  //竞技场次数用完
+  ERR_ARENA_PLAYER_ERROR= 11611;  //错误的挑战对象
+  ERR_REPORT_NOT_EXIST  = 11612;  //战报已过期
+  ERR_COPY_CANNOT_SWEEP = 11613;  //副本不能挂机
+  ERR_MAIL_TOO_LONG     = 11614;  //邮件内容过长
+  ERR_CARRIER_COPY_NOT_PASSED = 11615; //航母副本还未通关
+
+
+  ERR_COLD_DOWN         = 11700;  //操作冷却中
+
+  //军团相关
+  ERR_ARMY_NOT_JOINED   = 11800;  //还未加入军团
+  ERR_ARMY_JOINED       = 11801;  //已经在军团中
+  ERR_ARMY_PERMISSION   = 11802;  //权限不足
+  ERR_ARMY_NAME         = 11803;  //军团名重复
+  ERR_ARMY_NOT_FOUND    = 11804;  //没有找到该军团
+  ERR_ARMY_MEMBER_COUNT = 11805;  //军团人数超上限
+  ERR_ARMY_MEMBER_NOT_FOUND = 11806; //未找到军团成员
+  ERR_ARMY_IS_MASTER    = 11807;  //军团长不能离开军团
+  ERR_ARMY_ANNOUNCEMENT_LEN = 11808;  //军团公告太长
+  ERR_ARMY_APPLY_MAX    = 11809;  //申请的军团数量太多
+  ERR_ARMY_LEAVE_CD     = 11810;  //离开军团CD中
+  ERR_ARMY_BOSS_DEAD    = 11811;  //军团战役BOSS已经死亡
+  ERR_ARMY_ARMY_CANT_DISMISS = 11812; //军团无法解散
+  ERR_ARMY_VP_HAS_TOO_MUCH = 11813;  //管理员数量太多
+  ERR_ARMY_BOSS_ANOTHER_AWARD = 11814;  //军团战役奖励已被领取
+  ERR_ARMY_NAME_TOO_LONG    = 11815;  //军团名称过长
+
+  ERR_WORLD_BOSS_CD     = 11820;  //BOSS重生中
+
+  ERR_RECHARGE_MONEY    = 11830; //充值金额不足
+
+
+  //领地攻讨相关
+  ERR_PATROL_NEED_TIME  = 11900;         //领地升级时长未满
+  ERR_PATROL_TAKE_UP    = 11901;         //领地已被占用
+  ERR_PATROL_SHIP_PATROLLING = 11902;    //此船正在巡逻
+
+
+  ERR_ACTIVITY_NOT_OPEN   = 12000;      //活动未开启
+  ERR_ACTIVITY_NOT_FOUND  = 12001;      //未找到活动
+  ERR_ACTIVITY_AWARD_COUNT= 12002;      //奖励次数不足
+  ERR_ACTIVITY_EQUIO_SCORE= 12003;      //积分不足
+  ERR_ACTIVITY_AWARDED    = 12004;      //奖励已经领取
+
+
+
+  ERR_DEBUG_MESSAGE_START       = 20000;      //调试消息开始ID
+  ERR_DEBUG_BOSS_REWARDED       = 20001;      //调试功勋奖励已经领取
+  ERR_DEBUG_BOSS_MERIT_NEED_MORE= 20002;      //调试功勋奖励功勋不足
+  ERR_DEBUG_BOSS_CONFIG         = 20003;      //调试功勋奖励配置表未找到
+  ERR_DEBUG_ARMY_WAR_BOSS_REWARDED = 20004;   //调试军团战役BOSS奖励已经领取过
+  ERR_DEBUG_LEGION_WAR_IMPASSABLE= 20005;     //调试制霸全球城市不连通
+  ERR_DEBUG_LEGION_WAR_CITY_NOT_FOUND = 20006; //调试制霸全球城市没找到(配置表)
+  ERR_DEBUG_LEGION_WAR_POSITION = 20007;      //调试制霸全球位置下标越界
+  ERR_DEBUG_LEGION_DAILY_REWARDED= 20008;     //调试用制霸全球每日奖励已经领取
+  ERR_DEBUG_LEGION_WAR_TARGET_COUNT = 20009;  //调试用制霸全球悬赏目标奖励次数不足
+  ERR_DEBUG_LOGIN_AWARD_LOGIN_DAYS  = 20010;  //调试用领取登录奖励, 登录天数不足
+  ERR_DEBUG_LOGIN_AWARD_MONTH_CARD  = 20011;  //调试用领取登录奖励, 月卡天数不足
+  ERR_DEBUG_WEEKLY_CARD_AWARD       = 20012;  //调试用周基金/小月基金/大月基金已经领取
+  ERR_DEBUG_WEEKLY_CARD_INVALID     = 20013;  //调试用周基金/小月基金/大月基金未开放
+  ERR_DEBUG_WEEKLY_CARD_SIGN        = 20014;  //调试用周基金/大小月基金不需要补签
+
+  ERR_MYSQL_ERROR_BEGIN         = 100000;
+  ERR_MYSQL_ERROR_END           = 130000;
+}
+
+message PlayerInfo
+{
+required int64 uid            = 1;  //玩家唯一ID
+required string openid        = 2;  //玩家的账号
+required string name          = 3;  //玩家名字(格式是s123.name)
+required uint32 server        = 4;  //服务器编号
+required int32 vip_level      = 5;  //VIP等级
+required int32 level          = 6;  //玩家等级
+required int32 vip_exp        = 7;  //VIP经验
+required int64 exp            = 8;  //经验
+required int64 coin           = 9;  //金币数量
+required int64 money          = 10; //元宝数量
+required int32 oil            = 11; //汽油(体力)
+required int32 last_oil_time  = 12; //上次恢复汽油时间
+required int32 energy         = 13; //精力
+required int32 last_energy_time = 14; //上次恢复精力时间
+required int32 prestige       = 15; //声望
+required int32 plane          = 16; //神魂(飞机碎片)
+required int32 hero           = 17; //将魂(英雄碎片)
+required int32 muscle         = 18; //威名
+required int32 exploit        = 19; //功勋
+required int32 union          = 20; //公会贡献
+optional int64 truce_time     = 21; //免战时间
+optional int32 sign_id        = 22; //签到id
+optional int64 sign_time      = 23; //签到时间
+optional int32 avatar         = 24; //玩家头像
+optional int32 rank_id        = 25; //玩家军衔
+optional int64 create_time    = 26; //玩家创建时间
+optional int32 status         = 27; //账号状态(0正常,1禁言,2封号)
+optional int32 status_time    = 28; //禁言封号结束时间
+optional int32 flag           = 29; //玩家账号类型(0普通, 1GM, 2指导员, 3福利号)
+optional string dialog_id     = 31; //新手引导ID
+optional string client_flag   = 32; //客户端标记
+optional string story_id      = 33; //剧情ID
+optional int32 max_rank       = 34; //竞技场最高排名(荣誉字段,以竞技场消息内的为准)
+optional int32 total_recharge = 35; //历史累计充值钱数(单位1分,0.1元宝)
+optional int32 login_days     = 36; //登录天数(从1开始)
+optional string channel       = 37; //创建角色的渠道号
+optional string device_id     = 38; //设备ID
+}
+
+message PatrolInfo
+{
+required int32 patrol_id = 1;          //巡逻点ID
+optional int64 ship_uid = 2;           //船只UID
+optional int32 patrol_type = 3;        //巡逻类型   0_4h   1_8h   2_12h
+optional int32 patrol_mode = 4;        //巡逻模式   0_普通 1_中级 2_高级
+repeated KVPair2 patrol_awards = 5;    //巡逻奖励
+optional int64 patrol_start_time = 6;  //巡逻起始时间
+optional int32 patrol_level = 7;       //巡逻点等级
+}
+
+message CrossServerInfo
+{
+optional int32 country = 1;            //选择的国家
+repeated OtherPlayerInfo enemy = 2;    //敌对玩家
+optional int32 fight_record = 3;       //战斗记录
+optional int32 win_count = 4;          //胜场
+optional int32 rank = 5;               //阵营排名
+optional int32 win_get_award = 6;      //胜场奖励领取记录
+}
+
+message WorldBossLog
+{
+optional int32 level = 1;
+optional int32 type = 2;
+optional int64 time = 3;
+optional int32 item_id = 5;
+optional int32 item_count = 6;
+optional string player_name = 7;
+}
+
+message ActivityRecord
+{
+required int32 type = 1;
+optional int64 refresh_time = 2;
+repeated KVPair2 record = 3;
+optional int64 id = 4;
+repeated string award = 5;
+}
+
+message WorldBossInfo
+{
+optional int32 level = 1;
+repeated int64 current_hp = 2;
+optional int64 last_dead_time = 3;
+optional int64 luck_player = 4;
+optional int32 group_id = 5;
+optional int64 max_hp = 6;
+optional int64 refresh_time = 7;
+optional int32 fight_count = 8;
+optional string kill_player_name = 9;
+repeated WorldBossLog log = 10;
+}
+
+message LegionForeplayInfo
+{
+optional int32 id = 1;
+repeated int64 current_hp = 2;
+optional int64 max_hp = 3;
+repeated ForeplayInfoLog log = 4;
+}
+
+message ForeplayInfoLog
+{
+optional string name = 1;
+optional int32 damage = 2;
+}
+
+message PlayerWorldBossInfo
+{
+optional int32 refresh_time = 1;
+optional int32 country = 2;
+optional int32 merit = 3;
+optional int32 damage = 4;
+optional int64 merit_award = 5;
+optional int64 kill_award = 6;
+}
+
+message ArmyShopRecord
+{
+repeated int64 slot1 = 1;
+repeated int64 slot2 = 2;
+repeated int64 slot3 = 3;
+repeated int64 slot4 = 4;
+repeated int64 slot5 = 5;
+repeated int64 slot6 = 6;
+}
+
+message KVPair2
+{
+required int32 key = 1;
+required int32 value = 2;
+}
+
+message NoticeInfo
+{
+required int64 tid = 1;
+optional uint32 server_id = 2;
+required int32 type = 3;          //1-聊天框，2-滚动框，3-聊天框+滚动框
+required int32 order = 4;
+optional string link_url = 5; 
+required int64 begin_time = 6;
+required int64 end_time = 7;
+required int32 interval = 8;
+required string content = 9;
+}
+
+enum DailySign
+{
+  ARMY_SIGN_65 = 0;  //军签到积分
+  ARMY_SIGN_130 = 1;
+  ARMY_SIGN_165 = 2;
+  ARMY_SIGN_210 = 3;
+  VIP_DAILY_AWARD = 4;
+  ARMY_SIGN_DONE1 = 5; //军团今日是否签到
+  ARMY_SIGN_DONE2 = 6; //军团今日是否签到
+  ARMY_SIGN_DONE3 = 7; //军团今日是否签到
+  ASTROLOGY_FREE_BUY = 8; //占星免费购买次数
+  DAILY_RESEARCH_HERO = 9;//抽船第一次
+  // 10-37已经使用
+}
+
+enum QulityKind
+{
+  QUALITY_WHITE = 1;  //白色
+  QUALITY_GREEN = 2;  //绿色
+  QUALITY_BLUE  = 3;  //蓝色
+  QUALITY_PURPLE = 4; //紫色
+  QUALITY_ORANGE = 5; //橙色
+  QUALITY_RED   = 6;  //红色
+  QUALITY_UNIQUE = 7; //暗金
+}
+
+enum JobKind
+{
+  JOB_BATTLESHIP = 1; //战列舰
+  JOB_CRUISER    = 2; //巡洋舰
+  JOB_DESTROYER  = 3; //驱逐舰
+  JOB_SUBMARINE  = 4; //潜艇
+}
+
+//货币类型
+enum MoneyKind
+{
+MONEY_KIND_COIN     = 1;  //金币
+MONEY_KIND_MONEY    = 2;  //元宝(钻石)
+MONEY_KIND_OIL      = 3;  //体力(石油)
+MONEY_KIND_ENERGY   = 4;  //精力
+MONEY_KIND_EXP      = 5;  //经验
+MONEY_KIND_VIPEXP   = 6;  //VIP经验
+MONEY_KIND_HERO     = 7;  //将魂(英雄碎片)
+MONEY_KIND_PLANE    = 8;  //神魂(飞机碎片)
+MONEY_KIND_PRESTIGE = 9;  //声望
+MONEY_KIND_MUSCLE   = 10; //威名
+MONEY_KIND_EXPLOIT  = 11; //战功
+MONEY_KIND_UNION    = 12; //公会贡献
+}
+
+message MoneyType
+{
+required int32 kind   = 1;  //货币类型
+required int32 value  = 2;  //货币增量值
+}
+
+//道具摘要信息
+message ItemSimpleInfo
+{
+required int32 item_id  = 1;  //道具ID
+required int32 count    = 2;  //道具个数
+}
+
+//商店信息
+message ShopCommodityInfo
+{
+required int32 commodity_id  = 1;  //商品ID
+required int32 bought_count  = 2;  //购买次数
+}
+
+enum PlaneKind
+{
+  PLANE_1       = 1 ;   //轰炸机
+  PLANE_2       = 2 ;   //鱼雷机
+  PLANE_3       = 3 ;   //救援机
+  PLANE_4       = 4 ;   //歼击机
+  PLANE_5       = 5 ;   //侦察机
+  PLANE_6       = 6 ;   //预警机
+  PLANE_7       = 7 ;   //电子对抗机
+  PLANE_8       = 8 ;   //攻击机
+  PLANE_9       = 9 ;   //反潜机
+  PLANE_10      = 10;   //干扰机
+}
+
+//定义的一些常数
+enum MaxNumber
+{
+option allow_alias = true;
+
+MAX_1                   = 64;
+MAX_EQUIPED_PLANE_COUNT = 64;   //最大装备飞机的数量
+MAX_ITEM_COUNT          = 256;  //道具最大个数
+MAX_HERO_COUNT          = 128;  //船只最大个数
+MAX_EQUIPED_ITEM_COUNT  = 7;    //最大可穿装备个数
+MAX_HERO_RAND_ATTR_COUNT= 4;    //船随机属性最大个数
+MAX_ROBOT_ID            = 10000;//机器人的最大ID
+MAX_REPORT_ABSTRACT_COUNT = 10; //每种战报摘要10条
+MAX_ARMY_LOG_COUNT      = 20;   //军团日志上限
+}
+
+enum ItemType
+{
+ITEM_TYPE_NONE      = 0;  //错误值
+ITEM_TYPE_ITEM      = 1;  //普通道具
+ITEM_TYPE_EQUIP     = 2;  //装备
+ITEM_TYPE_ARMY      = 3;  //宝物
+ITEM_TYPE_PLANE     = 4;  //飞机
+}
+
+enum FightType
+{
+  FIGHT_FUBEN        = 1; //副本战斗
+  FIGHT_ARENA  = 2; //竞技场
+  FIGHT_BASE   = 3; //基地战
+  FIGHT_DSTRIKE = 4; //BOSS围剿战
+}
+
+enum ItemAttributeKind
+{
+  ITEM_ATTR_LEVEL             = 1;  //装备升级等级
+  ITEM_ATTR_REFINE_LEVEL      = 2;  //装备改造等级
+  ITEM_ATTR_REFINE_EXP        = 3;  //装备改造经验
+  ITEM_ATTR_EQUIPED_HERO      = 4;  //装备在哪个船上(已经废弃了)
+  ITEM_ATTR_NAVY_LEVEL        = 5;  //海军等级
+  ITEM_ATTR_NAVY_EXP          = 6;  //海军经验
+  ITEM_ATTR_NAVY_REFINE_LEVEL = 7;  //海军突破等级
+  ITEM_ATTR_EQUIPED_POS       = 8;  //装备在哪个槽位上
+  ITEM_ATTR_GOLD_LEVEL        = 9;  //装备化金等级
+  ITEM_ATTR_NVAY_GOLD_LEVEL   = 10; //海军化金等级
+  ITEM_ATTR_STAR_LEVEL        = 11; //升星等级
+  ITEM_ATTR_STAR_EXP          = 12; //升星经验
+  ITEM_ATTR_STAR_LUCKY        = 13; //升星幸运值
+}
+
+message ItemAttribute
+{
+required int32 key      = 1;  //道具属性ID
+required int32 value    = 2;  //道具属性值
+}
+
+message Item
+{
+required int64 uid          = 1;  //道具唯一ID
+required sfixed32 item_id   = 2;  //道具ID
+required int32 count        = 3;  //道具个数
+repeated ItemAttribute attr = 4;  //道具属性
+}
+
+enum AttackAttr
+{
+ATTACK_ATTR_SCORE           = 0;  //战斗力
+ATTACK_ATTR_HP              = 1;  //血量
+ATTACK_ATTR_AP              = 2;  //物理攻击
+ATTACK_ATTR_SP              = 3;  //魔法攻击
+ATTACK_ATTR_WF              = 4;  //物理防御
+ATTACK_ATTR_FF              = 5;  //魔法防御
+
+ATTACK_ATTR_ANGER           = 10; //初始怒气
+ATTACK_ATTR_HP_PERCENT      = 11; //血量(千分比)
+ATTACK_ATTR_AP_PERCENT      = 12; //物理攻击(千分比)
+ATTACK_ATTR_SP_PERCENT      = 13; //魔法攻击(千分比)
+ATTACK_ATTR_WF_PERCENT      = 14; //物理防御(千分比)
+ATTACK_ATTR_FF_PERCENT      = 15; //魔法防御(千分比)
+ATTACK_ATTR_HIT_PERCENT     = 16; //命中(千分比)
+ATTACK_ATTR_MISS_PERCENT    = 17; //闪避(千分比)
+ATTACK_ATTR_CRIT_PERCENT    = 18; //暴击(千分比)
+ATTACK_ATTR_RESIST_PERCENT  = 19; //暴抗(千分比)
+ATTACK_ATTR_DAMAGE          = 20; //伤害加成(千分比)
+ATTACK_ATTR_DAMAGE_DECREASE = 21; //伤害减免(千分比)
+ATTACK_ATTR_PVP_DAMAGE      = 22; //PVP增伤(千分比)
+ATTACK_ATTR_PVP_DAMAGE_DEC  = 23; //PVP减伤(千分比)
+ATTACK_ATTR_UK_DAMAGE       = 24; //国家1船只增伤(英国, 千分比)
+ATTACK_ATTR_UK_DAMAGE_DEC   = 25; //国家1船只减伤(英国, 千分比)
+ATTACK_ATTR_US_DAMAGE       = 26; //国家2船只增伤(美国, 千分比)
+ATTACK_ATTR_US_DAMAGE_DEC   = 27; //国家2船只减伤(美国, 千分比)
+ATTACK_ATTR_GE_DAMAGE       = 28; //国家3船只增伤(德国, 千分比)
+ATTACK_ATTR_GE_DAMAGE_DEC   = 29; //国家3船只减伤(德国, 千分比)
+ATTACK_ATTR_JP_DAMAGE       = 30; //国家4船只增伤(日本, 千分比)
+ATTACK_ATTR_JP_DAMAGE_DEC   = 31; //国家4船只减伤(日本, 千分比)
+ATTACK_ATTR_ANGER_RECOVER   = 32; //每回合恢复怒气
+ATTACK_ATTR_PK_HIT          = 33; //致命一击(N‰的概率伤害翻倍)
+ATTACK_ATTR_PK_HIT_SUB      = 34; //降低N‰的致命一击概率
+ATTACK_ATTR_PK_ADD_HP       = 35; //生命之光(受攻击时, 30%概率恢复N‰的血量)
+ATTACK_ATTR_PK_ADD_HP_SUB   = 36; //生命之光抑制(降低N‰的生命之光血量恢复)
+ATTACK_ATTR_PK_AP_DAMAGE_REBACK = 37;  //物理伤害反伤(50%概率反弹N‰的伤害)
+ATTACK_ATTR_PK_SP_DAMAGE_REBACK = 38;  //魔法伤害反伤(50%概率反弹N‰的伤害)
+ATTACK_ATTR_PK_BULLYING     = 39;      //自己生命大于等于目标, 伤害增加N‰
+ATTACK_ATTR_PK_TENACITY     = 40;      //自己生命小于等于50%, 伤害增加N‰
+ATTACK_ATTR_PK_AP_BULLYING_SUB  = 41;  //被物理攻击时, 自己生命小于等于攻击者, 受到伤害减免N‰
+ATTACK_ATTR_PK_SP_BULLYING_SUB  = 42;  //被法术攻击时, 自己生命小于等于攻击者, 受到伤害减免N‰
+ATTACK_ATTR_PK_IGNORE_DEFENCE   = 43;  //每次攻击时, N‰的概率忽视目标35%防御
+ATTACK_ATTR_PK_IGNORE_DEFENCE_INC = 44;//触发忽视防御时, 攻击者额外造成N‰的伤害
+ATTACK_ATTR_PK_IGNORE_DEFENCE_SUB = 45;//触发忽视防御时, 被攻击者降低N‰的伤害
+ATTACK_ATTR_PK_VAMPIRIC     = 46;      //10%概率将伤害的N‰转换为自己的生命
+}
+
+enum MailType
+{
+MAIL_TYPE_CHANGE_NAME   = 1;  //好友改名
+MAIL_TYPE_CHANGE_NAME2  = 2;  //军团成员改名
+MAIL_TYPE_BATTLE_SUCCESS= 3;  //竞技场防守成功
+MAIL_TYPE_BATTLE_FAIL   = 4;  //竞技场防守失败
+MAIL_TYPE_RECHARGE      = 5;  //充值
+MAIL_TYPE_NAVY          = 6;  //海军争夺
+MAIL_TYPE_ADD_FRIEND    = 7;  //添加好友成功
+MAIL_TYPE_PERSONAL_MAIL = 8;  //私人邮件
+MAIL_TYPE_PK                = 9;  //竞技场(跨国军演奖励)
+MAIL_TYPE_DESTRIKE          = 10; //击溃海盗
+MAIL_TYPE_DESTRIKE_DISCOVERY= 11; //发现的海盗被击溃
+MAIL_TYPE_DSTRIKE_EXPLOIT   = 12;  //维和功勋排名奖励
+MAIL_TYPE_DSTRIKE_DAMAGE    = 13;  //维和伤害排名奖励
+MAIL_TYPE_SYS               = 14;  //系统邮件
+MAIL_TYPE_SEVEN_DAYS_RACE   = 15;  //开服竞赛
+MAIL_TYPE_WROLD_BOSS_ARMY   = 16;  //联盟排行奖励
+MAIL_TYPE_WROLD_BOSS_DAMAGE = 17;  //伤害排行奖励
+MAIL_TYPE_WROLD_BOSS_MERIT  = 18;  //荣誉排行奖励
+MAIL_TYPE_CDKEY             = 19;  //CDkey礼包
+MAIL_TYPE_RESEARCH_ITEM     = 20;  //抽取道具积分奖励
+MAIL_TYPE_CROSS_SERVER      = 21;  //跨服积分战
+MAIL_TYPE_LEGION_WAR_1      = 22;  //制霸全球个人积分奖励
+MAIL_TYPE_LEGION_WAR_2      = 23;  //制霸全球军团积分奖励
+MAIL_TYPE_LEGION_WAR_3      = 24;  //制霸全球占领城池奖励
+MAIL_TYPE_TIME_ACTIVITY     = 25;  //限时活动邮件
+MAIL_TYPE_LEGION_FOREPLAY   = 26;  //制霸全球前戏奖励
+MAIL_TYPE_LEGION_WAR_SCORE  = 27;  //制霸全球占领积分发放
+MAIL_TYPE_SEVEN_DAYS_RACE_NEW = 28; //开服竞赛(新)
+MAIL_TYPE_SWEEP_STAKE_2_1   = 29;  //航母转盘活动排行榜1奖励[普通排行榜]
+MAIL_TYPE_SWEEP_STAKE_2_2   = 30;  //航母转盘活动排行榜2奖励[精英排行榜]
+MAIL_TYPE_FIRST_SERVER      = 31;  //删档测试服
+MAIL_TYPE_ARMY_TRANSFER     = 32;  //公会自动转让
+MAIL_TYPE_PEARL_HARBOR_BREAK = 33;  //捍卫珍珠港战区击破奖励
+MAIL_TYPE_PEARL_HARBOR_PLAYER_RANK = 34; //捍卫珍珠港玩家排行奖励
+MAIL_TYPE_PEARL_HARBOR_ARMY_RANK = 35; //捍卫珍珠港军团排行奖励
+}
+
+message MailInfo
+{
+required fixed64 mail_id    = 1;  //邮件唯一ID
+required int32 mail_time    = 2;  //邮件收到的时间
+required int32 mail_type    = 3;  //邮件类型
+required string mail_content= 4;  //邮件内容
+repeated KVPair2 mail_attachment = 5; //邮件附件（领奖中心领取）
+
+optional int32 level_min      = 10;   //以下字段客户端不用
+optional int32 level_max      = 11;
+optional int32 vip_min        = 12;
+optional int32 vip_max        = 13;
+}
+
+message FightShipInfo
+{
+required HeroInfo hero_info   = 1; //船舰信息
+required int32 position       = 2; //位置(1到6)
+optional int64 current_hp     = 4; //剩余的血量
+optional int32 anger          = 5; //初始怒气
+}
+
+message FightCarrierInfo
+{
+required int64 carrier_id      = 3; //配置ID
+optional CurrentCarrierInfo carrier = 5;  //当前航母信息(必须得填)
+optional int32 anger            = 6;  //初始怒气
+}
+
+message FightReportInfo
+{
+repeated sint32 content       = 1 [packed = true];  //攻击内容, 详细看Excel
+}
+
+message CarrierInfo
+{
+required sfixed32 carrier_id= 1;  //航母ID
+optional int32 level = 2;
+optional int32 exp = 3;
+optional int32 reform_level = 4;
+optional int32 reform_exp = 5;
+}
+
+message PlayerComeBackInfo
+{
+optional int64 start_time = 1;
+optional int64 end_time = 2;
+optional int32 login_record = 3;
+optional int32 award_record = 4;
+optional int32 diff_day = 5;
+}
+
+message CurrentCarrierInfo
+{
+required sfixed32 carrier_id = 1; //当前装备的航母
+repeated int64 plane_id      = 3 [packed = true]; //当前装备的飞机ID
+repeated int64 attr1         = 7 [packed = true]; //航母的属性
+repeated int32 extra_damage1 = 8 [packed = true]; //飞机提供给船的属性
+repeated int64 tower_attr1   = 9 [packed = true]; //爬塔buffer属性(已经算好的AttackAttr)
+
+optional int32 quality       = 10;  //战斗用品质(其他系统勿用)
+optional int32 grade         = 11;  //战斗用grade(其他系统勿用)
+}
+
+//航母副本
+message CarrierCopy
+{
+required int32 index        = 1;  //副本点(1到12)
+required int32 robot_id     = 2;  //RobotID(生成玩家名字)
+required int32 level        = 3;  //显示玩家等级
+repeated int32 heros        = 4;  //上阵的6艘船
+required int32 carrier_id   = 5;  //上阵的航母
+required int64 fight_attr   = 6;  //战斗力
+}
+
+//航母副本通关的信息
+message CarrierCopyInfo
+{
+optional int32 layer      = 1;    //第几层, 1-4, 0表示还没进入过这个系统
+optional int32 passed_copy= 2;    //通关的航母副本(1 << Index, 如果不为0, 那么就是通关了)
+optional int32 current_index = 3; //当前正在打的航母副本(1到12, 0表示上次打的关卡通关(其他关卡都没打, 血量都是满的))
+repeated int32 left_hp    = 4;    //剩余的血量万分比(最外面显示加权平均值)
+optional int32 award_count= 5;    //领取奖励的次数
+optional int32 count      = 6;    //通关的次数
+optional int32 item_count = 7;    //本次累计获取合金数
+optional int32 item_max_count = 8;//历史最高获取合金数
+}
+
+message HeroInfo
+{
+required sfixed32 hero_id   = 1;  //舰船ID
+required int32 level        = 2;  //等级
+required int32 exp          = 3;  //经验
+optional int64 uid          = 6;  //舰船唯一ID
+optional int32 grade        = 7;  //突破等级(从0开始)
+repeated int32 rand_attr    = 8 [packed = true];  //随机属性
+repeated int32 rand_attr_1  = 9 [packed = true];  //随机属性备份(增量值)
+optional int32 fate_level   = 10; //天命等级
+optional int32 fate_exp     = 11; //天命经验
+optional int32 fate_seed    = 12; //天命种子
+optional int32 train_cost   = 13; //训练消耗
+optional int32 fate_cost    = 14; //天命消耗
+repeated int32 relation     = 15 [packed = true]; //已经激活的缘分
+repeated int64 attr1        = 16 [packed = true]; //攻击属性
+optional int32 quality      = 17; //战斗用的品质
+optional int32 wake_level   = 18; //觉醒等级
+repeated int32 wake_item    = 19; //觉醒道具
+}
+
+message HeroResearchInfo
+{
+required fixed32 last_time  = 1;             //上次研发船只时间戳(UTC)
+optional fixed32 hero_id    = 2;             //研发的船只(不为0就是可以领取)
+optional int32 item_count   = 3;             //用材料研发次数(客户端不用)
+optional int32 money_count  = 4;             //用钱研发次数(客户端不用)
+optional fixed32 last_free_time = 5;         //上次免费抽船时间戳(UTC)
+optional int32 money_count2 = 6;             //十连抽次数
+optional int32 rd_count = 7;                 //研发次数
+optional fixed32 last_free_rd_time = 8;      //上次免费研发时间戳
+optional int32 day_free_rd_count = 9;        //今日免费研发抽取次数
+}
+
+message RefreshShopInfo
+{
+required int32              shop_id             = 1;
+repeated ShopCommodityInfo  feats_commodity     = 2; //兑换商品信息
+optional int64              last_time           = 3; //免费抽取起始时间
+optional int32              used_count          = 4; //已经刷新次数
+}
+
+message ResearshItemInfo
+{
+required int32 point = 1;
+required int32 got_record = 2;
+}
+
+enum EquipPos
+{
+EQUIP_POS_1     = 0;
+EQUIP_POS_2     = 1;
+EQUIP_POS_3     = 2;
+EQUIP_POS_4     = 3;
+EQUIP_POS_5     = 4;
+EQUIP_POS_6     = 5;
+}
+
+message PositionInfo
+{
+required int32 position     = 1;  //位置(1到6)
+optional int64 hero_uid     = 3;  //舰船唯一ID
+}
+
+message TacticInfo
+{
+repeated PositionInfo infos      = 2; //上阵的位置信息
+repeated PositionInfo battle_pos = 3; //战斗时的位置信息
+repeated PositionInfo support_pos = 4; //援军位置信息
+}
+
+message OceanInfo
+{
+optional int64 uid = 1;
+optional int32 ship_type = 2;
+optional int64 start_time = 3;
+optional int64 bodyguard = 4;
+optional int32 robbed_count = 5;
+optional string player_name = 6;
+optional string bodayguard_name = 7;
+}
+
+message EquipsInfo
+{
+repeated int64 equips_1     = 4 [packed = true];  //第1个位置的装备
+repeated int64 equips_2     = 5 [packed = true];  //第2个位置的装备
+repeated int64 equips_3     = 6 [packed = true];  //第3个位置的装备
+repeated int64 equips_4     = 7 [packed = true];  //第4个位置的装备
+repeated int64 equips_5     = 8 [packed = true];  //第5个位置的装备
+repeated int64 equips_6     = 9 [packed = true];  //第6个位置的装备
+}
+
+message GMContent
+{
+optional int32 level      = 7;  //level
+optional int32 vip_level  = 8;  //vip_level
+repeated KVPair2 modify   = 16; //增加减少货币资源
+repeated KVPair2 add_sub_item = 17; //增删可以堆叠的道具(value大于0是增加;value小于0是减少)
+optional int32 time_delta_sec = 18; //增加减少服务器时间(单位是秒)
+
+//以下暂时不支持
+optional int64 player_id  = 1;
+optional int32 coin       = 2;
+optional int32 money      = 3;
+optional int32 exp        = 4;
+optional int32 vip_exp    = 5;
+optional int32 oil        = 6;
+optional int32 prestige   = 9; //声望
+optional int32 plane      = 10; //神魂(飞机碎片)
+optional int32 hero       = 11; //将魂(英雄碎片)
+optional int32 muscle     = 12; //威名
+optional int32 exploit    = 13; //功勋
+optional int32 union      = 14; //公会贡献
+optional int32 energy     = 15; //精力
+repeated Item             item          = 21;   //唯一ID是0, 那么就是增加; 否则就是更新
+repeated int64            delete_items  = 22 [packed = true];   //唯一ID不能为0
+repeated CarrierInfo      carrier       = 20;
+repeated HeroInfo         ship          = 23;
+repeated CopyProgress     progress      = 24;  //副本进度
+repeated CopyStarInfo     copy_star     = 25;  //副本星级
+optional CopyProgress     all_star      = 26;  //全三星通关带修改进度
+optional string           player_name   = 27;  //玩家名字
+optional int64            create_time   = 28;  //创建时间
+optional int32            sign_id       = 29;  //签到ID
+}
+
+enum CopyType
+{
+COPY_TYPE_NORMAL      = 1;  //普通副本(主线战役-普通)
+COPY_TYPE_GENERAL     = 2;  //名将副本(名舰战役)
+COPY_TYPE_HARD        = 3;  //精英副本(主线战役-精英)
+COPY_TYPE_DAILY       = 4;  //日常副本(日常军演)
+COPY_TYPE_AUTO_FIGHT  = 5;  //领地攻讨(岛屿攻讨)
+COPY_TYPE_PK          = 6;  //竞技场副本(海上争霸)
+COPY_TYPE_TOWER       = 7;  //爬塔副本(突袭油田-普通)
+COPY_TYPE_DSTRIKE     = 8;  //围剿BOSS副本(围剿海盗)
+COPY_TYPE_ELITE       = 9;  //精英挑战(突袭油田-精英挑战)
+COPY_TYPE_ARMY        = 10; //海军争夺(海军争夺)
+COPY_TYPE_COMPARE     = 11; //切磋副本(好友切磋)
+COPY_TYPE_GENERAL_HIDE= 12; //名将副本(名舰战役-隐藏副本)
+COPY_TYPE_CARRIER     = 14; //航母副本(护航辽宁舰)
+COPY_TYPE_ARMY_BOSS   = 15; //军团战役(联盟战役)
+COPY_TYPE_WORLD_BOSS  = 16; //世界BOSS(激战俾斯麦)
+COPY_TYPE_ELITE_RANDOM= 17; //精英随机副本(主线战役-精英副本外敌入侵)
+COPY_TYPE_CROSS_SERVICE_SCORE= 18; //跨服演武-积分赛
+COPY_TYPE_LEGION_WAR  = 20; //制霸全球
+COPY_TYPE_LEGION_FOREPLAY  = 21; //制霸全球前戏
+COPY_TYPE_MEDAL       = 22;  //勋章副本
+COPY_TYPE_PEARL_HARBOR = 23; //捍卫珍珠港副本
+};
+
+message CopyStarInfo
+{
+required int32 copy_id  = 1;  //副本ID
+required int32 star     = 2;  //(1,2,3)
+}
+
+message CopyCount
+{
+required int32 copy_id  = 1;  //副本ID
+required int32 count    = 2;  //今日完成的次数
+}
+
+message CopyProgress
+{
+required int32 chapter  = 1;  //章节ID
+required int32 copy_id  = 2;  //副本ID(已经通关的)
+optional int32 copy_type= 3;  //副本类型(CopyType)
+}
+
+message PlayerSimpleInfo
+{
+required string name      = 1;
+required int64 player_id  = 2;
+optional int32 hero_id    = 3;
+optional int32 vip_level  = 4;
+optional int32 level      = 5;
+optional int32 avatar     = 6;
+optional int32 rank_id    = 7; //军衔ID
+}
+
+message PlayerPrizeNotice
+{
+required string name = 1;
+required int32 item_id = 2;
+required int32 rank = 3;
+}
+
+message ReportRecord
+{
+optional int64 report_uid               = 1;  //战斗唯一ID
+optional int32 map_id                   = 2;  //副本表的ID
+optional int32 random                   = 3;  //随机种子
+repeated FightShipInfo ship_info        = 4;  //船舰信息
+repeated FightCarrierInfo carrier_info  = 5;  //航母信息
+repeated FightReportInfo report_info    = 6;  //战报信息
+repeated PlayerSimpleInfo players       = 7;  //A打B(A的下标是0, B的是1)
+optional int32 round                    = 8;  //回合数
+optional int32 win                      = 9;  //0表示失败, (1,2,3)表示胜利
+optional int32 group_count              = 12; //总波数
+optional int32 hp_percent               = 13; //剩余血量的百分比(如果需要显示)
+}
+
+message SingleReportRecord
+{
+optional bytes report         = 1;        //MessageResponseFightReport序列化好的bytes
+}
+
+message MultiReportRecord
+{
+repeated SingleReportRecord report = 1;   //多份战报
+}
+
+message CoralSeaTeam
+{
+repeated OtherPlayerInfo player   = 1;    //永远都是5个, 下标0表示第一个玩家(判断玩家ID是否为0)
+optional int64 leader_id          = 2;    //队长ID
+optional int64 team_id            = 3;    //队伍ID
+optional int32 ready_status       = 4;    //准备状态, (ready_status & (1 << N)) != 0表示下表N这个玩家准备好了
+optional int32 dead_man           = 5;    //死人状态, (dead_man & (1 << N)) != 0表示N是死人
+}
+
+message ChapterAwardInfo
+{
+required int32 chapter    = 1;  //章节ID
+required int32 mask       = 2;  //掩码,比如第一个奖励就是(mask & (1 << 0))
+}
+
+message OtherPlayerInfo
+{
+required int64 player_id  = 1;  //玩家ID在[1, 10000]之间为机器人; 0视为错误
+optional string name      = 2;
+optional int32 level      = 3;
+optional int32 vip_level  = 4;
+optional int32 time       = 5;
+optional int32 avatar     = 6;  //头像
+optional int32 rank_id    = 7;  //军衔ID
+optional int32 pvp_country= 8;  //四海争霸国家(0的话就用(player_id % 4) + 1来计算)
+optional uint32 server_id = 9;  //服务器ID(出生的服务器ID)
+
+repeated HeroInfo heros             = 10;
+optional CurrentCarrierInfo carrier = 11;
+optional EquipsInfo equips          = 12;
+repeated PositionInfo battle_pos    = 13; //上阵的站位
+repeated Item items                 = 14;
+repeated CarrierInfo all_carriers   = 15;
+repeated PositionInfo battle_pos1   = 16; //真正战斗时的站位
+optional string army_name           = 17; //军团名称
+optional int64 army_id              = 18; //军团ID
+optional int32 army_avatar          = 19; //工会图标
+optional uint32 server              = 20; //所在的服务器进程(在这个服务器内玩)
+optional int32 last_active_time     = 21; //服务器使用(控制对象生命周期)
+}
+
+message PKRankInfo
+{
+required int64 player_id  = 1;
+required int32 rank       = 2;
+}
+
+message PearlHarborMonsterHP
+{
+repeated int64 hp = 1;
+optional int32 monster_group = 2;         //当前怪物组
+optional int64 monster_group_max_hp = 3;  //怪物组最大学血量
+optional int32 quality = 4;               //品质
+}
+
+message PearlHarborInfo
+{
+optional int32 war_zone = 1;               //战区
+optional int64 buff_end_time = 2;          //buff结束时间
+optional int32 buff_used_count = 3;        //buff使用次数
+optional int64 fresh_time = 4;             //刷新时间（客户端不用）
+repeated PearlHarborMonsterHP monster_hp = 5; //当前怪物组HP
+optional int32 invade_count = 6;           //被入侵数量
+optional int32 max_war_zone = 7;           //历史最高战区
+optional bool tomorrow_type = 8;           //0-历史最高 1-历史最高少1
+optional int64 score = 9;                  //军团成绩
+optional int32 batch = 10;                 //批次
+repeated KVPair2 break_award = 11;         //击破奖励
+repeated KVPair2 break_ship = 12;          //击破船只
+repeated KVPair2 player_score = 13;        //玩家成绩
+repeated KVPair2 player_today_score = 14;  //玩家当天战绩
+}
+
+enum FriendStatus
+{
+FRIEND_STATUS_UNAUDIT     = 1;    //待审核
+FRIEND_STATUS_FRIEND      = 2;    //朋友
+FRIEND_STATUS_BLACKMAIL   = 3;    //黑名单
+}
+
+
+message FriendInfo
+{
+required int64 friend_id    = 1;  //好友的UID
+required int32 type         = 2;  //好友类型(1待同意;2好友;3黑名单)
+
+optional int32 level        = 3;  //好友等级
+optional int32 vip_level    = 4;  //还有VIP等级
+optional int32 hero_id      = 5;  //删除该字段
+optional int32 energy_time  = 6;  //赠送精力时间戳
+optional string name        = 7;  //好友名称
+optional int64 score        = 8;  //战斗力
+optional int32 last_active_time = 9;  //最新激活时间,0表示在线
+optional int32 energy       = 10; //1：有未领取的精力;2已经领取;0表示没有精力可领取
+optional int32 avatar       = 11; //好友的头像
+optional int32 patrol_id    = 12; //好友巡逻进度最高副本id
+optional string army_name   = 13; //好友军团名字
+optional int32 rank_id      = 14; //好友军衔
+}
+
+enum CountType
+{
+COUNT_TYPE_TOWER               = 1;  //爬塔
+COUNT_TYPE_ARENA               = 2;  //竞技场购买次数
+COUNT_TYPE_TOWER_BOX           = 3;  //爬塔抽箱子次数
+COUNT_TYPE_ELITE_COPY          = 4;  //爬塔精英挑战
+COUNT_TYPE_FRIEND_ENERGY       = 5;  //领取好友精力的次数
+COUNT_TYPE_DAILY_COPY          = 6;  //日常挑战主线副本次数
+COUNT_TYPE_DAILY_GIVE_ENEGRY   = 7;  //日常赠送好友精力次数
+COUNT_TYPE_DAILY_PATROL        = 8;  //日常巡逻时间次数
+COUNT_TYPE_DAILY_HARD_COPY     = 9;  //日常精英副本次数
+COUNT_TYPE_DAILY_DAILY_COPY    = 10; //日常日常副本次数
+COUNT_TYPE_DAILY_GENERAL_COPY  = 11; //日常名将副本次数
+COUNT_TYPE_DAILY_TOWER         = 12; //日常爬塔次数
+COUNT_TYPE_DAILY_ARENA         = 13; //日常竞技场次数
+COUNT_TYPE_DAILY_COMPOSE_NAVY  = 14; //日常宝物合成次数
+COUNT_TYPE_DAILY_EQUIP_UP      = 15; //日常装备强化
+COUNT_TYPE_DAILY_NAVY_UP       = 16; //日常宝物强化
+COUNT_TYPE_DAILY_SHIP_UP       = 17; //日常舰队强化
+COUNT_TYPE_DAILY_REFINE_EQUIP  = 18; //日常装备改造
+COUNT_TYPE_DAILY_MAKE_SHIP     = 19; //日常造船（招募）
+COUNT_TYPE_DAILY_BUY_SHIP      = 20; //日常买船（花钱造船）
+COUNT_TYPE_DAILY_DSTRIKE       = 21; //日常围剿叛军
+COUNT_TYPE_DAILY_SHARE_DSTRIKE = 22; //日常分享叛军
+COUNT_TYPE_DAILY_BUY_OIL       = 23; //日常购买体力丹
+COUNT_TYPE_DAILY_BUY_ENEGRY    = 24; //日常购买精力丹
+COUNT_TYPE_DAILY_PATROL_RIOT   = 25; //日常领地暴动(灭火)
+COUNT_TYPE_DAILY_HARD_ENEMY    = 26; //日常击杀精英外敌
+COUNT_TYPE_DAILY_STAR_TRIAL    = 27; //日常名将试练
+COUNT_TYPE_DAILY_RECRUIT_GENERAL = 28; //日常将星招募
+COUNT_TYPE_DAILY_APPOINTING    = 29; //日常点将台
+COUNT_TYPE_DAILY_LUCKY         = 30; //日常招财招福
+COUNT_TYPE_DAILY_ACTIVITY      = 31; //日常任务积分奖励
+COUNT_TYPE_DAILY_CARRIER_COPY_RESET  = 32; //航母副本重置次数
+COUNT_TYPE_CARRIER_COPY_AWARD  = 33; //航母副本奖励次数(价格)
+COUNT_TYPE_ARMY_WAR_BUY_COUNT  = 34;  //军团战役购买次数
+COUNT_TYPE_RAISE_FUNDING       = 35;  //每日募集军资次数
+COUNT_TYPE_RAISE_FUNDING_TIME  = 36;  //每日募集军资时间戳
+COUNT_TYPE_ARMY_WAR_COUNT      = 37;  //军团战役战斗次数
+COUNT_TYPE_WORLD_BOSS_FIGHT    = 38;  //世界boss最后战斗次数
+COUNT_TYPE_WORLD_BOSS_BOUGHT_COUNT = 39;   //世界BOSS购买次数
+COUNT_TYPE_ASTROLOGY           = 40; //占星次数
+COUNT_TYPE_CROSS_BUY_SERVER_FIGHT  = 41;  //跨服演武挑战购买次数
+COUNT_TYPE_CROSS_BUY_SERVER_RANDOM = 42;  //跨服演武刷新购买次数
+COUNT_TYPE_CROSS_SERVER_FIGHT  = 43;      //跨服演武挑战次数
+COUNT_TYPE_CROSS_SERVER_RANDOM = 44;      //跨服演武刷新次数
+COUNT_TYPE_LEGION_WAR          = 45;      //制霸全球攻打次数
+COUNT_TYPE_LEGION_WAR_REWARD   = 46;      //制霸全球攻打次数奖励(bit位)
+COUNT_TYPE_LEGION_WAR_TARGET   = 47;      //制霸全球悬赏目标奖励是否能领取(非0表示玩家ID, 按照这个玩家ID算奖励)
+COUNT_TYPE_LEGION_WAR_TARGET_BUY = 48;    //制霸全球悬赏任务领奖次数购买
+COUNT_TYPE_LEGION_WAR_TARGET_AWARD = 49;  //制霸全球悬赏任务已经领取奖励次数
+COUNT_TYPE_LEGION_FOREPLAY_BUY_COUNT = 50;//制霸前戏购买次数
+COUNT_TYPE_LEGION_FOREPLAY_FIGHT_COUNT = 51;  //制霸前戏战斗次数
+COUNT_TYPE_LEGION_FOREPLAY_AWARD_RECORD = 52; //制霸前戏领奖记录
+COUNT_TYPE_LEGION_FOREPLAY_DAMAGE = 53;       //制霸前戏伤害
+COUNT_TYPE_DAILY_RECHARGE_ITEM    = 54;   //每日小额道具充值(1,3,6块)
+COUNT_TYPE_ACTIVITY_EQUIP_COUNT   = 55;   //深海探宝每日已经免费使用次数
+COUNT_TYPE_ACTIVITY_CARRIER_COUNT = 56;   //航母活动每日已经免费使用次数
+COUNT_TYPE_MEDAL_FIGHT            = 58;   //勋章挑战次数
+COUNT_TYPE_MEDAL_REFRESH          = 59;   //勋章刷新次数
+COUNT_TYPE_MEDAL_SHOP_REFRESH     = 60;   //勋章商店刷新次数
+COUNT_TYPE_MEDAL_RESEARCH_COUNT   = 61;   //勋章抽取次数
+COUNT_TYPE_COME_BACK_RECHARGE_AWARD = 62; //英雄回归领奖记录
+COUNT_TYPE_PEARL_HARBOR_BUY_COUNT = 63;   //珍珠港购买次数
+COUNT_TYPE_PEARL_HARBOR_FIGHT_COUNT = 64; //珍珠港战斗次数
+
+COUNT_TYPE_SPECIFIC_COPY_BEGIN = 1000; //日常购买副本起始(普通/精英)
+}
+
+enum AchievementType
+{
+ACHIEVEMENT_TYPE_LEVEL                  = 1;  //等级达到N级
+ACHIEVEMENT_TYPE_COPY_STARS             = 2;  //主线副本星数达到n星
+ACHIEVEMENT_TYPE_FIGHTING               = 3;  //战斗力达到n 
+ACHIEVEMENT_TYPE_SHIP_UP                = 4;  //强化6艘上阵战舰到n级
+ACHIEVEMENT_TYPE_MAKE_SHIP              = 5;  //6艘上阵战舰研发到n级
+ACHIEVEMENT_TYPE_TOWER                  = 6;  //爬塔n星
+ACHIEVEMENT_TYPE_VIP                    = 7;  //vip等级达到n
+ACHIEVEMENT_TYPE_PATROL_RIOT            = 8;  //解决暴动n次
+ACHIEVEMENT_TYPE_PATROL_TIME            = 9;  //累积巡逻n小时
+ACHIEVEMENT_TYPE_DSTRIKE                = 10; //累积终结叛军n次
+ACHIEVEMENT_TYPE_HARD_COPY_STARS        = 11; //精英副本星数达到n
+ACHIEVEMENT_TYPE_SHIP_AWAKENING         = 12; //战舰觉醒
+ACHIEVEMENT_TYPE_HARD_COPY              = 13; //通关精英副本第n章
+ACHIEVEMENT_TYPE_HARD_ENEMY             = 14; //累计击杀精英副本外敌n个
+ACHIEVEMENT_TYPE_RECHARGE               = 15; //在限时优惠中充值n次
+ACHIEVEMENT_TYPE_BATTLE_FORMATIONS      = 16; //激活n条阵图组合
+ACHIEVEMENT_TYPE_EQUIP                  = 17; //上阵6艘战舰装备四件装备
+ACHIEVEMENT_TYPE_ARMY                   = 18; //上阵6艘战舰装备两个海军
+ACHIEVEMENT_TYPE_ROB_NAVY               = 19; //累计夺宝次数
+ACHIEVEMENT_TYPE_BLUE_NAVY              = 20; //累计合成蓝色宝物
+ACHIEVEMENT_TYPE_PURPLE_NAVY            = 21; //累计合成紫色宝物
+ACHIEVEMENT_TYPE_ORANGE_NAVY            = 22; //累计合成橙色宝物
+ACHIEVEMENT_TYPE_LEVEL_V                = 23; //等级达到N级获得vip经验
+ACHIEVEMENT_TYPE_EQUIP_LEVEL            = 24; //穿戴四件装备强化等级达到X。
+ACHIEVEMENT_TYPE_EQUIP_REFINE_LEVEL     = 25; //穿戴两件海军强化等级达到X。
+ACHIEVEMENT_TYPE_AEMY_LEVEL             = 26; //穿戴两件海军强化等级达到X。
+ACHIEVEMENT_TYPE_AEMY_REFINE_LEVEL      = 27; //穿戴两件海军改造等级达到X。
+ACHIEVEMENT_TYPE_SWEEP_COPY             = 28; //扫荡副本X次。（不包括手动打）
+ACHIEVEMENT_TYPE_COPY_ID                = 29; //主线副本进度到达X（副本id）。
+ACHIEVEMENT_TYPE_JOIN_ARMY              = 30; //加入军团
+
+//成就计数
+ACHIEVEMENT_TYPE_COUNT_DSTRIKE          = 1001; //累积终结叛军n次
+ACHIEVEMENT_TYPE_COUNT_PATROL_RIOT      = 1002; //解决暴动n次
+ACHIEVEMENT_TYPE_COUNT_HARD_ENEMY       = 1003; //累计击杀精英副本外敌n个
+ACHIEVEMENT_TYPE_COUNT_RECHARGE         = 1004; //在限时优惠中充值n次
+ACHIEVEMENT_TYPE_COUNT_ROB_NAVY         = 1005; //累计夺宝次数
+ACHIEVEMENT_TYPE_NAVY_COUNT             = 1006; //海军数量
+ACHIEVEMENT_TYPE_NAVY_PURPLE_COUNT      = 1007; //紫色海军数量
+ACHIEVEMENT_TYPE_NAVY_ORANGE_COUNT      = 1008; //橙色海军数量
+ACHIEVEMENT_TYPE_RECHARGE_1             = 1009; //充值状态低32bit
+ACHIEVEMENT_TYPE_RECHARGE_2             = 1010; //充值状态高32bit
+ACHIEVEMENT_TYPE_DOUBLE                 = 1011; //上次充值翻倍时间戳
+ACHIEVEMENT_TYPE_ARMY_WAR_CHAPTER1      = 1012; //军团战役章节奖励[0, 31]
+ACHIEVEMENT_TYPE_ARMY_WAR_CHAPTER2      = 1013; //军团战役章节奖励[32, 63]
+ACHIEVEMENT_TYPE_ARMY_WAR_CHAPTER3      = 1014; //军团战役章节奖励[64, 95]
+ACHIEVEMENT_TYPE_ARMY_WAR_CHAPTER4      = 1015; //军团战役章节奖励[96, 127]
+ACHIEVEMENT_TYPE_MIN_WAKE_LEVEL         = 1016; //6艘最低觉醒等级
+ACHIEVEMENT_TYPE_COUNT_EQUIP_LEVEL      = 1017; //穿戴四件装备强化等级达到X。
+ACHIEVEMENT_TYPE_COUNT_EQUIP_REFINE_LEVEL= 1018; //穿戴四件装备改造等级达到X。
+ACHIEVEMENT_TYPE_COUNT_AEMY_LEVEL        = 1019; //穿戴两件海军强化等级达到X。
+ACHIEVEMENT_TYPE_COUNT_AEMY_REFINE_LEVEL = 1020; //穿戴两件海军改造等级达到X。
+ACHIEVEMENT_TYPE_COUNT_SWEEP_COPY        = 1021; //扫荡副本X次。（不包括手动打）
+ACHIEVEMENT_TYPE_LOGIN_AWARD_1           = 1022; //累计登录奖励低32位[0, 31]
+ACHIEVEMENT_TYPE_LOGIN_AWARD_2           = 1023; //累计登录奖励高32位[32, 63]
+ACHIEVEMENT_TYPE_VIP_LOGIN_AWARD_1       = 1024; //月卡累计登录奖励低32位[0, 31]
+ACHIEVEMENT_TYPE_VIP_LOGIN_AWARD_2       = 1025; //月卡累计登录奖励高32位[32, 63]
+ACHIEVEMENT_TYPE_COUNT_MONTH_CARD        = 1026; //月卡算1, 永久卡算100(1就表示30天)
+ACHIEVEMENT_TYPE_COUNT_JOIN_ARMY         = 1027; //加入军团标记
+ACHIEVEMENT_TYPE_WEEKLY_CARD_COUNT       = 1028;  //购买周卡次数
+ACHIEVEMENT_TYPE_MONTH_CARD_128_COUNT    = 1029;  //购买128基金次数
+ACHIEVEMENT_TYPE_MONTH_CARD_328_COUNT    = 1030;  //购买328基金次数
+ACHIEVEMENT_TYPE_FIRST_SERVER_REWARD     = 1031;  //是否发放了首服奖励
+
+//七日活动
+SEVEN_DAY_TYPE_BEGIN                    = 200;
+SEVEN_DAY_TYPE_LOGIN_ITEM               = 201; //每日登陆送道具
+SEVEN_DAY_TYPE_LOGIN_SHIP               = 202; //每日登陆送战舰
+SEVEN_DAY_TYPE_RECHARGE                 = 203; //充值额度
+SEVEN_DAY_TYPE_FIGHTING                 = 204; //战斗力达成值
+SEVEN_DAY_TYPE_LEVEL                    = 205; //等级
+SEVEN_DAY_TYPE_COPY                     = 206; //主线副本通关章节
+SEVEN_DAY_TYPE_EQUIP_QUALITY            = 207; //装备强化品质
+SEVEN_DAY_TYPE_EQUIP_LEVEL              = 208; //装备强化等级
+SEVEN_DAY_TYPE_EQUIP_MAX_REFINE         = 209; //装备精炼
+SEVEN_DAY_TYPE_EQUIP_ALL_REFINE         = 210; //装备精炼6件
+SEVEN_DAY_TYPE_PK                       = 211; //竞技场排名
+SEVEN_DAY_TYPE_NAVY_COUNT               = 212; //海军数量
+SEVEN_DAY_TYPE_NAVY_PURPLE_COUNT        = 213; //紫色海军数量
+SEVEN_DAY_TYPE_NAVY_ORANGE_COUNT        = 214; //橙色海军数量 
+SEVEN_DAY_TYPE_NAVY_MAX_REFINE          = 215; //海军最高精炼等级
+SEVEN_DAY_TYPE_NAVY_ALL_REFINE          = 216; //宝物最六件精炼等级
+SEVEN_DAY_TYPE_TOWER_RESET              = 217; //爬塔重置次数
+SEVEN_DAY_TYPE_TOWER_RANK               = 218; //爬塔排名
+SEVEN_DAY_TYPE_TOWER_STAR               = 219; //爬塔星数
+SEVEN_DAY_TYPE_MAX_SHIP                 = 220; //战舰最大研发等级
+SEVEN_DAY_TYPE_ALL_SHIP                 = 221; //战舰六艘研发等级
+SEVEN_DAY_TYPE_DSTRIKE_BUY              = 222; //购买围剿令的次数
+SEVEN_DAY_TYPE_DSTRIKE_DAMAGE           = 223; //围剿海盗伤害
+SEVEN_DAY_TYPE_DSTRIKE_EXPLOIT          = 224; //围剿海盗功勋
+SEVEN_DAY_TYPE_GENERAL                  = 225; //名将副本
+SEVEN_DAY_TYPE_SHOP_REFRESH             = 226; //功勋商店刷新次数
+SEVEN_DAY_TYPE_SHOP_BUY                 = 227; //功勋商店购买次数
+SEVEN_DAY_TYPE_GOODS                    = 228; //半价抢购（不计数），条件填写商品id-商城商店表
+SEVEN_DAY_TYPE_GENERAL_HIDE             = 229; //名将隐藏副本//通关名将隐藏副本X,填关卡id
+SEVEN_DAY_TYPE_SHIPBUILD                = 230; //高级抽将10次//造船采购累计
+SEVEN_DAY_TYPE_TRAIN_GOLD               = 231; //武将元宝培养10次//舰船元宝加固X次
+SEVEN_DAY_TYPE_PATROL_ADVANCE           = 232; //领地高级巡逻12小时//
+SEVEN_DAY_TYPE_PATROL_TOTLE             = 233; //领地巡逻24小时//
+SEVEN_DAY_TYPE_SHOPTYPE1_COST           = 234; //商城消耗X元宝
+SEVEN_DAY_TYPE_SHOPTYPE2_COST           = 235; //三国无双神装商店消耗X威名
+SEVEN_DAY_TYPE_SHOPTYPE3_COST           = 236; //神将商店消耗X将魂
+SEVEN_DAY_TYPE_SHOPTYPE4_COST           = 237; //竞技场声望商店消耗X声望
+SEVEN_DAY_TYPE_SHOPTYPE6_COST           = 238; //叛军战功商店消耗X战功
+
+SEVEN_DAY_TYPE_END                      = 299;
+
+//七日活动领取记录
+SEVEN_DAY_TAG_BEGIN                    = 300; 
+SEVEN_DAY_TAG_LOGIN_ITEM               = 301; //每日登陆送道具
+SEVEN_DAY_TAG_LOGIN_SHIP               = 302; //每日登陆送战舰
+SEVEN_DAY_TAG_RECHARGE                 = 303; //充值额度
+SEVEN_DAY_TAG_FIGHTING                 = 304; //战斗力达成值
+SEVEN_DAY_TAG_LEVEL                    = 305; //等级
+SEVEN_DAY_TAG_COPY                     = 306; //主线副本通关章节
+SEVEN_DAY_TAG_EQUIP_QUALITY            = 307; //装备强化品质
+SEVEN_DAY_TAG_EQUIP_LEVEL              = 308; //装备强化等级
+SEVEN_DAY_TAG_EQUIP_MAX_REFINE         = 309; //装备精炼
+SEVEN_DAY_TAG_EQUIP_ALL_REFINE         = 310; //装备精炼6件
+SEVEN_DAY_TAG_PK                       = 311; //竞技场排名
+SEVEN_DAY_TAG_NAVY_COUNT               = 312; //海军数量
+SEVEN_DAY_TAG_NAVY_PURPLE_COUNT        = 313; //紫色海军数量
+SEVEN_DAY_TAG_NAVY_ORANGE_COUNT        = 314; //橙色海军数量 
+SEVEN_DAY_TAG_NAVY_MAX_REFINE          = 315; //海军最高精炼等级
+SEVEN_DAY_TAG_NAVY_ALL_REFINE          = 316; //宝物最六件精炼等级
+SEVEN_DAY_TAG_TOWER_RESET              = 317; //爬塔重置次数
+SEVEN_DAY_TAG_TOWER_RANK               = 318; //爬塔排名
+SEVEN_DAY_TAG_TOWER_STAR               = 319; //爬塔星数
+SEVEN_DAY_TAG_MAX_SHIP                 = 320; //战舰最大研发等级
+SEVEN_DAY_TAG_ALL_SHIP                 = 321; //战舰六艘研发等级
+SEVEN_DAY_TAG_DSTRIKE_BUY              = 322; //购买围剿令的次数
+SEVEN_DAY_TAG_DSTRIKE_DAMAGE           = 323; //围剿海盗伤害
+SEVEN_DAY_TAG_DSTRIKE_EXPLOIT          = 324; //围剿海盗功勋
+SEVEN_DAY_TAG_GENERAL                  = 325; //名将副本
+SEVEN_DAY_TAG_SHOP_REFRESH             = 326; //功勋商店刷新次数
+SEVEN_DAY_TAG_SHOP_BUY                 = 327; //功勋商店购买次数
+SEVEN_DAY_TAG_GOODS                    = 328; //半价抢购次数
+SEVEN_DAY_TAG_GENERAL_HIDE             = 329; //名将隐藏副本次数
+SEVEN_DAY_TAG_SHIPBUILD                = 330; //高级抽将10次//造船采购累计
+SEVEN_DAY_TAG_TRAIN_GOLD               = 331; //武将元宝培养10次//舰船元宝加固X次
+SEVEN_DAY_TAG_PATROL_ADVANCE           = 332; //领地高级巡逻12小时//
+SEVEN_DAY_TAG_PATROL_TOTLE             = 333; //领地巡逻24小时//
+SEVEN_DAY_TAG_SHOPTYPE1_COST           = 334; //商城消耗X元宝
+SEVEN_DAY_TAG_SHOPTYPE2_COST           = 335; //三国无双神装商店消耗X威名
+SEVEN_DAY_TAG_SHOPTYPE3_COST           = 336; //神将商店消耗X将魂
+SEVEN_DAY_TAG_SHOPTYPE4_COST           = 337; //竞技场声望商店消耗X声望
+SEVEN_DAY_TAG_SHOPTYPE6_COST           = 338; //叛军战功商店消耗X战功
+
+SEVEN_DAY_TAG_END                      = 399;
+
+OTHER_SERVER_OPEN_FUND                 = 400; //开服基金
+OTHER_SERVER_WELFARE                   = 401; //开服福利
+OTHER_RAISE_FUNDING                    = 402; //募集军资总次数(负数是可领取状态)
+OTHER_RAISE_FUNDING_MONEY              = 403; //募集军资累计
+OTHER_FIRST_RECHARGE                   = 404; //首冲礼包(0首充, 1二次充值, 2二次充值领取状态, 3一元充值状态, 4首冲状态)
+OTHER_RESEARCH_ITEM_POINT              = 405; //抽道积分
+OTHER_RESEARCH_ITEM_RECORD             = 406; //抽道具领取记录
+OTHER_LEGION_FOREPLAY_RECORD           = 407; //制霸前戏领奖记录
+OTHER_TEN_RESEARCH_HERO_HALF           = 408; //10连抽半价
+OTHER_MEDAL_RESEARCH_COUNT             = 409; //勋章抽取次数
+
+FOURTEEN_DAY_TYPE_BEGIN                = 500;
+FOURTEEN_DAY_TYPE_LOGIN_ITEM           = 501; // 当日登录送道具
+FOURTEEN_DAY_TYPE_RECHARGE1            = 502; // 当日单笔充值
+FOURTEEN_DAY_TYPE_RECHARGE2            = 503; // 当日单笔充值
+FOURTEEN_DAY_TYPE_RECHARGE3            = 504; // 当日单笔充值
+FOURTEEN_DAY_TYPE_RECHARGE4            = 505; // 当日单笔充值
+FOURTEEN_DAY_TYPE_RECHARGE5            = 506; // 当日单笔充值
+FOURTEEN_DAY_TYPE_RECHARGE6            = 507; // 当日单笔充值
+FOURTEEN_DAY_TYPE_RECHARGE7            = 508; // 当日单笔充值
+FOURTEEN_DAY_TYPE_ROB_ARMY1            = 509; // 当日海军抢夺达到次数
+FOURTEEN_DAY_TYPE_ROB_ARMY2            = 510; // 当日海军抢夺达到次数
+FOURTEEN_DAY_TYPE_PK6                  = 511; // 当天竞技场战斗【胜利】达到指定次数
+FOURTEEN_DAY_TYPE_PK7                  = 512; // 当天竞技场战斗【胜利】达到指定次数
+FOURTEEN_DAY_TYPE_SWEEP_COPY3          = 513; // 当日主线副本战斗【胜利】（包含扫荡）达到指定次数
+FOURTEEN_DAY_TYPE_SWEEP_COPY4          = 514; // 当日主线副本战斗【胜利】（包含扫荡）达到指定次数
+FOURTEEN_DAY_TYPE_TOWER                = 515; // 当日突袭油田达到星数
+FOURTEEN_DAY_TYPE_SALE                 = 516; // 特价贩售（每个道具可购买限定次数）
+FOURTEEN_DAY_TYPE_HALF_BUY             = 517; // 半价抢购（每个道具只能购买一次）
+FOURTEEN_DAY_TYPE_LOGIN_SHIP           = 518; // 当日登录送战舰
+FOURTEEN_DAY_TYPE_ELITECOPY            = 519; //当天精英副本【胜利】达到指定次数
+FOURTEEN_DAY_TYPE_END                  = 599;
+
+FOURTEEN_DAY_TAG_BEGIN                 = 600;
+FOURTEEN_DAY_TAG_LOGIN_ITEM            = 601; // 当日登录送道具
+FOURTEEN_DAY_TAG_RECHARGE1             = 602; // 当日单笔充值
+FOURTEEN_DAY_TAG_RECHARGE2             = 603; // 当日单笔充值
+FOURTEEN_DAY_TAG_RECHARGE3             = 604; // 当日单笔充值
+FOURTEEN_DAY_TAG_RECHARGE4             = 605; // 当日单笔充值
+FOURTEEN_DAY_TAG_RECHARGE5             = 606; // 当日单笔充值
+FOURTEEN_DAY_TAG_RECHARGE6             = 607; // 当日单笔充值
+FOURTEEN_DAY_TAG_RECHARGE7             = 608; // 当日单笔充值
+FOURTEEN_DAY_TAG_ROB_ARMY1             = 609; // 当日海军抢夺达到次数
+FOURTEEN_DAY_TAG_ROB_ARMY2             = 610; // 当日海军抢夺达到次数
+FOURTEEN_DAY_TAG_PK6                   = 611; // 当天竞技场战斗【胜利】达到指定次数
+FOURTEEN_DAY_TAG_PK7                   = 612; // 当天竞技场战斗【胜利】达到指定次数
+FOURTEEN_DAY_TAG_SWEEP_COPY3           = 613; // 当日主线副本战斗【胜利】（包含扫荡）达到指定次数
+FOURTEEN_DAY_TAG_SWEEP_COPY4           = 614; // 当日主线副本战斗【胜利】（包含扫荡）达到指定次数
+FOURTEEN_DAY_TAG_TOWER                 = 615; // 当日突袭油田达到星数
+FOURTEEN_DAY_TAG_SALE                  = 616; // 特价贩售（每个道具可购买限定次数）
+FOURTEEN_DAY_TAG_HALF_BUY              = 617; // 半价抢购（每个道具只能购买一次）
+FOURTEEN_DAY_TAG_LOGIN_SHIP            = 618; // 当日登录送战舰
+FOURTEEN_DAY_TAG_ELITECOPY             = 619; //当天精英副本【胜利】达到指定次数
+FOURTEEN_DAY_TAG_END                   = 699;
+
+};
+
+enum TalkChannel
+{
+TALK_CHANNEL_SYS             = 1;  //系统公告
+TALK_CHANNEL_SERVER          = 2;  //全服
+TALK_CHANNEL_ARMY            = 3;  //军团
+TALK_CHANNEL_PRIVATE         = 4;  //私聊
+}
+
+//参见战报格式.xlsx的ReportAbstract
+//里面有详细内容的定义
+enum ReportType
+{
+REPORT_TYPE_ARENA             = 1;  //竞技场战报(排名变化的战报)
+REPORT_TYPE_ARENA_DEFENSE     = 2;  //竞技场防守战报
+}
+
+message TowerState
+{
+optional int32 max_order      = 1;  //最高层数
+optional int32 max_star       = 2;  //最高星数
+optional int32 current_order  = 3;  //当前层数
+optional int32 current_star   = 4;  //当前星数
+optional int32 award          = 5;  //已经领奖的层数
+optional int32 buff_star      = 6;  //可以用来购买buff的星星数
+optional int32 copy_star      = 7;  //当前层的星数情况(copy_star >> ((order % 3) * 8)) & 0xFF
+required string random_buff   = 8;  //随机出来的buff:BuffID1;BuffID2;BuffID3
+optional int32 max_star_order = 9;  //连续最高星数的层数
+}
+
+enum RankType
+{
+RANK_TYPE_STAR_1            = 1;  //主线副本星数排行
+RANK_TYPE_STAR_2            = 2;  //精英副本星数排行
+RANK_TYPE_TOWER             = 3;  //爬塔星数排行
+RANK_TYPE_DSTRIKE_EXPLOIT   = 4;  //围剿叛军功勋排行
+RANK_TYPE_DSTRIKE_DAMAGE    = 5;  //围剿叛军伤害排行
+RANK_TYPE_LEVEL             = 6;  //等级排行榜
+RANK_TYPE_FIGHT             = 7;  //战斗力排行榜
+RANK_TYPE_CARRIER_COPY      = 8;  //航母副本排行榜(合金数用的是star字段, 没有新加字段)
+RANK_TYPE_ARMY_WAR          = 9;  //军团战役伤害排行
+RANK_TYPE_WORLD_BOSS_ARMY      = 10;  //世界boss军团荣耀排行榜
+RANK_TYPE_WORLD_BOSS_DAMAGE_UK = 11;  //世界boss伤害排行榜英国
+RANK_TYPE_WORLD_BOSS_DAMAGE_US = 12;  //世界boss伤害排行榜美国
+RANK_TYPE_WORLD_BOSS_DAMAGE_GE = 13;  //世界boss伤害排行榜德国
+RANK_TYPE_WORLD_BOSS_DAMAGE_JP = 14;  //世界boss伤害排行榜日本
+RANK_TYPE_WORLD_BOSS_MERIT_UK  = 15;  //世界boss伤害排行榜英国
+RANK_TYPE_WORLD_BOSS_MERIT_US  = 16;  //世界boss伤害排行榜美国
+RANK_TYPE_WORLD_BOSS_MERIT_GE  = 17;  //世界boss伤害排行榜德国
+RANK_TYPE_WORLD_BOSS_MERIT_JP  = 18;  //世界boss伤害排行榜日本
+RANK_TYPE_RESEARCH_ITEM        = 19;  //道具抽取积分排行榜
+RANK_TYPE_CROSS_SERVER_UK      = 20;  //跨服积分战排行榜英国
+RANK_TYPE_CROSS_SERVER_US      = 21;  //跨服积分战排行榜美国
+RANK_TYPE_CROSS_SERVER_GE      = 22;  //跨服积分战排行榜德国
+RANK_TYPE_CROSS_SERVER_JP      = 23;  //跨服积分战排行榜日本
+RANK_TYPE_LEGION_WAR_1         = 24;  //制霸全球个人排行榜(star是积分, damage是server_id)
+RANK_TYPE_LEGION_WAR_2         = 25;  //制霸全球跨区个人排行榜(star是积分, damage是server_id)
+RANK_TYPE_LEGION_WAR_3         = 26;  //制霸全球跨区军团排行榜(uid是军团ID, name/army_name是军团名, star是军团积分, damage是server_id)
+RANK_TYPE_LEGION_FOREPLAY      = 27;  //制霸全球前戏伤害排行榜
+RANK_TYPE_SWEEP_STAKE_CARRIER  = 28;  //航母转盘活动(star是积分)
+RANK_TYPE_MEDAL                = 29;  //勋章排行榜
+RANK_TYPE_MEDAL_CROSS_SERVER   = 30;  //全服勋章排行榜
+RANK_TYPE_PEARL_HARBOR_PLAYER  = 31;  //玩家捍卫珍珠港排行榜
+RANK_TYPE_PEARL_HARBOR_ARMY    = 32;  //军团捍卫珍珠港排行榜
+}
+
+message RankItemInfo
+{
+required int64 uid          = 1;  //ID(玩家UID)
+required string name        = 2;  //名字玩家名称
+optional string army_name   = 4;  //军团名
+optional int32 level        = 5;  //等级
+optional int64 fight_attr   = 7;  //战斗力
+optional int32 vip_level    = 8;  //vip等级
+optional int32 exploit      = 9;  //围剿BOSS功勋
+optional int64 damage       = 10; //围剿BOSS伤害
+optional int32 star         = 11; //星星数
+optional int32 avatar       = 12; //头像
+}
+
+message RankList
+{
+repeated RankItemInfo items = 1;  //排名从1开始
+}
+
+message RechargeInfo
+{
+required fixed32 recharge_time= 1;  //充值的时间戳
+required int32 money          = 2;  //充值的钱数(单位1分RMB, 0.1元宝)
+optional int32 goodid         = 3;  //商品ID
+}
+
+enum ArmyPosition
+{
+ARMY_POSITION_MEMBER    = 0;  //普通成员
+ARMY_POSITION_VP        = 1;  //副军团长
+ARMY_POSITION_MASTER    = 2;  //军团长
+}
+
+enum ArmySkill
+{
+ARMY_SKILL_ATTACK     = 0;    //攻击
+ARMY_SKILL_HP         = 1;    //血量
+ARMY_SKILL_WF         = 2;    //物防
+ARMY_SKILL_FF         = 3;    //法防
+ARMY_SKILL_HIT        = 4;    //命中
+ARMY_SKILL_MISS       = 5;    //闪避
+ARMY_SKILL_CRIT       = 6;    //暴击
+ARMY_SKILL_RESIST     = 7;    //爆抗
+ARMY_SKILL_EXP        = 8;    //经验加成
+ARMY_SKILL_PVP_DAMAGE = 9;    //PVP增伤
+ARMY_SKILL_PVP_DAMAGE_DEC= 10;//PVP减伤
+}
+
+//格式:Type,Time,Content
+//Type是下面的枚举
+//Time是事情发生的时间,UTC时间戳
+//Content是下面Type注释括号里面的内容
+enum ArmyLog
+{
+ARMY_LOG_LEVEL_UP     = 1;  //军团升级(uid,name,new level)
+ARMY_LOG_POS_CHANGED  = 2;  //职位变动(uid,name,new position)
+ARMY_LOG_NEW_MEMBER   = 3;  //新成员(uid,name,new member uid, new member name)
+ARMY_LOG_FIRE_MEMBER  = 4;  //开除成员(uid,name,member uid, member name)
+ARMY_LOG_MEMBER_EXIT  = 5;  //成员离开军团(uid,name)
+ARMY_LOG_CHANGE_MASTER= 6;  //会长转让(uid,name,new master uid, new master name)
+ARMY_LOG_SIGN         = 7;  //军团签到(uid,name,type,exp)
+ARMY_LOG_BOSS         = 8;  //军团boss击杀(copy_id,exp)
+}
+
+message ArmyInfo
+{
+required int64 army_id      = 1;      //军团ID
+required string army_name   = 2;      //军团名
+optional int32 avatar       = 3;      //军团头像
+optional int32 level        = 4;      //军团等级
+optional int64 exp          = 5;      //军团经验
+optional int64 master_id    = 6;      //军团长ID
+optional string master_name = 7;      //军团长名字
+optional string announcement1 = 8;    //军团公告1(对外公告)
+optional string announcement2 = 9;    //军团公告2(对内公告)
+repeated int32 skills         = 10;   //军团技能等级上限
+repeated string log           = 11;   //军团日志(只保留20条)
+optional int32 member_count   = 12;   //查看其他军团成员数(自己军团无用)
+optional int32 donate_count   = 13;   //今天捐献次数
+optional int32 donate_time    = 14;   //今天捐献时间
+optional int32 donate_value   = 15;   //今天捐献值(活跃度)
+repeated ShopCommodityInfo army_shop = 16;  //军团刷新商店
+optional ArmyShopRecord  buy_record = 17;  //军团商品
+optional int32 army_war      = 18;    //军团战役章节进度
+optional int32 army_merit    = 19;    //公会荣誉
+optional int64 shop_refresh_time = 20; //公会商店最后刷新时间
+}
+
+message ArmyMemberInfo
+{
+required int64 player_id    = 1;  //玩家ID
+required string name        = 2;  //玩家名
+optional int32 position     = 3;  //军团职位
+optional int32 level        = 4;  //玩家等级
+optional int32 vip_level    = 5;  //VIP等级
+optional int64 fight        = 6;  //玩家战斗力
+optional int32 army_exp     = 7;  //累计贡献
+optional int32 today_exp    = 8;  //今日祭天贡献
+optional int32 update_time  = 9;  //最后更新时间
+optional bool is_online     = 10; //是否在线(true是在线)
+optional int64 army_id      = 11; //!!!客户端勿用!!!
+optional int32 avatar       = 12; //玩家头像
+}
+
+message ArmyApplyInfo
+{
+required int64 player_id    = 1;  //玩家ID
+required string name        = 2;  //玩家名称
+optional int32 level        = 3;  //玩家等级
+optional int32 vip_level    = 4;  //VIP等级
+optional int64 fight        = 5;  //战斗力
+optional int64 army_id      = 6;  //申请的军团(客户端勿用)
+optional int32 avatar       = 7;  //玩家头像
+}
+
+//军团战役boss点,个人奖励
+message ArmyBossMemAward
+{
+optional int64 player_id      = 1;
+optional string name          = 2;
+optional int32 index          = 3;  //玩家领取的index,取值[1,48],0表示没有领取
+optional int32 award          = 4;  //reward_choose的下标
+}
+
+message ArmyBossInfo
+{
+optional int32 copy_id        = 1;                //chapter * 10 + index, index取值[1,4]
+repeated int64 left_hp        = 2 [packed = true];//剩余血量
+repeated ArmyBossMemAward awards = 3;             //副本点个人奖励情况
+optional string name          = 4;                //击杀者的名字
+}
+
+message ArmyWarInfo
+{
+optional ArmyBossInfo boss1   = 1;
+optional ArmyBossInfo boss2   = 2;
+optional ArmyBossInfo boss3   = 3;
+optional ArmyBossInfo boss4   = 4;
+}
+
+enum TimeActivityType
+{
+TIME_ACTIVITY_RECHARGE    = 1;    //限时特惠
+TIME_ACTIVITY_COPY        = 2;    //主线副本战斗胜利次数
+TIME_ACTIVITY_ELITE_COPY  = 3;    //精英副本战斗胜利次数
+TIME_ACTIVITY_PK          = 4;    //海上争霸战斗胜利次数
+TIME_ACTIVITY_ROB         = 5;    //海军抢夺次数
+TIME_ACTIVITY_ARMY_COPY   = 6;    //联盟战役次数
+TIME_ACTIVITY_TOWER       = 7;    //突袭油田重置次数
+TIME_ACTIVITY_DESTRIKE    = 8;    //围剿海盗击杀次数
+TIME_ACTIVITY_BUY_SHIP    = 9;    //采购造船次数
+TIME_ACTIVITY_EQUIP_REFINE_MAX_LEVEL = 10;  //穿戴装备最高改造等级
+TIME_ACTIVITY_EQUIP_REFINE_MIN_LEVEL = 11;  //上阵战舰穿戴24件装备最低改造等级
+TIME_ACTIVITY_NAVY_REFINE_MAX_LEVEL  = 12;  //穿戴海军最高改造等级达到n
+TIME_ACTIVITY_NAVY_REFINE_MIN_LEVEL  = 13;  //上阵战舰穿戴24件海军改造等级达到
+TIME_ACTIVITY_SHIP_FATE_MAX_LEVEL    = 14;  //上阵战舰最高研发等级达到
+TIME_ACTIVITY_SHIP_FATE_MIN_LEVEL    = 15;  //上阵所有战舰研发等级达到
+TIME_ACTIVITY_LOGIN                  = 16;  //登陆活动
+TIME_ACTIVITY_CONSUMER_FEEDBACK      = 17;  //消费回馈
+TIME_ACTIVITY_CUMLATIVE_RECHARGE     = 18;  //累充送礼
+TIME_ACTIVITY_DAY_REBATE6            = 19;  //积天返利6
+TIME_ACTIVITY_DAY_REBATE30           = 20;  //积天返利30
+TIME_ACTIVITY_ASTROLOGY              = 21;  //战舰订制
+
+TIME_ACTIVITY_FESTIVAL_RECHARGE      = 50;  //节日充值
+TIME_ACTIVITY_FESTIVAL_LOGIN         = 51;  //节日登陆
+TIME_ACTIVITY_FESTIVAL_BUY_SHIP      = 52;  //节日采购
+TIME_ACTIVITY_FESTIVAL_PK            = 53;  //节日竞技场
+TIME_ACTIVITY_FESTIVAL_COPY          = 54;  //节日主线副本
+TIME_ACTIVITY_FESTIVAL_ELITE         = 55;  //节日精英油田
+TIME_ACTIVITY_FESTIVAL_ARMY_COPY     = 56;  //节日联盟战役
+TIME_ACTIVITY_FESTIVAL_HARD_COPY     = 57;  //节日精英副本
+TIME_ACTIVITY_FESTIVAL_DESTRIKE      = 58;  //节日攻略海盗
+TIME_ACTIVITY_FESTIVAL_KILL_DESTRIKE = 59;  //节日击杀海盗
+TIME_ACTIVITY_FESTIVAL_SHARE_DESTRIK = 60;  //节日分享围剿海盗
+TIME_ACTIVITY_FESTIVAL_ASTROLOGY     = 61;  //节日战舰定制
+TIME_ACTIVITY_FESTIVAL_END           = 70;  //节日活动截止
+}
+
+message TimeActivityRow
+{
+repeated string columns       = 1;
+}
+
+message TimeActivityInfo
+{
+optional int32 type           = 1;
+repeated string headers       = 2;
+repeated TimeActivityRow rows = 3;
+optional int32 begin_time     = 4;
+optional int32 end_time       = 5;
+optional string description   = 6;
+optional int64  id            = 7;
+}
+
+message EliteRandomCopyStatus
+{
+optional int32 chapter      = 1;
+optional int32 quality      = 2;
+optional int32 passed       = 3;  //0表示未通关, 非0通关
+}
+
+message LegionWarCity
+{
+required int32 city_id      = 1;
+repeated int64 players      = 2;  //下标N表示第N层, 值为0表示NPC, 非0是玩家
+}
+
+enum ActivitySweepStakeType
+{
+ACTIVITY_SWEEP_STAKE_EQUIP   = 1; //深海探宝
+ACTIVITY_SWEEP_STAKE_CARRIER = 2; //航母活动
+}
+
+message ActivitySweepStake
+{
+optional int32 type           = 1;  //ActivitySweepStakeType
+optional int32 update_time    = 2;  //更新时间
+optional int32 total_count    = 3;  //已经抽取的次数
+optional int32 award_status   = 4;  //进度条奖励
+optional int32 award_N_count  = 5;  //已经领取的N次奖励(N的倍数, 比如10, 20, 30)
+}
+
+message GmCommandParam
+{
+optional string key     = 1;
+optional string value   = 2;
+}
+
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+
+// MSG_CS_ERROR_CODE
+message MessageErrorCode {
+required int32 err_code       = 1;  //统一的错误号码
+required int32 msg_id         = 2;  //请求的ID
+}
+
+//MSG_CS_REQUEST_HEART_BEAT
+message MessageRequestHeartBeat
+{
+required fixed64 millisec     = 1;  //客户端本地的时间戳
+}
+
+//MSG_CS_RESPONSE_HEART_BEAT
+message MessageResponseHeartBeat
+{
+required fixed64 millisec     = 1;  //客户端计算ping值用
+required fixed64 sec          = 2;  //服务器的毫秒数
+optional string version       = 4;  //服务器版本号
+}
+
+//MSG_CS_REQUEST_LOGIN_C
+message MessageRequestLogin
+{
+required string account       = 1;  //平台账号(openid)
+optional uint32 server_id     = 2;  //服务器ID
+optional string channel       = 3;  //渠道ID
+optional string device_id     = 4;  //设备ID
+optional string idfa          = 5;  //iOS的IDFA(Android填成device_id)
+}
+
+//MSG_CS_RESPONSE_LOGIN_S
+message MessageResponseLogin
+{
+optional string account     = 2;  //平台账号
+optional int64 player_id    = 3;  //玩家ID
+optional string token       = 4;  //下次操作的口令
+optional int64 expiry_time  = 5;  //口令过期时间
+optional int32 recharge_platform = 6; //充值系统所用的平台ID
+optional int32 start_time   = 7;  //服务器开服时间
+optional int32 create_time  = 8;  //创建UID的时间戳
+optional int32 is_create    = 9;  //非0表示第一次创建UID
+}
+
+//MSG_CS_REPORT_TOKEN_C
+message MessageReportToken
+{
+required string account     = 1;  //平台账号
+required string token       = 2;  //口令
+}
+
+//MSG_CS_REQUEST_CREATE_PLAYER
+message MessageRequestCreatePlayer
+{
+required string name        = 1;  //玩家名称
+optional int32 avatar       = 2;  //玩家头像(默认是0)
+}
+
+//MSG_CS_RESPONSE_CREATE_PLAYER
+message MessageResponseCreatePlayer
+{
+required string name        = 1;  //玩家的名称
+}
+
+//MSG_CS_REQUEST_CHANGE_NAME
+message MessageRequestChangeName
+{
+optional string name        = 1;  //新的名字
+optional int32 avatar       = 2;  //玩家头像
+}
+
+//MSG_CS_RESPONSE_CHANGE_NAME
+message MessageResponseChangeName
+{
+optional string name        = 1;  //新名字
+optional int32 avatar       = 2;  //玩家头像
+}
+
+//MSG_CS_RESPONSE_LOAD_PLAYER
+message MessageResponseLoadPlayer
+{
+required PlayerInfo info    = 1;
+optional uint32 server_id   = 2;  //服务器编号
+
+optional int32 pk_rank_reward_rank = 3; //上次竞技场排行
+optional int32 pk_rank_reward_time = 4; //上次领取竞技场排行奖励时间
+repeated KVPair2  buy_count        = 5; //各种系统的计数器
+
+optional int32 patrol_total_time   = 6; //巡逻总时间
+repeated PatrolInfo patrol_info    = 7; //巡逻点具体信息
+repeated string report_abstract    = 8; //战报摘要
+repeated KVPair2 tower_buff        = 9; //爬塔已经购买的buff
+optional TowerState tower_state    = 10;  //爬塔状态
+optional DstrikeInfo dstrike_info  = 11;  //围剿海盗信息
+repeated KVPair2 achievements      = 12;  //成就数组
+repeated RechargeInfo recharge     = 13; //历史充值信息(会保留一个月)
+repeated int32 daily_sign          = 14; //日常标记
+optional int64 month_card          = 15; //小月卡
+optional int64 big_month_card      = 16; //大月卡
+optional int64 life_card           = 17; //终生卡
+repeated KVPair2 vip_weekly        = 18; //vip每周购买记录
+repeated int32 army_skill          = 19; //军团技能
+optional int64 army_id             = 20; //军团ID
+repeated ActivityRecord activity_record = 21;   //活动记录
+optional int64 army_leave_time     = 22; //离开公会时间
+optional bytes user_defined        = 23; //用户自定义
+repeated uint32 servers            = 24; //数组的个数大于1, 表明经过合服
+optional CrossServerInfo cross_info= 25; //跨服积分战信息
+optional int32 month_card_1        = 26; //小月基金购买时间
+optional int32 month_card_1_login  = 27; //小月基金登录天数
+optional int32 month_card_1_status = 28; //小月基金领奖状态
+optional int32 month_card_2        = 29; //大月基金购买时间
+optional int32 month_card_2_login  = 30; //大月基金登录天数
+optional int32 month_card_2_status = 31; //大月基金领奖状态
+optional int32 weekly_card         = 32; //周卡购买时间
+optional int32 weekly_card_login   = 33; //周卡登录天数
+optional int32 weekly_card_status  = 34; //周卡领取状态
+optional int64 max_fight_attr      = 35; //最高战斗力
+optional string got_award_version  = 36; //获得过奖励的版本号
+optional int32 medal_copy_id       = 37; //勋章副本ID
+optional int32 medal_star          = 38; //勋章集册进度
+optional string medal_state        = 39; //勋章集册状态
+optional int32 medal_achi          = 40; //勋章成就
+}
+
+//MSG_CS_RESPONSE_TIME_ACTIVITY
+message MessageResponseTimeActivity
+{
+repeated TimeActivityInfo infos = 1;
+}
+
+//MSG_CS_RESPONSE_GET_MAIL
+message MessageResponseGetMail
+{
+repeated MailInfo mails     = 1;
+required int64 read_mail_id = 2;  //最后一封读取的邮件ID
+}
+
+//MSG_CS_NOTIFY_MAIL_INFO
+message MessageNotifyMailInfo
+{
+required MailInfo new_mail = 2;
+}
+
+//MSG_CS_REQUEST_GET_MAIL_REWARD
+message MessageRequestGetMailReward
+{
+required fixed64 mail_id = 1;
+}
+
+//MSG_CS_RESPONSE_GET_MAIL_REWARD
+message MessageResponseGetMailReward
+{
+required fixed64 mail_id = 1;
+}
+
+//MSG_CS_RESPONSE_LOAD_ITEM
+message MessageResponseLoadItem
+{
+repeated Item items         = 1;
+optional EquipsInfo equips  = 2;  //装备信息
+}
+
+//MSG_CS_RESPONSE_LOAD_SHIP
+message MessageResponseLoadShip
+{
+repeated HeroInfo ships                 = 1;      //舰船信息
+repeated CarrierInfo carrier            = 2;      //航母信息
+required CurrentCarrierInfo current_carrier = 5;  //当前装备的航母
+optional HeroResearchInfo hero_research = 6;      //船只研发信息
+}
+
+//MSG_CS_RESPONSE_LOAD_FRIEND
+message MessageResponseLoadFriend
+{
+repeated FriendInfo infos     = 1;  //所有的好友(以及黑名单列表)
+}
+
+//MSG_CS_RESPONSE_LOAD_COPY
+message MessageResponseLoadCopy
+{
+repeated CopyStarInfo copy_star   = 3;  //副本星级
+repeated CopyProgress progress    = 4;  //副本进度
+repeated CopyCount copy_count     = 5;  //副本通关次数
+repeated int32 passed_copy        = 6 [packed = true];  //一次性通关的副本ID
+repeated ChapterAwardInfo chapter_award = 7;            //章节奖励
+repeated int32 gate_award         = 8 [packed = true];  //关卡奖励
+
+repeated CarrierCopy carrier_copy = 9;  //航母副本
+optional CarrierCopyInfo carrier_copy_info = 10; //航母副本的通关信息 
+}
+
+//MSG_CS_RESPONSE_LOAD_TACTIC
+message MessageResponseLoadTactic
+{
+required TacticInfo info    = 1;
+repeated int32 obtained_carriers = 2;
+}
+
+//MSG_CS_REQUEST_SET_TACTIC
+message MessageRequestSetTactic
+{
+required TacticInfo info    = 1;
+}
+
+//MSG_CS_RESPONSE_SET_TACTIC
+message MessageResponseSetTactic
+{
+required TacticInfo info    = 1;
+}
+
+//MSG_CS_REQUEST_ACTIVE_CARRIER
+message MessageRequestActiveCarrier
+{
+required sfixed32 carrier_id = 1;
+}
+
+//MSG_CS_REQUEST_RESEARCH_HERO
+message MessageRequestResearchHero
+{
+optional int32 use_money  = 2;  //可选参数 1:采购1次  10：采购10次  20:研发1次  21：研发10次
+}
+
+//MSG_CS_RESPONSE_GET_RESEARCH_HERO
+message MessageResponseGetResearchHero
+{
+repeated int64 hero_uid   = 1 [packed = true];
+}
+
+//MSG_CS_REQUEST_EQUIP_REFINE
+message MessageRequestEquipRefine
+{
+required int64 equip_uid = 1;
+repeated KVPair2 items   = 4; //消耗的道具
+}
+
+//MSG_CS_RESPONSE_EQUIP_REFINE
+message MessageResponseEquipRefine
+{
+required int64 equip_uid = 1;
+optional int32 change_level = 2;
+}
+
+//MSG_CS_REQUEST_EQUIP_LEVEL_UP
+message MessageRequestEquipLevelUp
+{
+required int64 equip_uid = 1;
+optional int32 count = 2; //默认是1
+optional int32 max_level = 3; //最高等级限制
+}
+
+//MSG_CS_RESPONSE_EQUIP_LEVEL_UP
+message MessageResponseEquipLevelUp
+{
+required int64 equip_uid = 1;
+optional int32 count1 = 2;  //升级次数
+optional int32 count2 = 3;  //2倍暴击的次数
+optional int32 count3 = 4;  //3倍暴击的次数
+}
+
+//MSG_CS_REQUEST_HERO_LEVEL_UP
+message MessageRequestHeroLevelUp
+{
+required int64 hero_uid   = 1;
+optional int64 item_uid   = 2;
+optional int32 count      = 3; //默认是1
+repeated KVPair2 item_list = 4; //道具列表
+}
+
+//MSG_CS_RESPONSE_HERO_LEVEL_UP
+message MessageResponseHeroLevelUp
+{
+required int64 hero_uid  = 1;
+}
+
+//MSG_CS_REQUEST_CLEAR_CD
+message MessageRequestClearCD
+{
+required int32 cd_type = 1; //CDType
+}
+
+//MSG_CS_RESPONSE_CLEAR_CD
+message MessageResponseClearCD
+{
+required int32 cd_type = 1; //CDType
+}
+
+//MSG_CS_REQUEST_HERO_GRADE_LEVEL_UP
+message MessageRequestHeroGradeLevelUp
+{
+required int64 hero_uid   = 1;  //需要突破的船舰
+repeated int64 other_uid  = 2 [packed = true];  //突破需要的其他同名船
+}
+
+//MSG_CS_RESPONSE_HERO_GRADE_LEVEL_UP
+message MessageResponseHeroGradeLevelUp
+{
+required int64 hero_uid = 1;
+}
+
+//MSG_CS_NOTIFY_OIL_INFO
+message MessageNotifyOilInfo
+{
+required int32 oil          = 1;
+required int32 last_oil_time= 2;
+required int32 energy       = 3;
+required int32 last_energy_time = 4;
+
+optional int32 msgid      = 10;
+optional int32 sysid      = 11;
+}
+
+//MSG_CS_NOTIFY_HERO_INFO
+message MessageNotifyHeroInfo
+{
+repeated HeroInfo info      = 1;
+repeated int64 delete_hero  = 2 [packed = true];
+}
+
+//MSG_CS_NOTIFY_ITEM_INFO
+message MessageNotifyItemInfo
+{
+repeated Item update_items  = 1;
+repeated int64 delete_items = 3 [packed = true];
+optional int32 message_id = 4;
+}
+
+//MSG_CS_NOTIFY_CARRIER_INFO
+message MessageNotifyCarrierInfo
+{
+optional CarrierInfo info = 1;
+optional int32 delete_id  = 2;
+}
+
+//MSG_CS_NOTIFY_CURRENT_CARRIER_INFO
+message MessageNotifyCurrentCarrierInfo
+{
+required CurrentCarrierInfo info = 1;
+}
+
+//MSG_CS_NOTIFY_MONEY_INFO
+message MessageNotifyMoneyInfo
+{
+optional int32 msgid          = 1;  //消息ID
+optional int32 sysid          = 2;  //系统ID
+
+required int32 vip_level      = 5;  //VIP等级
+required int32 level          = 6;  //玩家等级
+required int32 vip_exp        = 7;  //VIP经验
+required int64 exp            = 8;  //经验
+required int64 coin           = 9;  //金币数量
+required int64 money          = 10; //元宝数量
+required int32 prestige       = 11; //声望
+required int32 plane          = 12; //神魂(飞机碎片)
+required int32 hero           = 13; //将魂(英雄碎片)
+required int32 muscle         = 14; //威名
+required int32 exploit        = 15; //功勋
+required int32 union          = 16; //公会贡献
+}
+
+//MSG_CS_NOTIFY_COPY_INFO
+message MessageNotifyCopyInfo
+{
+optional CopyStarInfo copy_star   = 3;  //副本星级
+optional CopyProgress progress    = 4;  //副本进度
+repeated CopyCount copy_count     = 5;  //副本通关次数
+repeated int32 passed_copy        = 6 [packed = true];  //首胜副本,一次性通关副本
+}
+
+//MSG_CS_NOTIFY_HERO_RESEARCH_INFO
+message MessageNotifyHeroResearchInfo
+{
+optional HeroResearchInfo info = 1;
+}
+
+//MSG_CS_REQUEST_TEST
+message MessageRequestTest
+{
+required GMContent info  = 1;
+}
+
+//MSG_CS_REQUEST_FLOP
+message MessageRequestFlop
+{
+required int32 flop_type    = 1;  //1或者2, 1是免费, 2是付费
+optional int32 count        = 2;  //翻牌的次数(免费的填1, 付费的填翻的次数)
+}
+
+//MSG_CS_RESPONSE_FLOP
+message MessageResponseFlop
+{
+repeated int32 index          = 1 [packed = true];  //翻到的下标
+optional int32 flop_id        = 2;  //翻牌的掉落包ID
+repeated ItemSimpleInfo items = 3;  //翻牌掉落的东西
+}
+
+//MSG_CS_REQUEST_EQUIP_ITEM
+message MessageRequestEquipItem
+{
+required int64 item_uid       = 2;  //装备宝物唯一ID
+optional int32 is_wear        = 3;  //1是穿;0是脱
+optional int32 position       = 4;  //装备的位置[1, 6]
+}
+
+//MSG_CS_RESPONSE_EQUIP_ITEM
+message MessageResponseEquipItem
+{
+optional int32 position     = 2;
+}
+
+//MSG_CS_NOTIFY_FIGTH_RESULT
+message MessageNotifyFightResult
+{
+optional int32 star           = 1;  //星级(可能不显示)
+repeated MoneyType money      = 2;  //结算获得的货币
+repeated ItemSimpleInfo item  = 3;  //结算获得的道具
+optional int32 round          = 4;  //回合数
+optional int32 win            = 5;  //0表示失败, 1是胜利
+optional int32 flop_1         = 6;  //免费翻牌ID
+optional int32 flop_2         = 7;  //付费翻牌ID
+optional int32 copy_id        = 8;  //副本ID
+optional ItemSimpleInfo flop  = 9;  //翻牌奖励
+optional int64 total_damage   = 10; //总伤害
+optional int32 army_war_kill  = 11; //军团战役最后一击奖励(奖励货币类型12)
+optional int32 new_city       = 12; //制霸全球新的城市
+optional int32 new_position   = 13; //制霸全球新的位置
+}
+
+//MSG_CS_REQUEST_FIGHT_REPORT
+message MessageRequestFightReport
+{
+required int64 report_id  = 1; //战斗ID;
+}
+
+//MSG_CS_RESPONSE_FIGHT_REPORT
+message MessageResponseFightReport
+{
+required ReportRecord  info = 1;
+}
+
+//MSG_CS_REQUEST_FIGHT
+message MessageRequestFight
+{
+optional int32 copy_id      = 1;  //副本ID
+
+//夺宝的字段
+optional int64 player_id    = 4;  //被掠夺的对象(<MAX_ROBOT_ID表示是机器人)
+optional int32 item_id      = 5;  //海军碎片ID
+}
+
+//MSG_CS_REQUEST_ELITE_RANDOM_COPY_FIGHT
+message MessageRequestEliteRandomCopyFight
+{
+optional int32 chapter      = 1;
+}
+
+//MSG_CS_REQUEST_NAVY_REFINE
+message MessageRequestNavyRefine
+{
+required int64 item_uid   = 1;  //要被突破的海军UID
+repeated int64 other_uid  = 2 [packed = true];  //同名海军UID
+}
+
+//MSG_CS_RESPONSE_NAVY_REFINE
+message MessageResponseNavyRefine
+{
+required int64 item_uid     = 1;
+}
+
+//MSG_CS_REQUEST_COMPOSE_EQUIP
+message MessageRequestComposeEquip
+{
+required int64 item_id     = 1;
+required int32 item_count  = 2;
+}
+
+//MSG_CS_RESPONSE_COMPOSE_EQUIP
+message MessageResponseComposeEquip
+{
+repeated int64 item_uid     = 1 [packed = true]; //获得道具id
+repeated int64 ship_uid     = 2 [packed = true]; //获得船只id
+}
+
+//MSG_CS_REQUEST_HERO_RANDOM_ATTR
+message MessageRequestHeroRandomAttr
+{
+required int64 hero_uid     = 1;  //要洗属性的船
+required int32 count        = 2;  //连续洗属性的次数
+required int32 type         = 3;  //洗属性的类别(1只用材料, 2材料+金币, 3材料+钱)
+}
+
+//MSG_CS_RESPONSE_HERO_RANDOM_ATTR
+message MessageResponseHeroRandomAttr
+{
+required int32 hero_uid     = 1;
+}
+
+//MSG_CS_REQUEST_CARRIER_OPEN_SLOT
+message MessageRequestCarrierOpenSlot
+{
+required int64 carrier_id   = 1;
+}
+
+//MSG_CS_RESPONSE_CARRIER_OPEN_SLOT
+message MessageResponseCarrierOpenSlot
+{
+required int64 carrier_id   = 1;
+}
+
+//MSG_CS_REQUEST_GET_COPY_AWARD
+message MessageRequestGetCopyAward
+{
+//章节奖励, 发送章节ID和要领取奖励的下标(从0开始)
+optional int32 chapter        = 1;
+optional int32 chapter_index  = 2;
+//手动领取副本宝箱奖励,填副本ID
+optional int32 gate_id        = 3;
+}
+
+//MSG_CS_RESPONSE_GET_COPY_AWARD
+message MessageResponseGetCopyAward
+{
+optional ChapterAwardInfo chapter = 1;  //章节奖励
+optional int32  gate              = 2;  //关卡包ID
+}
+
+//MSG_CS_REQUEST_PLANE_LEVEL_UP
+message MessageRequestPlaneLevelUp
+{
+repeated int64 plane_uid      = 2 [packed = true];  //消耗的宝石(下标0的宝石是要被升级的)
+}
+
+//MSG_CS_RESPONSE_PLANE_LEVEL_UP
+message MessageResponsePlaneLevelUp
+{
+required int64 new_plane_uid  = 1;  //获得的新宝石
+}
+
+//MSG_CS_REQUEST_SAVE_RANDOM_ATTR
+message MessageRequestSaveRandomAttr
+{
+required int64 hero_uid       = 1;
+}
+
+//MSG_CS_RESPONSE_SAVE_RANDOM_ATTR
+message MessageResponseSaveRandomAttr
+{
+required int64 hero_uid       = 1;
+}
+
+//MSG_CS_NOTIFY_EQUIP_INFO
+message MessageNotifyEquipInfo
+{
+required int32 position       = 1;
+repeated int64 equips         = 2 [packed = true];
+}
+
+//MSG_CS_REQUEST_COMPOSE_NAVY
+message MessageRequestComposeNavy
+{
+required int32 navy_id        = 1;  //要合成哪种宝物
+optional int32 count          = 2;  //合成数量
+}
+
+//MSG_CS_RESPONSE_COMPOSE_NAVY
+message MessageResponseComposeNavy
+{
+repeated int64 navy_uid       = 2;  //合成的宝物
+}
+
+//MSG_CS_REQUEST_NAVY_LEVEL_UP
+message MessageRequestNavyLevelUp
+{
+required int64 navy_uid       = 1;  //宝物UID
+repeated int64 other_navy     = 2 [packed = true];  //被吃掉的宝物UID
+}
+
+//MSG_CS_RESPONSE_NAVY_LEVEL_UP
+message MessageResponseNavyLevelUp
+{
+required int64 navy_uid       = 1;
+optional int32 level_changed  = 2;
+}
+
+//MSG_CS_REQUEST_SELL_ITEM
+message MessageRequestSellItem
+{
+repeated int64 item_uid       = 1 [packed = true];
+}
+//MSG_CS_RESPONSE_SELL_ITEM
+message MessageResponseSellItem
+{
+repeated MoneyType money      = 1;
+}
+
+//MSG_CS_REQUEST_SELL_SHIP
+message MessageRequestSellShip
+{
+repeated int64 ship_uid       = 1 [packed = true];
+}
+
+//MSG_CS_RESPONSE_SELL_SHIP
+message MessageResponseSellShip
+{
+repeated MoneyType money      = 1;
+}
+
+//MSG_CS_REQUEST_BUY_ITEM
+message MessageRequestBuyItem
+{
+required int32 commodity_id    = 1;  //商品ID
+optional int32 commodity_count = 2;  //商品数量
+}
+
+//MSG_CS_RESPONSE_BUY_ITEM
+message MessageResponseBuyItem
+{
+required int32 commodity_id = 1;
+optional int32 commodity_count = 2;
+}
+
+//MSG_CS_NOTIFY_SHOP_INFO
+message MessageNotifyShopInfo
+{
+repeated ShopCommodityInfo  feats_commodity     = 1; //兑换商品信息
+optional int64              last_time           = 2; //(商店类型3在用)免费抽取起始时间
+optional int32              used_count          = 3; //(商店类型3在用)已经刷新次数
+repeated ShopCommodityInfo  normal_commodity    = 4; //道具商品更新信息
+repeated ShopCommodityInfo  life_commodity      = 5; //终生道具更新信息
+repeated RefreshShopInfo    refresh_commodity   = 6; //刷新商店
+}
+
+
+//MSG_CS_RESPONSE_LOAD_SHOP
+message MessageResponseLoadShop
+{
+repeated ShopCommodityInfo  feats_commodity     = 1; //兑换商品信息
+optional int64              last_time           = 2; //免费抽取起始时间
+optional int32              used_count          = 3; //已经刷新次数
+repeated ShopCommodityInfo  normal_commodity    = 4; //道具商品更新信息
+repeated ShopCommodityInfo  life_commodity      = 5; //终生道具更新信息
+repeated RefreshShopInfo    refresh_commodity   = 6; //刷新商店
+}
+
+//MSG_CS_REQUEST_SEND_MAIL
+message MessageRequestSendMail
+{
+required int64 player_id = 1;
+required string content  = 2;
+}
+
+
+//MSG_CS_REQUEST_FATE_LEVEL_UP
+message MessageRequestFateLevelUp
+{
+required int64 hero_uid = 1;  //舰船唯一ID
+required int32 count = 2;     //数量
+}
+
+
+//MSG_CS_RESPONSE_FATE_LEVEL_UP
+message MessageResponseFateLevelUp
+{
+required int64 hero_uid = 1;  //舰船唯一ID
+}
+
+//MSG_CS_REQUEST_GET_OTHER_PLAYER
+message MessageRequestGetOtherPlayer
+{
+repeated int64 player_uids  = 1 [packed = true];
+}
+
+//MSG_CS_RESPONSE_GET_OTHER_PLAYER
+message MessageResponseGetOtherPlayer
+{
+repeated OtherPlayerInfo infos = 1;
+}
+
+//MSG_CS_RESPONSE_GET_PK_RANK_LIST
+message MessageResponseGetPkRankList
+{
+repeated PKRankInfo infos = 1;
+}
+
+//MSG_CS_RESPONSE_GET_MY_PK_RANK_INFO
+message MessageResponseGetMyPkRankInfo
+{
+required int32 rank       = 1;  //当前排名
+required int32 pk_times   = 2;  //今天已经挑战的次数
+repeated PKRankInfo infos = 3;  //可以挑战的人
+required int32 max_rank   = 4;  //最高排名
+required int32 last_pk_time = 5;  //上次竞技时间
+
+repeated PKRankInfo top10 = 6;  //竞技场前10名
+}
+
+//MSG_CS_NOTIFY_FRIEND_INFO
+message MessageNotifyFriendInfo
+{
+repeated FriendInfo friend    = 1;  //好友信息变动
+optional int64 delete_friend  = 2;  //删除好友
+}
+
+//MSG_CS_REQUEST_ADD_FRIEND
+message MessageRequestAddFriend
+{
+optional int64 add_friend     = 1;      //加某个好友
+optional int64 delete_friend  = 2;      //删除某个好友
+optional FriendInfo blackmail_user = 4; //拉黑某个人(基本信息要客户端填写)
+}
+
+//MSG_CS_RESPONSE_ADD_FRIEND
+message MessageResponseAddFriend
+{
+optional int64 add_friend     = 1;
+}
+
+//MSG_CS_REQUEST_AGREE_ADD_FRIEND
+message MessageRequestAgreeAddFriend
+{
+required int64 friend_id      = 1;
+optional int32 op_type        = 2;    //1表示同意，2表示不同意。
+}
+
+//MSG_CS_REQUEST_START_PATROL
+message MessageRequestStartPatrol
+{
+required PatrolInfo patrol_info = 1;
+}
+
+//MSG_CS_RESPONSE_START_PATROL
+message MessageResponseStartPatrol
+{
+required PatrolInfo patrol_info = 1;
+}
+
+//MSG_CS_REQUEST_GET_PATROL_AWARDS
+message MessageRequestGetPatrolAwards
+{
+required int32 patrol_id = 1;
+}
+
+//MSG_CS_RESPONSE_GET_PATROL_AWARDS
+message MessageResponseGetPatrolAwards
+{
+required int32 patrol_id = 1; 
+required int32 total_time = 2;
+}
+
+//MSG_CS_REQUEST_PATROL_LEVEL_UP
+message MessageRequestPatrolLevelUp
+{
+required int32 patrol_id = 1;
+}
+
+//MSG_CS_RESPONSE_PATROL_LEVEL_UP
+message MessageResponsePatrolLevelUp
+{
+required PatrolInfo patrol_info = 1;
+}
+
+//MSG_CS_NOTIFY_DAILY_RANK_INFO
+message MessageNotifyDailyPKRankInfo
+{
+optional int32 pk_rank_reward_rank = 3; //上次竞技场排行
+optional int32 pk_rank_reward_time = 4; //上次领取竞技场排行奖励时间
+}
+
+//MSG_CS_REQUEST_TEST_PK_TARGET
+message MessageRequestTestPkTarget
+{
+required int32 rank         = 1;
+required int64 player_id    = 2;
+optional int32 auto_flop    = 3;  //是否自动翻牌(0不自动翻牌;非0自动翻)
+optional int32 count        = 4;  //0表示战斗; 非0表示扫荡
+}
+
+//MSG_CS_RESPONSE_TEST_PK_TARGET
+message MessageResponseTestPkTarget
+{
+required int32 rank         = 1;
+required int64 player_id    = 2;
+}
+
+//MSG_CS_REQUEST_BUY_COUNT
+message MessageRequestBuyCount
+{
+required int32 count_type   = 1;
+optional int32 buy_count    = 2;
+}
+
+//MSG_CS_RESPONSE_BUY_COUNT
+message MessageResponseBuyCount
+{
+required int32 count_type   = 1;
+optional int32 bought_count = 2;
+}
+
+//MSG_CS_NOTIFY_BUY_COUNT
+message MessageNotifyBuyCount
+{
+repeated KVPair2  infos     = 1;
+}
+
+//MSG_CS_REQUEST_TALK
+message MessageRequestTalk
+{
+required int32 channel      = 1;  //频道
+optional int64 player       = 2;  //如果是私聊, 需要填玩家ID
+required string content     = 3;  //聊天内容
+}
+
+//MSG_CS_RESPONSE_TALK
+message MessageResponseTalk
+{
+required int32 channel      = 1;
+optional int64 player       = 2;
+required string content     = 3;
+}
+
+//MSG_CS_NOTIFY_TALK
+message MessageNotifyTalk
+{
+required int32 channel            = 1;
+optional PlayerSimpleInfo player  = 2;
+required string content           = 4;
+}
+
+//MSG_CS_NOTIFY_PK_PERFORMANCE
+message MessageNotifyPkPerformance
+{
+required int32 old_rank       = 1;  //老的排名
+required int32 new_rank       = 2;  //新排名
+required int32 money          = 3;  //获取元宝数
+}
+
+//MSG_CS_NOTIFY_NEW_REPORT
+message MessageNotifyNewReport
+{
+required string report_abstract = 1; //战报摘要
+}
+
+
+//MSG_CS_REQUEST_RECOVER
+message MessageRequestRecover
+{
+repeated int64 item_uid   = 1 [packed = true];
+required int32 item_type  = 2;  //1 装备 2 宝物  3 战舰 4 航母
+required bool  is_resolve = 3; //是否完全分解
+}
+
+//MSG_CS_RESPONSE_RECOVER
+message MessageResponseRecover
+{
+repeated KVPair2 recover_items = 1;
+required int32 item_type = 2;
+}
+
+//MSG_CS_NOTIFY_TOWER_STATE
+message MessageNotifyTowerState
+{
+optional TowerState state   = 1;
+repeated KVPair2 tower_buff = 2; //全部的buff
+}
+
+//MSG_CS_REQUEST_TOWER_BUY_BUFF
+message MessageRequestTowerBuyBuff
+{
+required int32 buff_id      = 1;
+}
+
+//MSG_CS_REQUEST_TOWER_AWARD
+message MessageRequestTowerAward
+{
+required int32 chapter      = 1;    //配置表内的章节(服务器用来校验副本顺序)
+required int32 star         = 2;    //配置表内的星数
+}
+
+//MSG_CS_RESPONSE_TOWER_BUY_BOX
+message MessageResponseTowerBuyBox
+{
+repeated KVPair2 awards     = 3;                  //随机掉落的东西
+}
+
+//MSG_CS_REQUEST_GET_UID_BY_NAME
+message MessageRequestGetUIDByName
+{
+required string name        = 1;  //名字要是完整的名字,比如"s1.玩家名字"
+}
+
+//MSG_CS_RESPONSE_GET_UID_BY_NAME
+message MessageResponseGetUIDByName
+{
+required string name        = 1;
+required int64 player_id    = 2;  //0表示没有这个玩家
+}
+
+//MSG_CS_REQUEST_COPY_SWEEP
+message MessageRequestCopySweep
+{
+required int32 copy_id      = 1;  //要一键扫荡的副本
+optional int32 param        = 2;  //必要参数
+}
+
+//MSG_CS_RESPONSE_COPY_SWEEP
+message MessageResponseCopySweep
+{
+required int32 copy_id      = 1;
+}
+
+message DstrikeInfo
+{
+required int32 level        = 1;  //围剿BOSS的等级
+required int32 update_time  = 2;  //征讨令上次恢复时间
+required int32 merit        = 3;  //当日围剿功勋
+required int64 damage       = 4;  //当日围剿伤害
+optional fixed64 daily_award= 5;  //当日领取围剿BOSS功勋奖励
+}
+
+//围剿BOSS
+message DstrikeBoss
+{
+required int64 player_id    = 1;  //BOSS发现者ID
+required string name        = 2;  //BOSS发现者名字
+required int32 boss_id      = 3;  //BOSSID
+required int32 boss_quality = 4;  //BOSS品质
+required int32 boss_level   = 5;  //BOSS等级
+repeated int64 boss_blood   = 6 [packed = true];  //BOSS剩余血量
+optional int32 boss_status   = 7; //是否已经分享(0表示未分享)
+optional int32 boss_time     = 8; //发现时间(UTC时间戳)
+optional int32 boss_expire_time = 9;//过期时间(UTC时间戳)
+optional int64 total_blood    = 10; //最开始总的血量, 用来算血量百分比
+}
+
+//MSG_CS_RESPONSE_DSTRIKE_LIST
+message MessageResponseDstrikeList
+{
+repeated DstrikeBoss list   = 1;  //BOSS列表
+}
+
+//MSG_CS_REQUEST_DSTRIKE_FIGHT
+message MessageRequestDstrikeFight
+{
+required int64 player_id  = 1;    //玩家ID
+required int32 boss_id    = 2;    //bossID
+optional int32 token_count= 3;    //令牌消耗量, 客户端不考虑优惠时间段, 只有1和2两个选择
+}
+
+//MSG_CS_RESPONSE_DSTRIKE_FIGHT
+message MessageResponseDstrikeFight
+{
+optional DstrikeBoss boss = 1;  //返回请求的BOSS最新信息
+optional int64 player_id  = 2;  //boss死掉了
+}
+
+//MSG_CS_NOTIFY_DSTRIKE_SHARE
+message MessageNotifyDstrikeShare
+{
+required DstrikeBoss boss = 1;  //分享的BOSS信息
+}
+
+//MSG_CS_REQUEST_USE_TRUCE
+message MessageRequestUseTruce
+{
+required int32 truce_item_id = 1;  //免战时常 0. 1小时  1. 8小时
+}
+
+//MSG_CS_RESPONSE_USE_TRUCE
+message MessageResponseUseTruce
+{
+required int64 truce_until_time = 1; //免战时间
+}
+
+//MSG_CS_REQUEST_GET_ROB_OPPONENT
+message MessageRequestGetRobOpponent
+{
+required int32 item_id = 1;   //零件ID
+}
+
+//MSG_CS_RESPONSE_GET_ROB_OPPONENT
+message MessageResponseGetRobOpponent
+{
+repeated PlayerSimpleInfo other_info = 1;  //对手玩家信息
+}
+
+//MSG_CS_REQUEST_FRIEND_ENERGY
+message MessageRequestFriendEnergy
+{
+required int64 friend_id      = 1;        //0表示领取所有好友的精力
+}
+
+//MSG_CS_REQUEST_GET_FRIEND_ENERGY
+message MessageRequestGetFriendEnergy
+{
+required int64 friend_id      = 1;
+}
+
+//MSG_CS_RESPONSE_GET_FRIEND_ENERGY
+message MessageResponseGetFriendEnergy
+{
+required int32 get_energy     = 1;
+}
+
+//MSG_CS_REQUEST_GET_RANK_LIST
+message MessageRequestGetRankList
+{
+required int32 rank_type      = 1;
+}
+//MSG_CS_RESPONSE_GET_RANK_LIST
+message MessageResponseGetRankList
+{
+required int32 rank_type      = 1;
+required RankList list        = 2;
+}
+
+//MSG_CS_NOTIFY_DSTRIKE_INFO
+message MessageNotifyDstrikeInfo
+{
+required DstrikeInfo info     = 2;
+}
+
+//MSG_CS_REQUEST_USE_ITEM
+message MessageRequestUseItem
+{
+required int64 item_uid       = 1;
+required int32 item_count     = 2;
+optional int32 choose_item    = 3;  //N选1的掉落包填写, 其他不需要填写(填写掉落包里面的资源ID)
+}
+
+//MSG_CS_RESPONSE_USE_ITEM
+message MessageResponseUseItem
+{
+repeated KVPair2 results      = 1;
+}
+
+//MSG_CS_RESPONSE_SIGN_IN
+message MessageResponseSignIn
+{
+required int32 sign_id      = 1;
+required int64 sign_time    = 2;
+}
+
+//MSG_CS_REQUEST_GET_DAILY_AWARD
+message MessageRequestGetDailyAward
+{
+required CountType daily_type = 1;   //日常任务类型
+optional int32 activity_type = 2;    //日常任务积分奖励 (1.30 2.60 3.90 4.120)
+}
+
+//MSG_CS_NOTIFY_DSTRIKE_FIGHT_RESULT
+message MessageNotifyDstrikeBossFightResult
+{
+required int64 damage       = 1;  //围剿伤害
+required int64 merit        = 2;  //围剿功勋
+required int32 exploit      = 3;  //获得的功勋(货币)(数字为0表示BOSS已经被打死了)
+
+optional int32 damage_rank      = 4;  //伤害排行
+optional int32 damage_new_rank  = 5;  //新的伤害排行
+optional int32 exploit_rank     = 6;  //功勋排行
+optional int32 exploit_new_rank = 7;  //新的功勋排行
+}
+
+//MSG_CS_REQUEST_GET_ACHIEVEMENT
+message MessageRequestGetAchievement
+{
+required int32 achievement_id = 1;   //成就ID
+}
+
+//MSG_CS_NOTIFY_ACHIEVEMENT_COUNT
+message MessageNotifyAchievement
+{
+repeated KVPair2 achievements = 1;    //成就改变数组
+}
+
+//MSG_CS_RESPONSE_RANK_INFO
+message MessageResponseGetRankInfo
+{
+required int32 rank_id = 1;
+}
+
+//MSG_CS_REQUEST_GET_SEVEN_DAYS
+message MessageRequestGetSevenDays
+{
+required int32 seven_day_id = 1;
+optional int32 ship_id = 2;
+}
+
+//MSG_CS_REQUEST_GET_FOURTEEN_DAYS
+message MessageRequestGetFourteenDays
+{
+required int32 fourteen_day_id = 1;
+optional int32 ship_id = 2;
+}
+
+//MSG_CS_RESPONSE_GET_SERVER_SHOP_INFO
+message MessageResponseGetServerShopInfo
+{
+repeated KVPair2 items     = 1; //key是商品id, value是商品已经销售数量
+}
+
+//MSG_CS_REQUEST_ACTIVE_RELATION
+message MessageRequestActiveRelation
+{
+required int64 hero_uid     = 1;
+optional int32 relation_id  = 2;  //激活船的单个缘分
+repeated int32 relations    = 3;  //这个船所有激活的缘分
+}
+
+//MSG_CS_REQUEST_EQUIP_PLANE_NEW
+message MessageRequestEquipPlaneNew
+{
+required int32 plane_id = 1;      //飞机ID （0是卸下）
+required int32 index = 2;         //位置下标
+}
+
+//MSG_CS_RESPONSE_EQUIP_PLANE_NEW
+message MessageResponseEquipPlaneNew
+{
+required int32 plane_id = 1;      //飞机ID （0是卸下）
+required int32 index = 2;         //位置下标
+}
+
+//MSG_CS_REQUEST_PLANE_LEVEL_UP_NEW
+message MessageRequestPlaneLevelUpNew
+{
+required int32 index = 1;          //背包里的是-1
+optional int32 plane_id = 2;
+optional bool  is_all = 3;         //是否全部合成，只有参数1是-1是才有用
+}
+
+//MSG_CS_RESPONSE_PLANE_LEVEL_UP_NEW
+message MessageResponsePlaneLevelUpNew
+{
+required int32 count = 1;        //合成的飞机数量
+required int32 plane_id = 2;     //被合成的飞机ID
+optional int32 index = 3;        //飞机位置 背包里的是-1
+}
+
+//MSG_CS_REQUEST_CHANGE_CARRIER
+message MessageRequestChangeCarrier
+{
+required int32 carrier_id = 1;
+}
+
+//MSG_CS_NOTIFY_BAN_TO_LOGIN
+message MessageNotifyBanToLogin
+{
+required int32 status       = 1;
+required int32 status_time  = 2;
+}
+
+//MSG_CS_REQUEST_DIALOG
+message MessageRequestDialog
+{
+optional string story_id = 1;
+optional string dialog_id = 2;
+}
+
+//MSG_CS_REQUEST_DSTRIKE_DAILY_AWARD
+message MessageRequestDstrikeBossDailyAward
+{
+required int32 index    = 1;  //策划配置表内的Index字段
+}
+
+//MSG_CS_REQUEST_TEST_PK
+message MessageRequestTestPK
+{
+required int64 player_id = 1;
+}
+
+//MSG_CS_NOTIFY_NOTICE
+message MessageNotifyNotice
+{
+repeated NoticeInfo notices = 1;
+repeated int64 delete_notices = 2 [packed = true];
+}
+
+//MSG_CS_RESPONSE_GET_RANDOM_FRIEND
+message MessageResponseGetRandomFriend
+{
+repeated FriendInfo infos = 1;
+}
+
+//MSG_CS_REQUEST_CLIENT_FLAG
+message MessageRequestClientFlag
+{
+required string client_flag = 1;
+}
+
+//MSG_CS_NOTIFY_NOTICE_PRIZE
+message MessageNotifyNoticePrize
+{
+repeated PlayerPrizeNotice info = 1; //军衔
+}
+
+//MSG_CS_REQUEST_REGISTE_ACCOUNT
+message MessageRequestRegisteAccount
+{
+required string account       = 1;
+required string password      = 2;
+}
+
+//MSG_CS_RESPONSE_REGISTE_ACCOUNT
+message MessageResponseRegisteAccount
+{
+required string account       = 1;
+required string password      = 2;
+}
+
+//MSG_CS_REQUEST_ACCOUNT_LOGIN
+message MessageRequestAccountLogin
+{
+required string account       = 1;
+required string password      = 2;
+}
+
+//MSG_CS_RESPONSE_ACCOUNT_LOGIN
+message MessageResponseAccountLogin
+{
+required string account       = 1;
+}
+
+//MSG_CS_NOTIFY_CARRIER_COPY
+message MessageNotifyCarrierCopy
+{
+repeated CarrierCopy carrier_copy = 9;  //航母副本(如果个数是0,表示没有更新)
+optional CarrierCopyInfo carrier_copy_info = 10; //航母副本的通关信息(如果是null表示没有更新)
+}
+
+//MSG_CS_REQUEST_EQUIP_CARRIER
+message MessageRequestEquipCarrier
+{
+required int32 carrier_id = 1;   //航母id  0是卸下
+required int32 position = 2;     //第几个位置
+}
+
+//MSG_CS_RESPONSE_EQUIP_CARRIER
+message MessageResponseEquipCarrier
+{
+required int32 position = 1;     //第几个位置
+}
+
+//MSG_CS_REQUEST_CARRIER_LEVEL_UP
+message MessageRequestCarrierLevelUp
+{
+required int32 carrier_id  = 1;
+repeated KVPair2 item_list = 2; //道具列表
+}
+
+//MSG_CS_RESPONSE_CARRIER_LEVEL_UP
+message MessageResponseCarrierLevelUp
+{
+required int32 carrier_id  = 1;
+}
+
+//MSG_CS_REQUEST_CARRIER_REFORM_UP
+message MessageRequestCarrierReformUp
+{
+required int32 carrier_id  = 1;  //需要突破的船舰
+}
+
+//MSG_CS_RESPONSE_CARRIER_REFORM_UP
+message MessageResponseCarrierReformUp
+{
+required int32 carrier_id  = 1;
+}
+
+//MSG_CS_RESPONSE_GET_CARRIER_COPY_AWARD
+message MessageResponseGetCarrierCopyAward
+{
+repeated KVPair2 awards = 1; //货币和道具混合在一起
+}
+
+//MSG_CS_REQUEST_FIGHT_CARRIER_COPY
+message MessageRequestFightCarrierCopy
+{
+required int32 index = 1; //填1-12
+}
+
+//MSG_CS_NOTIFY_RECHARGE
+message MessageNotifyRecharge
+{
+required RechargeInfo info    = 1;
+optional int32 total_recharge = 2;
+}
+
+//MSG_CS_NOTIFY_OBTAINED_CARRIERS
+message MessageNotifyObtainedCarriers
+{
+repeated int32 carrier_id = 1;
+}
+
+//MSG_CS_REQUEST_GET_OPEN_FUND
+message MessageRequestGetOpenFund
+{
+required int32 fund_id = 1;
+}
+
+//MSG_CS_REQUEST_GET_OPEN_WELFARE
+message MessageRequestGetOpenWelfare
+{
+required int32 welfare_id = 1;
+}
+
+//MSG_CS_REQUEST_REFRESH_FEATS
+message MessageRequestRefreshFeats
+{
+required int32 shop_id = 1;
+}
+
+//MSG_CS_REPORT_TOKEN_S
+message MessageReportTokenS
+{
+required int32 error_id = 1;
+}
+
+//MSG_CS_REQUEST_CREATE_ARMY
+message MessageRequestCreateArmy
+{
+required string army_name   = 1;
+optional int32  avatar      = 2;
+}
+
+//MSG_CS_RESPONSE_CREATE_ARMY
+message MessageResponseCreateArmy
+{
+required string army_name   = 1;
+}
+
+//MSG_CS_REQUEST_ARMY_SKILL_UP
+message MessageRequestArmySkillUp
+{
+required int32 skill_id = 1;
+}
+
+//MSG_CS_RESPONSE_ARMY_SKILL_UP
+message MessageResponseArmySkillUp
+{
+required int32 skill_id = 1;
+required int32 skill_level = 2;
+}
+
+//MSG_CS_REQUEST_ARMY_SIGN
+message MessageRequestArmySign
+{
+required int32 sign_id = 1;
+}
+
+
+//MSG_CS_RESPONSE_ARMY_SIGN
+message MessageResponseArmySign
+{
+required int32 sign_id = 1;
+optional int32 sign_progress = 2;
+optional int32 sign_num = 3;
+optional int32 army_exp = 4;
+optional int32 army_union = 5;
+}
+
+//MSG_CS_RESPONSE_GET_ARMY_INFO
+message MessageResponseGetArmyInfo
+{
+required ArmyInfo army          = 1;    //军团信息
+repeated ArmyMemberInfo member  = 2;    //军团成员
+repeated ArmyApplyInfo apply    = 3;    //军团申请
+}
+
+//MSG_CS_REQUEST_KICK_ARMY_MEMBER
+message MessageRequestKickArmyMember
+{
+required int64 member_id        = 1;    //要被T掉的玩家ID
+}
+
+//MSG_CS_RESPONSE_KICK_ARMY_MEMBER
+message MessageResponseKickArmyMember
+{
+required int64 member_id        = 1;
+}
+
+//MSG_CS_REQUEST_ARMY_APPLY
+message MessageRequestArmyApply
+{
+required int64 army_id      = 1;
+optional bool is_cancel     = 2;  //true是取消申请
+}
+
+//MSG_CS_RESPONSE_ARMY_APPLY
+message MessageResponseArmyApply
+{
+required int64 army_id      = 1;
+required bool is_cancel     = 2;
+}
+
+//MSG_CS_REQUEST_AGREE_ARMY_APPLY
+message MessageRequestAgreeArmyApply
+{
+required int64 player_id      = 1;
+optional bool is_agree        = 2;  //true是同意;false是拒绝
+}
+
+//MSG_CS_RESPONSE_AGREE_ARMY_APPLY
+message MessageResponseAgreeArmyApply
+{
+required int64 player_id      = 1;
+optional bool is_agree        = 2;  //客户端需要删除申请条目
+optional ArmyMemberInfo info  = 3;  //同意玩家加入军团, 那么就有info, 需要加入到列表内
+}
+
+//MSG_CS_NOTIFY_ARMY_STATUS
+message MessageNotifyArmyStatus
+{
+required int64 army_id      = 1;  //army_id不为0,表示别人允许自己加入公会;0表示被人T出来
+optional int64 leave_time   = 2;  //是0, 就不要更新自己离开军团的时间
+}
+
+//MSG_CS_REQUEST_CHANGE_ARMY_ANNOUNCEMENT
+message MessageRequestChangeArmyAnnouncement
+{
+optional string announcement1   = 1;
+optional string announcement2   = 2;
+optional int32 avatar           = 3;
+}
+
+//MSG_CS_RESPONSE_CHANGE_ARMY_ANNOUNCEMENT
+message MessageResponseChangeArmyAnnouncement
+{
+optional string announcement1   = 1;
+optional string announcement2   = 2;
+optional int32 avatar           = 3;
+}
+
+//MSG_CS_REQUEST_GET_ARMY_SIGN_AWARD
+message MessageRequestGetArmySignAward
+{
+required int32 sign_id = 1;
+}
+
+//MSG_CS_RESPONSE_GET_ARMY_SIGN_AWARD
+message MessageResponseGetArmySignAward
+{
+required int32 sign_id = 1;
+}
+
+//MSG_CS_NOTIFY_DAILY_SIGN
+message MessageNotifyDailySign
+{
+repeated int32 daily_sign = 1;
+}
+
+//MSG_CS_REQUEST_ARMY_MAX_LEVEL_UP
+message MessageRequestArmyMaxLevelUp
+{
+required int32 skill_id = 1;
+}
+
+//MSG_CS_RESPONSE_ARMY_MAX_LEVEL_UP
+message MessageResponseArmyMaxLevelUp
+{
+required int32 skill_id = 1;
+optional int32 skill_lv = 2;
+optional int32 army_exp = 3;
+}
+
+//MSG_CS_REQUEST_GET_DAILY_ACTIVITY
+message MessageResquestGetDailyActivity
+{
+required int32 activity_id = 1;
+}
+
+//MSG_CS_RESPONSE_GET_DAILY_ACTIVITY
+message MessageResponseGetDailyActivity
+{
+required int32 activity_id = 1;
+repeated KVPair2 award = 2;
+}
+
+//MSG_CS_NOTIFY_MONTH_CARD
+message MessageNotifyMonthCard
+{
+required int32 month_card = 1;
+required int32 big_month_card = 2;
+required int32 life_card = 3;
+
+optional int32 month_card_1        = 26; //小月基金购买时间
+optional int32 month_card_1_login  = 27; //小月基金登录天数
+optional int32 month_card_1_status = 28; //小月基金领奖状态
+optional int32 month_card_2        = 29; //大月基金购买时间
+optional int32 month_card_2_login  = 30; //大月基金登录天数
+optional int32 month_card_2_status = 31; //大月基金领奖状态
+optional int32 weekly_card         = 32; //周卡购买时间
+optional int32 weekly_card_login   = 33; //周卡登录天数
+optional int32 weekly_card_status  = 34; //周卡领取状态
+}
+
+//MSG_CS_REQUEST_RAISE_FUNDING
+message MessageRequestRaiseFunding
+{
+required bool is_reward = 1;
+}
+
+//MSG_CS_RESPONSE_RAISE_FUNDING
+message MessageRespnseRaiseFunding
+{
+required bool is_reward = 1;
+repeated KVPair2 award = 2;
+}
+
+//MSG_CS_REQUEST_ARMY_WAR_FIGHT
+message MessageRequestArmyWarFight
+{
+optional int32 copy_id      = 1;
+}
+
+//MSG_CS_RESPONSE_GET_ARMY_WAR_INFO
+message MessageResponseGetArmyWarInfo
+{
+repeated ArmyWarInfo info = 1;    //今天挑战过的所有副本(顺序,不是倒序)
+optional int32 next_chapter = 2;  //下一次重置要打的副本(官员可以设置)
+optional int32 current_chapter = 3; //当前通关了的章节
+}
+
+//MSG_CS_REQUEST_SET_ARMY_WAR_CHAPTER
+message MessageRequestSetArmyWarChapter
+{
+optional bool is_current_chapter = 1; //true表示当前通关的章节;false是下一个
+}
+
+//MSG_CS_RESPONSE_SET_ARMY_WAR_CHAPTER
+message MessageResponseSetArmyWarChapter
+{
+optional int32 next_chapter = 1;
+}
+
+//MSG_CS_REQUEST_GET_ARMY_WAR_CHAPTER_AWARD
+message MessageRequestGetArmyWarChapterAward
+{
+optional int32 chapter    = 1;    //领取到第N章的奖励
+}
+
+//MSG_CS_RESPONSE_GET_ARMY_WAR_CHAPTER_AWARD
+message MessageResponseGetArmyWarChapterAward
+{
+optional int32 chapter    = 3;    //当前已经领取第N章了
+}
+
+//MSG_CS_REQUEST_GET_ARMY_WAR_BOSS_AWARD
+message MessageRequestGetArmyWarBossAward
+{
+optional int32 copy_id  = 1;  //副本ID
+optional int32 index    = 2;  //选取的格子[1, 48]
+}
+
+//MSG_CS_RESPONSE_GET_ARMY_WAR_BOSS_AWARD
+message MessageResponseGetArmyWarBossAward
+{
+optional int32 copy_id  = 1;  //副本ID
+optional int32 index    = 2;  //选取的格子[1, 48]
+optional ArmyWarInfo war  = 3; //刷新BOSS信息
+}
+
+//MSG_CS_REQUEST_GET_VIP_WEEKLY
+message MessageRequestGetVIPWeekly
+{
+required int32 id = 1;
+}
+
+//MSG_CS_RESPONSE_GET_VIP_WEEKLY
+message MessageResponseGetVIPWeekly
+{
+required int32 id = 1;
+}
+
+//MSG_CS_NOTIFY_VIP_WEEKLY
+message MessageNotifyVIPWeekly
+{
+repeated KVPair2 vip_weekly = 1;
+}
+
+//MSG_CS_REQUEST_ARMY_LIST
+message MessageRequestArmyList
+{
+required int32 page = 1;
+required int32 page_size = 2;
+optional bool  has_apply = 3;  //是否包含自己已申请的公会 true-包含
+optional bool army_copy  = 4;  //true是军团战役排序, false按等级排序
+}
+
+//MSG_CS_RESPONSE_ARMY_LIST
+message MessageResponseArmyList
+{
+required int32 all_page = 1;
+repeated ArmyInfo info = 2;
+required int32 page = 3;
+repeated int64 apply_army_id = 4;
+}
+
+//MSG_CS_REQUEST_SEARCH_ARMY
+message MessageRequestSearchArmy
+{
+required string army_name = 1;
+}
+
+//MSG_CS_RESPONSE_SEARCH_ARMY
+message MessageResponseSearchArmy
+{
+repeated ArmyInfo info = 1;
+repeated int64 apply_army_id = 2;
+}
+
+//MSG_CS_REQUEST_CHANGE_ARMY_POS
+message MessageRequestChangeArmyPos
+{
+required int64 player_id = 1;
+required ArmyPosition pos = 2;
+}
+
+//MSG_CS_RESPONSE_CHANGE_ARMY_POS
+message MessageResponseChangeArmyPos
+{
+required int64 player_id = 1;
+}
+
+//MSG_CS_NOTIFY_ARMY_MEMBER_POS
+message MessageNotifyArmyMemberPos
+{
+required int32 pos = 1;
+}
+
+//MSG_CS_RESPONSE_GET_ARMY_SHOP_INFO
+message MessageResponseGetArmyShopInfo
+{
+repeated ShopCommodityInfo army_shop = 1;  //军团刷新商店
+optional ArmyShopRecord buy_record = 2;    //军团商品
+}
+
+//MSG_CS_RESPONSE_GET_WORLD_BOSS
+message MessageResponseGetWorldBoss
+{
+optional WorldBossInfo boss = 1;
+optional PlayerWorldBossInfo info = 2;
+optional int32 army_merit = 3;
+}
+
+//MSG_CS_RESPONSE_FIGHT_WORLD_BOSS
+message MessageResponseFightWorldBoss
+{
+required WorldBossInfo boss = 1;
+optional PlayerWorldBossInfo info = 2;
+}
+
+//MSG_CS_REQUEST_WORLD_BOSS_COUNTRY
+message MessageRequestWorldBossCountry
+{
+required int32 country = 1;
+}
+
+//MSG_CS_RESPONSE_WORLD_BOSS_COUNTRY
+message MessageResponseWorldBossCountry
+{
+required int32 country = 1;   // 1.英国  2.美国  3.德国  4.日本
+}
+
+//MSG_CS_NOTIFY_WORLD_BOSS_FIGHT_RESULT
+message MessageNotifyWorldBossFightResult
+{
+optional int32 damage = 1;   //伤害
+optional int32 merit = 2;    //荣誉
+optional int32 exploit = 3;  //战功
+
+repeated KVPair2 last_straw = 4;  //最后一击奖励
+repeated KVPair2 luck_hit = 5;    //幸运一击
+}
+
+//MSG_CS_REQUEST_GET_WORLD_BOSS_MERIT_AWARD 
+message MessageRequestGetEWorldBossMeritAward
+{
+repeated int32 id = 1;
+}
+
+//MSG_CS_RESPONSE_GET_WORLD_BOSS_MERIT_AWARD
+message MessageResponseGetEWorldBossMeritAward
+{
+required int64 got_record = 1;
+repeated int32 id = 2;
+}
+
+//MSG_CS_REQUEST_GET_WORLD_BOSS_KILL_AWARD
+message MessageRequestGetEWorldBossKillAward
+{
+repeated int32 id = 1;
+}
+
+//MSG_CS_RESPONSE_GET_WORLD_BOSS_KILL_AWARD 
+message MessageResponseGetEWorldBossKillAward
+{
+required int64 got_record = 1;
+repeated int32 id = 2;
+}
+
+//MSG_CS_RESPONSE_GET_WORLD_BOSS_MERIT_RANK
+message MessageResponseGetWorldBossMeritRank
+{
+optional RankList  uk_list        = 1;
+optional RankList  us_list        = 2;
+optional RankList  ge_list        = 3;
+optional RankList  jp_list        = 4;
+}
+
+//MSG_CS_RESPONSE_GET_WORLD_BOSS_DAMAGE_RANK
+message MessageResponseGetWorldBossDamageRank
+{
+optional RankList  uk_list        = 1;
+optional RankList  us_list        = 2;
+optional RankList  ge_list        = 3;
+optional RankList  jp_list        = 4;
+}
+
+//MSG_CS_NOTIFY_ACTIVITY_RECORD
+message MessageNotifyActivityRecord
+{
+optional ActivityRecord records = 1;
+}
+
+//MSG_CS_NOTIFY_ELITE_RANDOM_COPY
+message MessageNotifyEliteRandomCopy
+{
+repeated EliteRandomCopyStatus copys  = 1;
+optional int64 last_update_time       = 2;
+}
+
+//MSG_CS_REQUEST_MAKE_WAKE_ITEM
+message MessageRequestMakeWakeItem
+{
+required int32 item_id = 1;
+optional int32 count = 2;
+}
+
+//MSG_CS_RESPONSE_MAKE_WAKE_ITEM
+message MessageResponseMakeWakeItem 
+{
+repeated KVPair2 items = 1;
+}
+
+//MSG_CS_REQUEST_RECOVER_WAKE_ITEM
+message MessageRequestRecoverWakeItem
+{
+required int32 item_id = 1;
+optional int32 count = 2;
+}
+
+//MSG_CS_RESPONSE_RECOVER_WAKE_ITEM
+message MessageResponseRecoverWakeItem
+{
+repeated KVPair2 items = 1;
+}
+
+//MSG_CS_REQUEST_EQUIP_WAKE_ITEM
+message MessageRequestEquipWakeItem
+{
+required int32 item_id = 1;
+required int64 hero_uid = 2;
+}
+
+//MSG_CS_RESPONSE_EQUIP_WAKE_ITEM
+message MessageResponseEquipWakeItem
+{
+required int64 hero_uid = 1;
+optional int32 item_id = 2;
+}
+
+//MSG_CS_REQUEST_SHIP_WAKE
+message MessageRequestShipWake
+{
+required int64 hero_uid = 1;
+repeated int64 other_hero_uid = 2; //要吃的战舰id
+}
+
+//MSG_CS_RESPONSE_SHIP_WAKE
+message MessageResponseShipWake
+{
+required int64 hero_uid = 1;
+}
+
+//MSG_CS_REQUEST_GET_TIME_ACTIVITY_AWARD
+message MessageRequestGetTimeActivityAward
+{
+required int32 activiy_type = 1;
+required int32 id = 2;
+}
+
+//MSG_CS_RESPONSE_GET_TIME_ACTIVITY_AWARD
+message MessageResponseGetTimeActivityAward
+{
+required int32 activiy_type = 1;
+required int32 id = 2;
+}
+
+//MSG_CS_REQUEST_SET_USER_DEFINED
+message MessageRequestSetUserDefined
+{
+required bytes content = 1;
+}
+
+//MSG_CS_REQUEST_ASTROLOGY
+message MessageRequestAstrology
+{
+required int32 type = 1;       //1-抽1次   10-抽10次
+}
+
+//MSG_CS_RESPONSE_ASTROLOGY
+message MessageResponseAstrology
+{
+repeated KVPair2 items = 1;
+optional int32 type = 2;
+}
+
+//MSG_CS_REQUEST_ASTROLOGY_CHANGE
+message MessageRequestAstrologyChange
+{
+required int32 hero_id = 1;
+}
+
+//MSG_CS_RESPONSE_ASTROLOGY_CHANGE
+message MessageResponseAstrologyChange
+{
+required int32 hero_id = 1;
+}
+
+//MSG_CS_RESPONSE_GET_LEGION_WAR_LOG
+message MessageResponseGetLegionWarLog
+{
+repeated string info      = 1;  //time,city_id_1,position_1,player_id_1,name_1,city_id_2,position_2,player_id_2,name_2
+}
+
+//MSG_CS_REQUEST_GET_LEGION_WAR_TARGET
+message MessageRequestGetLegionWarTarget
+{
+optional bool use_money       = 1;  //true是用钱刷新
+}
+
+//MSG_CS_RESPONSE_GET_LEGION_WAR_TARGET
+message MessageResponseGetLegionWarTarget
+{
+optional int64 player_id      = 1;
+}
+
+//MSG_CS_RESPONSE_GET_LEGION_WAR_TARGET_AWARD
+message MessageRespopnseGetLegionWarTargetAward
+{
+optional int32 score        = 1;  //制霸全球积分
+}
+
+//MSG_CS_REQUEST_SET_FOCUS_CITY
+message MessageRequestSetFocusCity
+{
+optional int32 city_id      = 1;
+}
+
+//MSG_CS_RESPONSE_GET_LEGION_WAR_INFO
+message MessageResponseGetLegionWarInfo
+{
+repeated LegionWarCity  city    = 1;    //所有的城市点信息
+optional int32 score            = 2;    //制霸全球积分
+optional int64 target           = 3;    //悬赏目标
+optional int32 focus_city       = 4;    //集火目标
+optional int32 army_score       = 5;    //军团积分
+}
+
+//MSG_CS_NOTIFY_LEGION_WAR_ARMY_INFO
+message MessageNotifyLegionWarWarArmyInfo
+{
+optional int32 focus_city       = 4;    //集火目标(非0值更新)
+optional int32 army_score       = 5;    //军团积分(非0值更新)
+}
+
+//MSG_CS_REQUEST_LEGION_WAR_FIGHT
+message MessageRequestLegionWarFight
+{
+optional int32 city         = 1;  //需要攻打的城市
+optional int32 position     = 2;  //第几层
+}
+
+//MSG_CS_RESPONSE_GET_LEGION_WAR_PLAYER
+message MessageResponseGetLegionWarPlayer
+{
+repeated OtherPlayerInfo  player    = 1;
+}
+
+//MSG_CS_NOTIFY_LEGION_WAR_PLAYER
+message MessageNotifyLegionWarPlayer
+{
+optional OtherPlayerInfo player     = 1;
+optional int32 city_id              = 2;    //如果没有城市, 那就只更新玩家信息
+optional int32 position             = 3;
+}
+
+//MSG_CS_REQUEST_FIRST_RECHARGE
+message MessageResquestFirstRecharge
+{
+required bool is_second = 1;
+}
+
+//MSG_CS_RESPONSE_FIRST_RECHARGE
+message MessageResponseFirstRecharge
+{
+optional bool is_second = 1;
+}
+
+//MSG_CS_REQUEST_RESEARCH_ITEM
+message MessageRequestResearchItem
+{
+required int32 type = 1;         //1-单抽  10-10抽
+}
+
+ //MSG_CS_RESPONSE_RESEARCH_ITEM
+message MessageResponseResearchItem
+{
+required int32 type = 1;
+repeated KVPair2 awards = 2;
+required int32 point = 3;
+}
+
+//MSG_CS_REQUEST_GET_RESEARCH_ITEM_AWARD
+message MessageRequestGetResearchItemAward
+{
+required int32 type = 1;
+}
+
+//MSG_CS_RESPONSE_GET_RESEARCH_ITEM_AWARD
+message MessageResponseGetResearchItemAward
+{
+required int32 type = 1;
+}
+
+//MSG_CS_REQUEST_CROSS_SERVER_COUNTRY
+message MessageRequestCrossServerCountry
+{
+required int32 country = 1;
+}
+
+//MSG_CS_RESPONSE_CROSS_SERVER_COUNTRY
+message MessageResponseCrossServerCountry
+{
+required CrossServerInfo info = 1;
+}
+
+//MSG_CS_RESPONSE_CROSS_SERVER_RANDOM_PLAYER
+message MessageResponseCrossServerRandomPlayer
+{
+repeated OtherPlayerInfo enemy = 1;    //敌对玩家
+}
+
+//MSG_CS_REQUEST_CROSS_SERVER_FIGHT
+message MessageRequestCrossServerFight
+{
+required int64 uid = 1;
+}
+
+//MSG_CS_RESPONSE_CROSS_SERVER_FIGHT
+message MessageResponseCrossServerFight
+{
+required int32 fight_record = 1;
+required int32 win_count = 2;
+}
+
+//MSG_CS_NOTIFY_RECHARGE_DETAILS
+message MessageNotifyRechargeDetails
+{
+optional string order_id      = 1;
+optional int32  device_type   = 2;
+optional string user_id       = 3;
+optional int32 pay_amount     = 4;
+optional string currency_code = 5;
+optional string channel_id    = 6;
+optional uint32 server_id     = 7;
+optional int64 role_id        = 8;
+optional int32 goods_type     = 9;
+optional int32 game_coin      = 10;
+optional string timestamp     = 12;
+optional string goods_id      = 11;
+}
+
+//MSG_CS_NOTIFY_LEGION_WAR_POS
+message MessageNotifyLegionWarPos
+{
+optional int32 city_1       = 1;
+optional int32 position_1   = 2;
+optional int32 city_2       = 3;
+optional int32 position_2   = 4;
+}
+
+//MSG_CS_RESPONSE_LEGION_WAR_REGISTER
+message MessageResponseLegionWarRegister
+{
+optional int32  city        = 1;
+optional int32 position     = 2;
+}
+
+//MSG_CS_REQUEST_GET_LEGION_WAR_REWARD
+message MessageRequestGetLegionWarReward
+{
+optional int32 index        = 1;
+}
+
+//MSG_CS_RESPONSE_GET_LEGION_WAR_REWARD
+message MessageResponseGetLegionWarReward
+{
+optional int32 index        = 1;
+}
+
+//MSG_CS_REQUEST_CROSS_SERVER_GET_AWARD 
+message MessageRequestCrossServerGetAward
+{
+required int32 id = 1;
+}
+
+//MSG_CS_RESPONSE_CROSS_SERVER_GET_AWARD
+message MessageResponseCrossServerGetAward
+{
+required int32 record = 1;
+optional int32 id = 2;
+}
+
+//MSG_CS_NOTIFY_CROSS_SERVER
+message MessageNotifyCrossServer
+{
+required CrossServerInfo info = 1;
+}
+
+// MSG_CS_RESPONSE_GET_ASTROLOGY_INFO
+message MessageResponseGetAstrologyInfo
+{
+required int64 astrology_award_refresh_time = 1;
+required int32 astrology_award_country = 2;
+}
+
+//MSG_CS_NOTIFY_LOGIN_DAYS
+message MessageNotifyLoginDays
+{
+optional int32 login_days = 1;
+}
+
+//MSG_CS_REQUEST_GET_LOGIN_AWARD
+message MessageRequestGetLoginAward
+{
+optional int32 is_vip       = 1;  //1表示领取月卡的奖励
+optional int32 days         = 2;  //领取的天数奖励
+}
+
+//MSG_CS_REQUEST_GET_WEEKLY_CARD_AWARD
+message MessageRequestGetWeeklyCardAward
+{
+optional int32 type       = 1;  //0是周基金, 1是小月基金, 2是大月基金
+optional int32 days       = 2;  //需要领取第几天的奖励(策划配置表里面的天数)
+}
+
+//MSG_CS_RESPONSE_GET_WEEKLY_CARD_AWARD
+message MessageResponseGetWeeklyCardAward
+{
+optional int32 type       = 1;
+optional int32 days       = 2;
+}
+
+//MSG_CS_REQUEST_WEEKL_CARD_SIGN
+message MessageRequestWeeklyCardSign
+{
+optional int32 type       = 1;
+}
+
+//MSG_CS_RESPONSE_WEEKL_CARD_SIGN
+message MessageResponseWeeklyCardSign
+{
+optional int32 type       = 1;
+}
+
+//MSG_CS_REQUEST_LEGION_FOREPLAY_FIGHT
+message MessageRequestLegionForeplayFight
+{
+required int32 id = 1;
+}
+
+//MSG_CS_RESPONSE_LEGION_FOREPLAY_FIGHT
+message MessageResponseLegionForeplayFight
+{
+required int32 id = 1;
+optional LegionForeplayInfo boss_info = 2;
+optional int32 merit_award_item = 3;
+optional int32 merit_award = 4; //最后一击奖励
+optional int32 old_rank   = 5;
+optional int32 new_rank   = 6;
+}
+
+//MSG_CS_REQUEST_LEGION_FOREPLAY_GET_SERVER_AWARD
+message MessageRequestLegionForeplayGetServerAward
+{
+required int32 id = 1;
+}
+
+//MSG_CS_RESPONSE_LEGION_FOREPLAY_GET_SERVER_AWARD
+message MessageResponseLegionForeplayGetServerAward
+{
+required int32 id = 1;
+repeated KVPair2 award = 2;
+}
+
+//MSG_CS_REQUEST_LEGION_FOREPLAY_GET_DAMAGE_AWARD
+message MessageRequestLegionForeplayGetDamageAward
+{
+repeated int32 id = 3;
+}
+
+//MSG_CS_RESPONSE_LEGION_FOREPLAY_GET_DAMAGE_AWARD
+message MessageResponseLegionForeplayGetDamageAward
+{
+repeated int32 id = 3;
+repeated KVPair2 award = 2;
+}
+
+//MSG_CS_RESPONSE_LEGION_FOREPLAY_GET_INFO
+message MessageResponseLegionForeplayGetInfo
+{
+required LegionForeplayInfo info = 1;
+}
+
+//MSG_CS_REQUEST_ENTER_STAGE
+message MessageRequestEnterStage
+{
+optional int32 stage_id = 1;    //1-世界boss   2-制霸前戏
+}
+
+//MSG_CS_REQUEST_LEAVE_STAGE
+message MessageRequestLeaveStage
+{
+optional int32 stage_id = 1;   //1-世界boss   2-制霸前戏
+}
+
+//MSG_CS_NOTIFY_WORLD_BOSS_STATUS
+message MessageNotifyWorldBossStatus
+{
+optional WorldBossInfo info = 1;
+optional string player_name = 2;
+optional int64 damage = 3;
+}
+
+//MSG_CS_NOTIFY_FOREPLAY_STATUS
+message MessageNotifyForeplayStatus
+{
+optional LegionForeplayInfo info = 1;
+optional string player_name = 2;
+optional int64 damage = 3;
+}
+
+//MSG_CS_NOTIFY_MAX_FIGHT_ATTR
+message MessageNotifyMaxFightAttr
+{
+optional int64 fight_attr = 1;
+}
+
+//MSG_CS_RESPONSE_ACTIVITY_SWEEP_STAKE
+message MessageResponseActivitySweepStake
+{
+repeated ActivitySweepStake activity  = 1;  //没找到type对应的信息, 那么数据全是0
+}
+
+//MSG_CS_NOTIFY_ACTIVITY_SWEEP_STAKE
+message MessageNotifyActivitySweepStake
+{
+repeated ActivitySweepStake activity  = 1; //重复的Type就替换更新, 否则增加
+}
+
+//MSG_CS_REQUEST_SWEEP_STAKE_EQUIP
+message MessageRequestSweepStakeEquip
+{
+optional int32 count    = 1;    //1或者10, 1的话会自动使用免费次数
+}
+
+//MSG_CS_REQUEST_SWEEP_STAKE_CARRIER
+message MessageRequestSweepStakeCarrier
+{
+optional int32 count    = 1;    //1或者10, 1的话会自动使用免费次数
+}
+
+//MSG_CS_RESPONSE_SWEEP_STAKE
+message MessageResponseSweepStake
+{
+optional int32 type       = 1;  //参见ActivitySweepStakeType
+repeated KVPair2 award_1  = 2;  //1次或者10次的奖励
+optional int32 new_rank   = 3;  //排行榜最新名次
+}
+
+//MSG_CS_REQUEST_GET_SWEEP_STAKE_EQUIP_AWARD
+message MessageRequestGetSweepStakeEquipAward
+{
+optional int32 award_index    = 1;    //activity_equip内的ID
+}
+
+//MSG_CS_RESPONSE_GET_SWEEP_STAKE_EQUIP_AWARD
+message MessageResponseGetSweepStakeEquipAward
+{
+optional int32 award_index    = 1;    //activity_equip内的ID
+}
+
+//MSG_CS_REQUEST_GET_SWEEP_STAKE_COUNT_AWARD
+message MessageRequestGetSweepStakeCountAward
+{
+optional int32 type           = 1;    //参见ActivitySweepStakeType
+}
+
+//MSG_CS_RESPONSE_GET_SWEEP_STAKE_COUNT_AWARD
+message MessageResponseGetSweepStakeCountAward
+{
+optional int32 type        = 1;
+optional KVPair2 award_2   = 3;  //X次必得奖励
+}
+
+//MSG_CS_REQUEST_FESTIVAL_REPLENISHSIGN
+message MessageRequestFestivalReplenishSign
+{
+optional int32 day = 1;
+}
+
+//MSG_CS_RESPONSE_FESTIVAL_REPLENISHSIGN
+message MessageResponseFestivalReplenishSign
+{
+optional int32 day = 1;
+}
+
+//MSG_CS_REQUEST_PLANE_CHANGE
+message MessageRequestPlaneChange
+{
+repeated KVPair2 planes = 1;
+optional PlaneKind type = 2;
+}
+
+//MSG_CS_RESPONSE_PLANE_CHANGE
+message MessageResponsePlaneChange
+{
+repeated KVPair2 planes = 1;
+}
+
+//MSG_CS_NOTIFY_FOREPLAY_NOTICE
+message MessageNotifyForeplayNotice
+{
+optional int32 id = 1;
+optional string player_name = 2;
+}
+
+//MSG_CS_NOTIFY_SERVER_NOTICE
+message MessageNotifyServerNotice
+{
+optional int32 type = 1;   //1-制霸前夕boss通知   2-竞技场排行改变
+repeated string param = 2;
+}
+
+//MSG_CS_REQUEST_GET_VERSION_AWARD
+message MessageRequestGetVersionAward
+{
+optional int32 type_id = 1;
+optional string version = 2;
+}
+
+//MSG_CS_RESPONSE_GET_VERSION_AWARD
+message MessageResponseGetVersionAward
+{
+optional int32 type_id = 1;
+optional string version = 2;
+repeated KVPair2 award = 3;
+}
+
+//MSG_CS_REQUEST_GM_COMMAND
+message MessageRequestGMCommand
+{
+optional string action        = 1;
+repeated GmCommandParam param = 2;
+optional string sign          = 3;
+}
+
+//MSG_CS_RESPONSE_GM_COMMAND
+message MessageResponseGMCommand
+{
+optional int32 result         = 1;
+repeated string param         = 2;
+}
+
+//MSG_CS_REQUEST_MEDAL_RESEARCH
+message MessageRequestMedalResearch
+{
+optional int32 type = 1;
+}
+
+//MSG_CS_RESPONSE_MEDAL_RESEARCH
+message MessageResponseMedalResearch
+{
+repeated KVPair2 medal = 1;
+repeated int32 bronze = 2;
+}
+
+//MSG_CS_RESPONSE_MEDAL_FIGHT
+message MessageResponseMedalFight
+{
+optional int32 medal_copy_id = 1;
+}
+
+//MSG_CS_RESPONSE_MEDAL_FIGHT_REFRESH
+message MessageResponseMedalFightRefresh
+{
+optional int32 medal_copy_id = 1;
+}
+
+//MSG_CS_NOTIFY_GLOBAL_CONFIG
+message MessageNotifyGlobalConfig
+{
+optional string config_str    = 1;
+}
+
+//MSG_CS_REQUEST_MEDAL_ACTIVE
+message MessageRequestMedalActive
+{
+optional int32 id = 1;
+optional bool is_reset = 2;
+}
+
+//MSG_CS_RESPONSE_MEDAL_ACTIVE
+message MessageResponseMedalActive
+{
+optional int32 id = 1;
+optional string active_state = 2;
+optional int32 medal_star = 3;
+optional int32 medal_achi = 4;
+}
+
+//MSG_CS_REQUEST_RED_EQUIP_STAR_LEVEL_UP
+message MessageRequestRedEquipStarLevelUp
+{
+optional int32 uid = 1;
+optional int32 type = 2;
+}
+
+//MSG_CS_RESPONSE_RED_EQUIP_STAR_LEVEL_UP
+message MessageResponseRedEquipStarLevelUp
+{
+optional int32 uid = 1;
+optional int32 crit = 2;
+}
+
+//MSG_CS_NOYIFY_COME_BACK_INFO
+message MessageNotifyHeroComeBackInfo
+{
+optional PlayerComeBackInfo info = 1;
+}
+
+//MSG_CS_REQUEST_GET_COME_BACK_LOGIN_AWARD
+message MessageRequestGetComeBackLoginAward
+{
+optional int32 day = 1;
+}
+
+//MSG_CS_RESPONSE_GET_COME_BACK_LOGIN_AWARD
+message MessageResponseGetComeBackLoginAward
+{
+optional int32 login_record = 1;
+optional int32 award_record = 2;
+}
+
+//MSG_CS_REQUEST_GET_COME_BACK_RECHARGE_AWARD
+message MessageRequestGetComeBackRechargeAward
+{
+optional int32 id = 1;
+}
+
+//MSG_CS_RESPONSE_GET_COME_BACK_RECHARGE_AWARD
+message MessageResponseGetComeBackRechargeAward
+{
+optional int32 id = 1;
+}
+
+//MSG_CS_REQUEST_SELL_ITEM_EX
+message MessageRequestSellItemEx
+{
+optional int32 item_id = 1;
+optional int32 count = 2;
+}
+
+//MSG_CS_RESPONSE_SELL_ITEM_EX
+message MessageResponseSellItemEx
+{
+repeated KVPair2 items = 1;
+}
+
+//MSG_CS_REQUEST_MEDAL_ACTIVE_ACHI
+message MessageRequestMedalActiveAchi
+{
+optional int32 id = 1;
+}
+
+//MSG_CS_RESPONSE_MEDAL_ACTIVE_ACHI
+message MessageResponseMedalActiveAchi
+{
+optional int32 id = 1;
+}
+
+//MSG_CS_REQUEST_PEARL_HARBOR_FIGHT
+message MessageRequestPearlHarborFight
+{
+optional int32 index = 1;
+}
+
+//MSG_CS_RESPONSE_PEARL_HARBOR_FIGHT
+message MessageResponsePearlHarborFight
+{
+optional int32 index = 1;
+optional int32 score = 2;
+optional int32 army_score = 3;
+optional int32 fight_union = 4;
+optional int32 last_hit_union = 5;
+}
+
+//MSG_CS_RESPONSE_PEARL_HARBOR_GET_INFO
+message MessageResponsePearlHarborGetInfo
+{
+optional PearlHarborInfo info = 1;
+}
+
+//MSG_CS_REQUEST_PEARL_HARBOR_WAR_ZONE
+message MessageRequestPearlHarborWarZone
+{
+optional bool type = 1;  //0-历史最高 1-历史最高少1
+}
+
+//MSG_CS_RESPONSE_PEARL_HARBOR_WAR_ZONE
+message MessageResponsePearlHarborWarZone
+{
+optional bool type = 1;
+}
+
+//MSG_CS_RESPONSE_PEARL_HARBOR_START_BUFF
+message MessageResponsePearlHarborStartBuff
+{
+optional int64 end_time = 1;
+}
+
+//MSG_CS_RESPONSE_CORAL_SEA_FIGHT
+message MessageResponseCoralSeaFight
+{
+optional MultiReportRecord report     = 1;
+repeated CoralSeaTeam tream           = 2;  //下标0是自己方,下标1是敌方
+optional bool we_win                  = 3;  //自己方胜利是true,否则是false
+}
+
+//MSG_CS_RESPONSE_CORAL_SEA_FIGHT_LOG
+message MessageResponseCoralSeaFightLog
+{
+repeated bytes report                 = 1;  //MessageResponseCoralSeaFight序列化好的战报
+}
+
+message PearlHarborScoreInfo
+{
+optional int64 uid = 1;
+optional string name = 2;
+optional int32 vip = 3;
+optional int32 today_score = 4;
+optional int64 score = 5;
+optional int32 position = 6;
+}
+
+
+//MSG_CS_RESPONSE_PEARL_HARBOR_ARMY_SCORE
+message MessageResponsePearlHarborArmyScore
+{
+optional int64 army_score = 1;
+repeated PearlHarborScoreInfo member_score = 2;
+}
+

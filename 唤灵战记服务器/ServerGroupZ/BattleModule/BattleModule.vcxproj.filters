@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="战斗模块">
+      <UniqueIdentifier>{7cf03686-1e51-41f4-804f-338e542dafb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="战斗模块\其他">
+      <UniqueIdentifier>{19e48987-6b12-4596-a70f-b8916dad90c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="战斗模块\本地数据">
+      <UniqueIdentifier>{144c81d6-64a6-4c5f-b652-7f26edccc126}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="战斗模块\召唤师">
+      <UniqueIdentifier>{f7e0068d-308c-40d4-a505-4acf42c14835}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="战斗模块\物体">
+      <UniqueIdentifier>{654b75c1-34c1-4473-9444-8b4b76b392d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="战斗模块\战场">
+      <UniqueIdentifier>{9b9900bc-a113-4540-ad44-017588d20779}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BuffTP.h">
+      <Filter>战斗模块\本地数据</Filter>
+    </ClInclude>
+    <ClInclude Include="BulletTP.h">
+      <Filter>战斗模块\本地数据</Filter>
+    </ClInclude>
+    <ClInclude Include="EditMap.h">
+      <Filter>战斗模块\本地数据</Filter>
+    </ClInclude>
+    <ClInclude Include="Incident.h">
+      <Filter>战斗模块\本地数据</Filter>
+    </ClInclude>
+    <ClInclude Include="Master.h">
+      <Filter>战斗模块\召唤师</Filter>
+    </ClInclude>
+    <ClInclude Include="Battle.h">
+      <Filter>战斗模块\战场</Filter>
+    </ClInclude>
+    <ClInclude Include="StageBattle.h">
+      <Filter>战斗模块\战场</Filter>
+    </ClInclude>
+    <ClInclude Include="Gate.h">
+      <Filter>战斗模块\物体</Filter>
+    </ClInclude>
+    <ClInclude Include="Hero.h">
+      <Filter>战斗模块\物体</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>战斗模块\物体</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleObject.h">
+      <Filter>战斗模块\物体</Filter>
+    </ClInclude>
+    <ClInclude Include="Building.h">
+      <Filter>战斗模块\物体</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>战斗模块\物体</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomBullet.h">
+      <Filter>战斗模块\物体</Filter>
+    </ClInclude>
+    <ClInclude Include="ProtoPackage.h">
+      <Filter>战斗模块\其他</Filter>
+    </ClInclude>
+    <ClInclude Include="Buff.h">
+      <Filter>战斗模块\其他</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleDefine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="battle_header.h">
+      <Filter>战斗模块</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BuffTP.cpp">
+      <Filter>战斗模块\本地数据</Filter>
+    </ClCompile>
+    <ClCompile Include="BulletTP.cpp">
+      <Filter>战斗模块\本地数据</Filter>
+    </ClCompile>
+    <ClCompile Include="EditMap.cpp">
+      <Filter>战斗模块\本地数据</Filter>
+    </ClCompile>
+    <ClCompile Include="Incident.cpp">
+      <Filter>战斗模块\本地数据</Filter>
+    </ClCompile>
+    <ClCompile Include="Master.cpp">
+      <Filter>战斗模块\召唤师</Filter>
+    </ClCompile>
+    <ClCompile Include="Battle.cpp">
+      <Filter>战斗模块\战场</Filter>
+    </ClCompile>
+    <ClCompile Include="StageBattle.cpp">
+      <Filter>战斗模块\战场</Filter>
+    </ClCompile>
+    <ClCompile Include="Gate.cpp">
+      <Filter>战斗模块\物体</Filter>
+    </ClCompile>
+    <ClCompile Include="Hero.cpp">
+      <Filter>战斗模块\物体</Filter>
+    </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>战斗模块\物体</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleObject.cpp">
+      <Filter>战斗模块\物体</Filter>
+    </ClCompile>
+    <ClCompile Include="Building.cpp">
+      <Filter>战斗模块\物体</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>战斗模块\物体</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomBullet.cpp">
+      <Filter>战斗模块\物体</Filter>
+    </ClCompile>
+    <ClCompile Include="ProtoPackage.cpp">
+      <Filter>战斗模块\其他</Filter>
+    </ClCompile>
+    <ClCompile Include="Buff.cpp">
+      <Filter>战斗模块\其他</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

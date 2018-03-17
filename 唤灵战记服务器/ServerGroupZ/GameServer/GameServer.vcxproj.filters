@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="%40游戏世界">
+      <UniqueIdentifier>{4868a6e0-e75a-464e-b6b3-0a20b5183bb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="%40游戏世界\玩家">
+      <UniqueIdentifier>{82c98fbc-ce10-4b68-a7b9-a7c92cbe4223}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="%40游戏世界\城镇">
+      <UniqueIdentifier>{a2a58f79-6daa-476a-b658-117e210c0097}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="%40游戏世界\房间">
+      <UniqueIdentifier>{b6935962-bf7f-4131-abcb-867a632162ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="%40游戏世界\玩家\军队">
+      <UniqueIdentifier>{01d752ab-5d11-4e45-bee8-86a3b7352dbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="%40游戏世界\玩家\背包">
+      <UniqueIdentifier>{92ecbc8b-e8ec-4722-a19d-303ad6d52744}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="%40游戏世界\玩家\离线">
+      <UniqueIdentifier>{984be9ba-7ea1-4351-986b-93ebc89985be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="%40游戏世界\公会">
+      <UniqueIdentifier>{2a6300cb-f4d2-4806-b8f4-7dd897557f14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="%40游戏世界\玩家\任务">
+      <UniqueIdentifier>{0f06958f-f6cc-4e2e-b95c-f226749022b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="%40游戏世界\玩家\周期">
+      <UniqueIdentifier>{c7bc1f01-f059-4fa8-9014-ddb9a2ecf885}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="%40游戏世界\玩家\玩家练功台">
+      <UniqueIdentifier>{700f9f0b-6f5c-40c0-9f7b-e52a0f9a92c0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GameServer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GameWorld.h">
+      <Filter>%40游戏世界</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDefine.h">
+      <Filter>%40游戏世界</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>%40游戏世界\玩家</Filter>
+    </ClInclude>
+    <ClInclude Include="Town.h">
+      <Filter>%40游戏世界\城镇</Filter>
+    </ClInclude>
+    <ClInclude Include="Serializer.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Knapsack.h">
+      <Filter>%40游戏世界\玩家\背包</Filter>
+    </ClInclude>
+    <ClInclude Include="Army.h">
+      <Filter>%40游戏世界\玩家\军队</Filter>
+    </ClInclude>
+    <ClInclude Include="Offline.h">
+      <Filter>%40游戏世界\玩家\离线</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerCache.h">
+      <Filter>%40游戏世界\玩家</Filter>
+    </ClInclude>
+    <ClInclude Include="IPlayerData.h">
+      <Filter>%40游戏世界\玩家</Filter>
+    </ClInclude>
+    <ClInclude Include="Guild.h">
+      <Filter>%40游戏世界\公会</Filter>
+    </ClInclude>
+    <ClInclude Include="Mission.h">
+      <Filter>%40游戏世界\玩家\任务</Filter>
+    </ClInclude>
+    <ClInclude Include="NeedReset.h">
+      <Filter>%40游戏世界\玩家\周期</Filter>
+    </ClInclude>
+    <ClInclude Include="HeroCard.h">
+      <Filter>%40游戏世界\玩家\军队</Filter>
+    </ClInclude>
+    <ClInclude Include="Equip.h">
+      <Filter>%40游戏世界\玩家\背包</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>%40游戏世界\玩家\背包</Filter>
+    </ClInclude>
+    <ClInclude Include="Mail.h">
+      <Filter>%40游戏世界\玩家\背包</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerExercise.h">
+      <Filter>%40游戏世界\玩家\玩家练功台</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomZ.h">
+      <Filter>%40游戏世界\房间</Filter>
+    </ClInclude>
+    <ClInclude Include="OffLineHero.h">
+      <Filter>%40游戏世界\玩家\离线</Filter>
+    </ClInclude>
+    <ClInclude Include="OffLinePlayer.h">
+      <Filter>%40游戏世界\玩家\离线</Filter>
+    </ClInclude>
+    <ClInclude Include="OffLineUnit.h">
+      <Filter>%40游戏世界\玩家\离线</Filter>
+    </ClInclude>
+    <ClInclude Include="OffLineBattle.h">
+      <Filter>%40游戏世界\玩家\离线</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldBossBattle.h">
+      <Filter>%40游戏世界\玩家\离线</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GameServer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GameWorld.cpp">
+      <Filter>%40游戏世界</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>%40游戏世界\玩家</Filter>
+    </ClCompile>
+    <ClCompile Include="Town.cpp">
+      <Filter>%40游戏世界\城镇</Filter>
+    </ClCompile>
+    <ClCompile Include="Knapsack.cpp">
+      <Filter>%40游戏世界\玩家\背包</Filter>
+    </ClCompile>
+    <ClCompile Include="Army.cpp">
+      <Filter>%40游戏世界\玩家\军队</Filter>
+    </ClCompile>
+    <ClCompile Include="Offline.cpp">
+      <Filter>%40游戏世界\玩家\离线</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerCache.cpp">
+      <Filter>%40游戏世界\玩家</Filter>
+    </ClCompile>
+    <ClCompile Include="Guild.cpp">
+      <Filter>%40游戏世界\公会</Filter>
+    </ClCompile>
+    <ClCompile Include="Mission.cpp">
+      <Filter>%40游戏世界\玩家\任务</Filter>
+    </ClCompile>
+    <ClCompile Include="NeedReset.cpp">
+      <Filter>%40游戏世界\玩家\周期</Filter>
+    </ClCompile>
+    <ClCompile Include="HeroCard.cpp">
+      <Filter>%40游戏世界\玩家\军队</Filter>
+    </ClCompile>
+    <ClCompile Include="Equip.cpp">
+      <Filter>%40游戏世界\玩家\背包</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>%40游戏世界\玩家\背包</Filter>
+    </ClCompile>
+    <ClCompile Include="Mail.cpp">
+      <Filter>%40游戏世界\玩家\背包</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerExercise.cpp">
+      <Filter>%40游戏世界\玩家\玩家练功台</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomZ.cpp">
+      <Filter>%40游戏世界\房间</Filter>
+    </ClCompile>
+    <ClCompile Include="OffLineHero.cpp">
+      <Filter>%40游戏世界\玩家\离线</Filter>
+    </ClCompile>
+    <ClCompile Include="OffLinePlayer.cpp">
+      <Filter>%40游戏世界\玩家\离线</Filter>
+    </ClCompile>
+    <ClCompile Include="OffLineUnit.cpp">
+      <Filter>%40游戏世界\玩家\离线</Filter>
+    </ClCompile>
+    <ClCompile Include="OffLineBattle.cpp">
+      <Filter>%40游戏世界\玩家\离线</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldBossBattle.cpp">
+      <Filter>%40游戏世界\玩家\离线</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
